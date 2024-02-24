@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * @typedef {{x: number, y: number}} Point
+ * @typedef {import('./types.d.ts').Point} Point
  */
 
 /**

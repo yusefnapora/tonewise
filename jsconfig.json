@@ -5,6 +5,4 @@
     "module": "NodeNext",
     "checkJs": true,
   },
-
-  "include": ["./src/js/types.d.ts"]
 }

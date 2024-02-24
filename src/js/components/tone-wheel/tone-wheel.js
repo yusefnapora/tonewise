@@ -11,10 +11,9 @@ import { PitchClassSelectedEvent } from './events.js'
 
 import { colorForAngle } from '../../common/color.js'
 import { createSVGElement, registerElement } from '../../common/dom.js'
-import * as Types from '../../common/types.js'
 /**
- * @typedef {Types.Point} Point
- * @typedef {Types.Rect} Rect
+ * @typedef {import('../../common/types.d.ts').Point} Point
+ * @typedef {import('../../common/types.d.ts').Rect} Rect
  */
 
 // Our SVG view box is 1000x1000 "user units" and we want to fill it completely,

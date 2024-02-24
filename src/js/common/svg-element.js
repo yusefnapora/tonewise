@@ -1,7 +1,10 @@
 // @ts-check
 
 import { createSVGElement, getFloatAttribute } from './dom.js'
-import * as Types from './types.js'
+
+/**
+ * @typedef {import('./types.d.ts').Rect} Rect
+ */
 
 const DEFAULT_VIEWBOX = { x: 0, y: 0, w: 1000, h: 1000 }
 
@@ -17,7 +20,7 @@ export class SVGComponentBase extends HTMLElement {
 
   _viewBox = DEFAULT_VIEWBOX
 
-  /** @type {Types.Rect} */
+  /** @type {Rect} */
   get viewBox() {
     return this._viewBox
   }
