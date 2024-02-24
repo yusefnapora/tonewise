@@ -7,6 +7,7 @@ import {
 } from '../../common/geometry.js'
 import { SVGComponentBase } from '../../common/svg-element.js'
 import { PitchClassElement } from './pitch-class.js'
+import { PitchClassSelectedEvent } from './events.js'
 
 import { colorForAngle } from '../../common/color.js'
 import { createSVGElement, registerElement } from '../../common/dom.js'
@@ -137,11 +138,10 @@ export class ToneWheel extends SVGComponentBase {
 
       const className = `tone-${i}`
 
-      // TODO: allow setting `onclick` on pitch-class elements directly
       const clickHandler = () => {
-        el.active = !el.active
         console.log(`${el.label} (tone ${i}) clicked. active: ${el.active}`)
-        this.render()
+        const event = new PitchClassSelectedEvent(el)
+        this.dispatchEvent(event)
       }
       const { path: segmentPath, intervalPoint } = this.#createRimSegment({
         startAngle: segmentStartAngle,
