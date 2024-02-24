@@ -1,5 +1,3 @@
-// @ts-check
-
 import { LitElement, html, css } from 'lit'
 import { ContextProvider } from '@lit/context'
 import { SoundContext } from '../context/sound-context.js'

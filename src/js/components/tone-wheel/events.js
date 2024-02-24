@@ -1,5 +1,3 @@
-// @ts-check
-
 import { PitchClassElement } from "./pitch-class.js"
 
 // export const NoteTouchBeganEvent = 'note:touch-began'

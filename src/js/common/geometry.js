@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * @typedef {import('./types.d.ts').Point} Point
  */

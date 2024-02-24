@@ -1,5 +1,3 @@
-// @ts-check
-
 import { SplendidGrandPiano } from 'smplr'
 
 export class Sampler {

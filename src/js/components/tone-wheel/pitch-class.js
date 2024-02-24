@@ -1,5 +1,3 @@
-// @ts-check
-
 import { registerElement } from '../../common/dom.js'
 
 export class PitchClassElement extends HTMLElement {

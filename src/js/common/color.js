@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * Given an `angle` in degrees, returns a CSS color string.
  *
