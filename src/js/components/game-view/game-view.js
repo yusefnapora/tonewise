@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit'
+import { ContextConsumer } from '@lit/context'
 import { registerElement } from '../../common/dom.js'
-import { PitchClassSelectedEventName } from '../tone-wheel/events.js';
+import { SoundContext } from '../../context/sound-context.js'
+
 
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -8,7 +10,9 @@ export class GameViewElement extends LitElement {
       max-width: 50vw;
       margin: auto;
     }
-  `;
+  `
+
+  #sampler = new ContextConsumer(this, { context: SoundContext })
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
   get #wheel() {
@@ -19,27 +23,45 @@ export class GameViewElement extends LitElement {
    * @param {import('../tone-wheel/events.js').PitchClassSelectedEvent} e
    */
   #pitchSelected(e) {
-    console.log('pitch class selected', e)
     e.pitchClass.active = !e.pitchClass.active
     // TODO: make pitch-class into reactive element to avoid manual update
     this.#wheel.render()
+
+    if (e.pitchClass.active && !!e.pitchClass.midiNote) {
+      this.#triggerNote(e.pitchClass.midiNote)
+    }
+  }
+
+  /**
+   * 
+   * @param {number|string} midiNote 
+   */
+  async #triggerNote(midiNote) {
+    const sampler = this.#sampler.value
+    if (!sampler) {
+      console.warn('no sampler available in context')
+      return
+    }
+    await sampler.enable()
+    console.log('triggering note', midiNote)
+    sampler.play(midiNote)
   }
 
   render() {
     return html`
     <tone-wheel @pitchClassSelected=${this.#pitchSelected}>
-      <pitch-class active>C</pitch-class>
-      <pitch-class>C♯</pitch-class>
-      <pitch-class active>D</pitch-class>
-      <pitch-class>D♯</pitch-class>
-      <pitch-class active>E</pitch-class>
-      <pitch-class active>F</pitch-class>
-      <pitch-class>F♯</pitch-class>
-      <pitch-class active>G</pitch-class>
-      <pitch-class>G♯</pitch-class>
-      <pitch-class active>A</pitch-class>
-      <pitch-class>A♯</pitch-class>
-      <pitch-class active>B</pitch-class>
+      <pitch-class midi-note="60">C</pitch-class>
+      <pitch-class midi-note="61">C♯</pitch-class>
+      <pitch-class midi-note="62">D</pitch-class>
+      <pitch-class midi-note="63">D♯</pitch-class>
+      <pitch-class midi-note="64">E</pitch-class>
+      <pitch-class midi-note="65">F</pitch-class>
+      <pitch-class midi-note="66">F♯</pitch-class>
+      <pitch-class midi-note="67">G</pitch-class>
+      <pitch-class midi-note="68">G♯</pitch-class>
+      <pitch-class midi-note="69">A</pitch-class>
+      <pitch-class midi-note="70">A♯</pitch-class>
+      <pitch-class midi-note="71">B</pitch-class>
     </tone-wheel>
   `
   }

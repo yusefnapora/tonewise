@@ -5,29 +5,27 @@ import { SplendidGrandPiano } from 'smplr'
 export class Sampler {
 
   /** @type { AudioContext } */
-  #context
+  #audioContext
 
   #instrument
+
+  #enabled = false
 
   /**
    * @param {object} [opts]
    * @param {AudioContext} [opts.context]
    */
   constructor(opts) {
-    this.#context = opts?.context ?? new AudioContext()
+    this.#audioContext = opts?.context ?? new AudioContext()
 
     // todo: option for named soundfont
-    this.#instrument = new SplendidGrandPiano(this.#context)
+    this.#instrument = new SplendidGrandPiano(this.#audioContext)
+
+    console.log('sampler constructor', this)
   }
 
-  /**
-   * Enables audio playback. Must be triggered by user action (e.g. button click event)
-   */
-  async enable() {
-    await Promise.all([
-      this.#context.resume(), 
-      this.#instrument.load
-    ])
+  async enable() { 
+    return this.#instrument.load
   }
 
   /**
@@ -35,6 +33,13 @@ export class Sampler {
    */
   play(note) {
     // TODO: expose more options
+    if (this.#audioContext.state === 'suspended') {
+      console.log('resuming audio context')
+      return this.#audioContext.resume().then(() => {
+        console.log('context resumed')
+        this.play(note)
+      })
+    }
     this.#instrument.start({ note, duration: 1 })
   }
 }

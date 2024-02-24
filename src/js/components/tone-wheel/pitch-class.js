@@ -52,6 +52,14 @@ export class PitchClassElement extends HTMLElement {
     }
   }
 
+  get midiNote() {
+    const s = this.getAttribute('midi-note')
+    if (s) {
+      return parseInt(s)
+    }
+    return undefined
+  }
+
 }
 
 registerElement('pitch-class', PitchClassElement)
