@@ -3,10 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "build": "echo no build step yet..."
+    "serve": "web-dev-server --node-resolve --watch --open --root-dir ./src"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@web/dev-server": "^0.4.3"
+  },
+  "dependencies": {
+    "lit": "^3.1.2"
+  }
 }
