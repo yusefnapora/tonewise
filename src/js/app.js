@@ -1,1 +1,1 @@
-export * from './components/tw-app.js'
+export * from './components/index.js'
