@@ -5,4 +5,6 @@
     "module": "NodeNext",
     "checkJs": true,
   },
+
+  "include": ["./src/common/types.d.ts"]
 }

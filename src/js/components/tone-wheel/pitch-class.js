@@ -1,63 +1,48 @@
+import { LitElement } from 'lit'
 import { registerElement } from '../../common/dom.js'
 
-export class PitchClassElement extends HTMLElement {
+export class PitchClassElement extends LitElement {
+  static properties = {
+    active: { type: Boolean },
+    interval: { type: Number, converter: convertIntervalString },
+    midiNote: { type: Number, attribute: 'midi-note' },
+  }
+
+  constructor() {
+    super()
+    this.active = false
+    this.interval = 0
+    this.interval = undefined
+    this.midiNote = 0
+    this.midiNote = undefined
+  }
+
   get label() {
     return this.textContent
   }
 
-  get active() {
-    return this.hasAttribute('active')
-  }
+}
 
-  /**
-   * @param {boolean} val 
-   */
-  set active(val) {
-    if (val) {
-      this.setAttribute('active', 'true')
-    } else {
-      this.removeAttribute('active')
-    }
-  }
-
-  /**
-   * @returns {number | undefined}
-   */
-  get interval() {
-    let s = this.getAttribute('interval')
-    if (!s) {
-      return undefined
-    }
-
-    s = s.replace(':', '/')
-    const [numStr, denomStr] = s.split('/')
-    const numerator = Number.parseFloat(numStr)
-    if (denomStr == null) {
-      return numerator
-    }
-    const denominator = Number.parseFloat(denomStr)
-    return numerator / denominator
-  }
-
-  /**
-   * @param {string|number|undefined} val 
-   */
-  set interval(val) {
-    if (val) {
-      this.setAttribute('interval', val.toString())
-    } else {
-      this.removeAttribute('interval')
-    }
-  }
-
-  get midiNote() {
-    const s = this.getAttribute('midi-note')
-    if (s) {
-      return parseInt(s)
-    }
+/**
+ * Parses out interval ratio strings, which can either be floating
+ * point numbers, or two numbers separated by either `/` or `:`
+ * to divide two numbers.
+ * @param {string} s 
+ * @returns number | undefined
+ */
+function convertIntervalString(s) {
+  if (!s) {
     return undefined
   }
 
+  s = s.replace(':', '/')
+  const [numStr, denomStr] = s.split('/')
+  const numerator = Number.parseFloat(numStr)
+  if (denomStr == null) {
+    return numerator
+  }
+  const denominator = Number.parseFloat(denomStr)
+  return numerator / denominator
 }
 
 registerElement('pitch-class', PitchClassElement)
