@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit'
 import { ContextConsumer } from '@lit/context'
 import { registerElement } from '../../common/dom.js'
 import { SoundContext } from '../../context/sound-context.js'
+import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 
 
 export class GameViewElement extends LitElement {
@@ -27,24 +28,42 @@ export class GameViewElement extends LitElement {
     // TODO: make pitch-class into reactive element to avoid manual update
     this.#wheel.render()
 
-    if (e.pitchClass.active && !!e.pitchClass.midiNote) {
-      this.#triggerNote(e.pitchClass.midiNote)
+    if (e.pitchClass.active) {
+      this.#triggerNote(e.pitchClass)
     }
   }
 
   /**
    * 
-   * @param {number|string} midiNote 
+   * @param {PitchClassElement} pitchClass 
    */
-  async #triggerNote(midiNote) {
+  async #triggerNote(pitchClass) {
+    const note = pitchClass.midiNote
+    if (!note) {
+      return
+    }
     const sampler = this.#sampler.value
     if (!sampler) {
       console.warn('no sampler available in context')
       return
     }
     await sampler.enable()
-    console.log('triggering note', midiNote)
-    sampler.play(midiNote)
+    console.log('triggering note', note)
+    await sampler.play({ 
+      note,
+      duration: 1,
+      onEnded: () => this.#noteEnded(pitchClass)
+    })
+  }
+
+  /**
+   * 
+   * @param {PitchClassElement} pitchClass 
+   */
+  #noteEnded(pitchClass) {
+    // TODO: fade animation
+    pitchClass.active = false 
+    this.#wheel.render()
   }
 
   render() {

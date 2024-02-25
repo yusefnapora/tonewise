@@ -1,13 +1,15 @@
 import { SplendidGrandPiano } from 'smplr'
 
+/**
+ * @typedef {import('./smplr-types.d.ts').SampleStart} SampleStart
+ */
+
 export class Sampler {
 
   /** @type { AudioContext } */
   #audioContext
 
   #instrument
-
-  #enabled = false
 
   /**
    * @param {object} [opts]
@@ -27,17 +29,14 @@ export class Sampler {
   }
 
   /**
-   * @param {string | number} note 
+   * @param {SampleStart} note
    */
-  play(note) {
-    // TODO: expose more options
+  async play(note) {
     if (this.#audioContext.state === 'suspended') {
       console.log('resuming audio context')
-      return this.#audioContext.resume().then(() => {
-        console.log('context resumed')
-        this.play(note)
-      })
+      await this.#audioContext.resume()
+      console.log('context resumed')
     }
-    this.#instrument.start({ note, duration: 1 })
+    return this.#instrument.start(note)
   }
 }
