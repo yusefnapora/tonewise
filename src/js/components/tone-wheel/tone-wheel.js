@@ -1,14 +1,14 @@
+import { LitElement, html, css, svg } from 'lit'
 import {
   degreesBetween,
   polarToCartesian,
   rimSegmentSVGPath,
 } from '../../common/geometry.js'
-import { SVGComponentBase } from '../../common/svg-element.js'
 import { PitchClassElement } from './pitch-class.js'
 import { PitchClassSelectedEvent } from './events.js'
 
 import { colorForAngle } from '../../common/color.js'
-import { createSVGElement, registerElement } from '../../common/dom.js'
+import { registerElement, getFloatAttribute } from '../../common/dom.js'
 /**
  * @typedef {import('../../common/types.d.ts').Point} Point
  * @typedef {import('../../common/types.d.ts').Rect} Rect
@@ -25,12 +25,25 @@ const DEFAULT_ROTATION_OFFSET = -90
 
 const DEFAULT_FONT_SIZE = 30
 
-export class ToneWheel extends SVGComponentBase {
+export class ToneWheel extends LitElement {
+  static styles = css`
+    :host {
+      display: block;
+    }
+    
+    .tone-label {
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+  `
+
+
   /**
    * @returns {number} the radius of the wheel in SVG "user units"
    */
   get radius() {
-    return this.getFloatAttribute('radius') ?? DEFAULT_RADIUS
+    return getFloatAttribute(this, 'radius') ?? DEFAULT_RADIUS
   }
 
   /**
@@ -41,30 +54,8 @@ export class ToneWheel extends SVGComponentBase {
     return DEFAULT_ROTATION_OFFSET
   }
 
-  /**
-   * @returns {boolean} true if we should render a pitch constellation (the "spokes" of the wheel)
-   *   with a line for each `active` pitch-class.
-   */
-  get shouldRenderPitchConstellation() {
-    return !this.hasAttribute('no-pitch-constellation')
-  }
-
-  /**
-   * Set to `true` if we should render a pitch constellation (the "spokes" of the wheel)
-   * to indicate the `active` pitch classes.
-   *
-   * @param {boolean} val
-   */
-  set shouldRenderPitchConstellation(val) {
-    if (val) {
-      this.removeAttribute('no-pitch-constellation')
-    } else {
-      this.setAttribute('no-pitch-constellation', 'true')
-    }
-  }
-
   get fontSize() {
-    let size = this.getFloatAttribute('font-size')
+    let size = getFloatAttribute(this, 'font-size')
     if (size) {
       return size
     }
@@ -72,25 +63,33 @@ export class ToneWheel extends SVGComponentBase {
     return DEFAULT_FONT_SIZE * scalar
   }
 
-  /**
-   * Create the SVG elements for the tone wheel and add them to the provided group element
-   *
-   * @param {SVGGElement} group an SVG `<g>` element to add all the SVG elements that comprise the
-   *   tone wheel.
-   */
-  renderContent(group) {
+  /** @returns {PitchClassElement[]} */
+  get pitchClasses() {
+    return [
+      ...this.querySelectorAll(':scope > pitch-class')
+    ]
+  }
+
+  render() {
+    const { content, styleContent } = this.renderContent()
+    return html`
+    <style>
+      ${styleContent}
+    </style>
+    <svg viewBox="0 0 1000 1000">
+      ${content}
+    </svg>
+    `
+  }
+
+  renderContent() {
     const segments = []
     const labels = []
     const pitchLines = []
 
-    let styleTag = ''
+    let styleContent = ''
 
-    // the `:scope > pitch-class` selector ensures that we only get the `<pitch-class>`
-    // elements that are our direct children, to avoid selecting elements
-    // from nested wheels
-    const elements = /** @type {PitchClassElement[]} */ ([
-      ...this.querySelectorAll(':scope > pitch-class'),
-    ])
+    const elements = this.pitchClasses
 
     if (elements.length === 0) {
       return
@@ -100,14 +99,6 @@ export class ToneWheel extends SVGComponentBase {
       console.error('<pitch-class> element not registered, unable to render')
       return
     }
-
-    styleTag += `<style>
-      .tone-label {
-        cursor: pointer;
-        user-select: none;
-        -webkit-user-select: none;
-      }
-    `
 
     const edoStep = 360 / elements.length
     const pitchesWithAngles = getIntervalAngles(elements)
@@ -157,7 +148,7 @@ export class ToneWheel extends SVGComponentBase {
           }),
         )
       }
-      if (el.active && this.shouldRenderPitchConstellation) {
+      if (el.active) {
         // scale the pitch line width proportional to the wheel radius,
         // and also shrink the width for pitches whose rim segment length
         // is less than 1 EDO-step
@@ -173,7 +164,7 @@ export class ToneWheel extends SVGComponentBase {
         )
       }
       const color = colorForAngle(intervalAngle)
-      styleTag += `
+      styleContent += `
         .${className} { 
           stroke: ${color};
           fill: ${color};
@@ -182,9 +173,16 @@ export class ToneWheel extends SVGComponentBase {
 			`
     }
 
-    styleTag += '</style>'
-    group.innerHTML += styleTag
-    group.append(...pitchLines, ...segments, ...labels)
+    const content = svg`
+    <g>
+      ${styleContent}
+      ${pitchLines}
+      ${segments}
+      ${labels}
+
+    </g>
+    `
+    return { content, styleContent }
   }
 
   /**
@@ -198,20 +196,20 @@ export class ToneWheel extends SVGComponentBase {
    */
   #createSegmentLabel(args) {
     const { label, position, clickHandler } = args
-    return createSVGElement({
-      tag: 'text',
-      innerHTML: label,
-      attributes: {
-        class: 'tone-label',
-        x: position.x,
-        y: position.y,
-        stroke: 'white',
-        fill: 'white',
-        'font-size': this.fontSize,
-        'text-anchor': 'middle',
-        onclick: clickHandler,
-      },
-    })
+    return svg`
+      <text
+        class="tone-label"
+        stroke="white"
+        fill="white"
+        text-anchor="middle"
+        font-size=${this.fontSize}
+        @click=${clickHandler}
+        x=${position.x}
+        y=${position.y}
+      >
+        ${label}
+      </text>
+    `
   }
 
   /**
@@ -251,14 +249,9 @@ export class ToneWheel extends SVGComponentBase {
       endAngle,
       thickness,
     })
-    const path = createSVGElement({
-      tag: 'path',
-      attributes: {
-        class: className,
-        d: pathString,
-        onclick: args.clickHandler,
-      },
-    })
+    const path = svg`
+      <path class=${className} d=${pathString} @click=${args.clickHandler} />
+    `
 
     // return the cartesian point that corresponds to the intervalAngle,
     // positioned midway between the inner and outer radii
@@ -281,26 +274,21 @@ export class ToneWheel extends SVGComponentBase {
    * @param {number} [args.cx] center x coord of wheel in viewbox units. defaults to 500
    * @param {number} [args.cy] center y coord of wheel in viewbox units. defaults to 500
    *
-   * @returns {SVGLineElement}
    */
   #createPitchLine(args) {
     const { className, endpoint, width } = args
     const cx = args.cx ?? 500
     const cy = args.cy ?? 500
 
-    return createSVGElement({
-      tag: 'line',
-      attributes: {
-        class: className,
-        x1: cx,
-        y1: cy,
-        x2: endpoint.x,
-        y2: endpoint.y,
-        'stroke-width': width,
-        'stroke-linecap': 'round',
-        opacity: 0.6,
-      },
-    })
+    return svg`
+    <line class=${className}
+      x1=${cx} y1=${cy}
+      x2=${endpoint.x} y2=${endpoint.y}
+      stroke-width=${width}
+      stroke-linecap="round"
+      opacity="0.6"
+    />
+    `
   }
 }
 

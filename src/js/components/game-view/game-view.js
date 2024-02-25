@@ -25,8 +25,8 @@ export class GameViewElement extends LitElement {
    */
   #pitchSelected(e) {
     e.pitchClass.active = !e.pitchClass.active
-    // TODO: make pitch-class into reactive element to avoid manual update
-    this.#wheel.render()
+    // TODO: make wheel auto-update when any pitch class changes active state
+    this.#wheel.requestUpdate()
 
     if (e.pitchClass.active) {
       this.#triggerNote(e.pitchClass)
@@ -63,7 +63,7 @@ export class GameViewElement extends LitElement {
   #noteEnded(pitchClass) {
     // TODO: fade animation
     pitchClass.active = false 
-    this.#wheel.render()
+    this.#wheel.requestUpdate()
   }
 
   render() {
