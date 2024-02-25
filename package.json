@@ -6,13 +6,16 @@
   "type": "module",
   "scripts": {
     "serve": "web-dev-server --node-resolve --watch --open --root-dir ./src",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "web-test-runner test/**/*.test.js --node-resolve"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@web/dev-server": "^0.4.3",
+    "@web/test-runner": "^0.18.0",
+    "chai": "npm:@esm-bundle/chai@^4.3.4-fix.0",
     "prettier": "3.2.5"
   },
   "dependencies": {
