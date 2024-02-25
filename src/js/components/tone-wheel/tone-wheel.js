@@ -8,7 +8,7 @@ import { PitchClassElement } from './pitch-class.js'
 import { PitchClassSelectedEvent } from './events.js'
 
 import { colorForAngle } from '../../common/color.js'
-import { registerElement, getFloatAttribute } from '../../common/dom.js'
+import { registerElement } from '../../common/dom.js'
 /**
  * @typedef {import('../../common/types.d.ts').Point} Point
  * @typedef {import('../../common/types.d.ts').Rect} Rect
