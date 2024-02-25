@@ -12,6 +12,8 @@ import { registerElement, getFloatAttribute } from '../../common/dom.js'
 /**
  * @typedef {import('../../common/types.d.ts').Point} Point
  * @typedef {import('../../common/types.d.ts').Rect} Rect
+ * 
+ * @typedef {import('lit').TemplateResult<2>} SVGTemplateResult
  */
 
 // Our SVG view box is 1000x1000 "user units" and we want to fill it completely,
@@ -35,6 +37,10 @@ export class ToneWheel extends LitElement {
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
+    }
+
+    .rim-segment {
+      cursor: pointer;
     }
   `
 
@@ -63,11 +69,10 @@ export class ToneWheel extends LitElement {
     return DEFAULT_FONT_SIZE * scalar
   }
 
-  /** @returns {PitchClassElement[]} */
   get pitchClasses() {
-    return [
+    return /** @type {PitchClassElement[]} */ ([
       ...this.querySelectorAll(':scope > pitch-class')
-    ]
+    ])
   }
 
   render() {
@@ -168,7 +173,6 @@ export class ToneWheel extends LitElement {
         .${className} { 
           stroke: ${color};
           fill: ${color};
-          cursor: pointer;
         }
 			`
     }
@@ -192,7 +196,7 @@ export class ToneWheel extends LitElement {
    * @param {Point} args.position
    * @param {Function} [args.clickHandler]
    *
-   * @returns {SVGTextElement}
+   * @returns {SVGTemplateResult}
    */
   #createSegmentLabel(args) {
     const { label, position, clickHandler } = args
@@ -225,7 +229,7 @@ export class ToneWheel extends LitElement {
    * @param {string} [args.className] CSS class name, used for stroke color
    *
    * @typedef {object} RimSegment
-   * @property {SVGPathElement} RimSegment.path an SVGPathElement for the segment
+   * @property {SVGTemplateResult} RimSegment.path an svg fragment containing shapes for the segment
    * @property {Point} intervalPoint a point positioned along the `intervalAngle`,
    *   midway between the inner and outer radius of the segment. Used for positioning labels
    *   and pitch constellation lines.
@@ -250,7 +254,7 @@ export class ToneWheel extends LitElement {
       thickness,
     })
     const path = svg`
-      <path class=${className} d=${pathString} @click=${args.clickHandler} />
+      <path class=${className + ' rim-segment'} d=${pathString} @click=${args.clickHandler} />
     `
 
     // return the cartesian point that corresponds to the intervalAngle,
@@ -281,7 +285,7 @@ export class ToneWheel extends LitElement {
     const cy = args.cy ?? 500
 
     return svg`
-    <line class=${className}
+    <line class=${className + ' pitch-line'}
       x1=${cx} y1=${cy}
       x2=${endpoint.x} y2=${endpoint.y}
       stroke-width=${width}
