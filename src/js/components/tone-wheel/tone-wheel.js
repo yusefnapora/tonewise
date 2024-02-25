@@ -44,29 +44,17 @@ export class ToneWheel extends LitElement {
     }
   `
 
-
-  /**
-   * @returns {number} the radius of the wheel in SVG "user units"
-   */
-  get radius() {
-    return getFloatAttribute(this, 'radius') ?? DEFAULT_RADIUS
+  static properties = {
+    radius: { type: Number },
+    rotationOffset: { type: Number },
+    fontSize: { type: Number },
   }
 
-  /**
-   * @returns {number} degrees to rotate the wheel by
-   */
-  get rotationOffset() {
-    // TODO: once we support setting the tonic note, rotate so tonic note is north
-    return DEFAULT_ROTATION_OFFSET
-  }
-
-  get fontSize() {
-    let size = getFloatAttribute(this, 'font-size')
-    if (size) {
-      return size
-    }
-    const scalar = this.radius / DEFAULT_RADIUS
-    return DEFAULT_FONT_SIZE * scalar
+  constructor() {
+    super()
+    this.radius = DEFAULT_RADIUS
+    this.rotationOffset = DEFAULT_ROTATION_OFFSET
+    this.fontSize = DEFAULT_FONT_SIZE
   }
 
   get pitchClasses() {
@@ -179,11 +167,9 @@ export class ToneWheel extends LitElement {
 
     const content = svg`
     <g>
-      ${styleContent}
       ${pitchLines}
       ${segments}
       ${labels}
-
     </g>
     `
     return { content, styleContent }
