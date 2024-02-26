@@ -89,6 +89,7 @@ export class GameRoundState extends EventTarget {
   }
 }
 
+export const currentRound = new GameRoundState()
 
 export const EventNames = {
   started: 'game:started',
