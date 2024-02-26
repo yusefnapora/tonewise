@@ -9,9 +9,13 @@
  * @property {Note[]} targets the "hidden" notes that the player is trying to guess
  * @property {ChallengeMode} [challengeMode] whether the notes should play in sequence or at the same time when presenting the challenge
  * 
+ * @typedef {object} PlayerGuess
+ * @property {Note} note
+ * @property {boolean} isCorrect
  * 
  * @typedef {object} GameProgress
- * @property {Note[]} guesses
+ * @property {PlayerGuess[]} guesses
+ * @property {boolean} isCompeted
  * 
  * @typedef {object} GameRound
  * @property {GameRules} rules
@@ -25,12 +29,44 @@
 /** @typedef {import('@reduxjs/toolkit').PayloadAction<GameRound>} GameRoundAction */
 /** @typedef {import('@reduxjs/toolkit').PayloadAction<Note>} NoteAction */
 
-import { createSlice } from "@reduxjs/toolkit"
-
+import { createSlice, current } from "@reduxjs/toolkit"
 
 /** @type {GameState} */
 const initialState = {
   currentRound: null,
+}
+
+/**
+ * @param {GameState} state  
+ */
+export function isStarted(state) {
+  return state.currentRound != null
+}
+
+/**
+ * @param {GameState} state 
+ */
+function isCompleted(state) {
+  if (state.currentRound == null) {
+    return false
+  }
+  if (state.currentRound.progress.isCompeted) {
+    return true
+  }
+
+  const { rules, progress } = state.currentRound
+  return rules.targets.every(note => 
+    progress.guesses.find(guess => 
+      guess.isCorrect && guess.note === note))
+}
+
+/**
+ * 
+ * @param {GameRules} rules 
+ * @param {Note} note 
+ */
+function isCorrectGuess(rules, note) {
+  return rules.targets.includes(note)
 }
 
 const gameSlice = createSlice({
@@ -62,11 +98,16 @@ const gameSlice = createSlice({
      * @param {NoteAction} action 
      */
     guess(state, action) {
-      if (!state.currentRound) {
+      if (!state.currentRound || state.currentRound.progress.isCompeted) {
         return
       }
+      const note = action.payload
+      const isCorrect = isCorrectGuess(state.currentRound.rules, note)
+      state.currentRound.progress.guesses.push({ note, isCorrect })
 
-      state.currentRound.progress.guesses.push(action.payload)
+      if (isCompleted(current(state))) {
+        state.currentRound.progress.isCompeted = true
+      }
     },
   }
 })
