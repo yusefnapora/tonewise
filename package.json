@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@lit/context": "^1.1.0",
+    "@reduxjs/toolkit": "^2.2.1",
     "lit": "^3.1.2",
     "smplr": "^0.12.2"
   }
