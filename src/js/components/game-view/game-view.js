@@ -3,7 +3,8 @@ import { ContextConsumer } from '@lit/context'
 import { registerElement } from '../../common/dom.js'
 import { SoundContext } from '../../context/sound-context.js'
 import { PitchClassElement } from '../tone-wheel/pitch-class.js'
-import { currentRound, EventNames } from '../../state/game-round.js'
+import { StateController } from '../../state/controller.js'
+import { start, guess } from '../../state/game-slice.js'
 
 const NOTES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B']
 const randomNote = () => NOTES[Math.floor(Math.random()*NOTES.length)]
@@ -16,30 +17,24 @@ export class GameViewElement extends LitElement {
     }
   `
 
+  #stateController = new StateController(this)
   #sampler = new ContextConsumer(this, { context: SoundContext })
 
   connectedCallback() {
     super.connectedCallback()
-    currentRound.addEventListener(EventNames.correctGuess, (e) => {
-      console.log('correct guess', e.target)
-    })
-    currentRound.addEventListener(EventNames.incorrectGuess, (e) => {
-      console.log('incorrect guess', e.target)
-    })
-    currentRound.addEventListener(EventNames.started, (e) => {
-      console.log('game started', e.target)
-    })
-    currentRound.addEventListener(EventNames.completed, (e) => {
-      console.log('game completed', e.target)
-      // TODO: trigger success animation, etc 
-      this.#startNewGame()
-    })
     this.#startNewGame()
+  }
+
+  stateChanged(state) {
+    console.log('state update', state)
+    this.requestUpdate()
   }
 
   #startNewGame() {
     // TODO: play note sequence & leave tonic note active (pitch line showing)
-    currentRound.start({ tonic: randomNote(), targets: [ randomNote() ]})
+    const rules = { tonic: randomNote(), targets: [ randomNote() ]}
+    const progress = { guesses: [] }
+    this.#stateController.dispatch(start({ rules, progress }))
   }
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
@@ -57,7 +52,7 @@ export class GameViewElement extends LitElement {
 
     if (e.pitchClass.active) {
       this.#triggerNote(e.pitchClass)
-      currentRound.guess(e.pitchClass.id)
+      this.#stateController.dispatch(guess(e.pitchClass.id))
     }
   }
 

@@ -15,7 +15,7 @@
  * 
  * @typedef {object} GameProgress
  * @property {PlayerGuess[]} guesses
- * @property {boolean} isCompeted
+ * @property {boolean} [isCompeted]
  * 
  * @typedef {object} GameRound
  * @property {GameRules} rules

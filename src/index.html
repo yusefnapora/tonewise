@@ -3,6 +3,11 @@
   <head>
     <title>Training Wheels</title>
   </head>
+  <script type="module">
+    globalThis.process = globalThis.process ?? {
+      env: { NODE_ENV: 'development' }
+    }
+  </script>
   <script type="module" src="./js/app.js"></script>
   <body>
     <app-view></app-view>
