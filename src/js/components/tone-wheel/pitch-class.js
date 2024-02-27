@@ -21,6 +21,14 @@ export class PitchClassElement extends LitElement {
     return this.textContent
   }
 
+  get name() {
+    return this.label
+  }
+
+  toJsObject() {
+    const { active, interval, midiNote, name } = this
+    return { active, interval, midiNote, name }
+  }
 }
 
 /**

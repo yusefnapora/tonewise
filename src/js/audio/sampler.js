@@ -37,6 +37,19 @@ export class Sampler {
       await this.#audioContext.resume()
       console.log('context resumed')
     }
-    return this.#instrument.start(note)
+
+    /** @type {Promise<SampleStart>} */
+    let ended
+    /** @type {Promise<SampleStart>} */
+    const started = new Promise(resolveStart => {
+      ended = new Promise(resolveEnd => {
+        this.#instrument.start({ 
+          onStart: resolveStart,
+          onEnded: resolveEnd,
+          ...note,
+        })
+      })
+    })
+    return { started, ended }
   }
 }

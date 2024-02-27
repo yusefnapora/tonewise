@@ -1,6 +1,6 @@
 
 /**
- * @typedef {string} Note
+ * @typedef {{ name: string, midiNote: number }} Note
  * 
  * @typedef {'sequential' | 'chord'} ChallengeMode
  * 
@@ -15,7 +15,7 @@
  * 
  * @typedef {object} GameProgress
  * @property {PlayerGuess[]} guesses
- * @property {boolean} [isCompeted]
+ * @property {boolean} [isCompleted]
  * 
  * @typedef {object} GameRound
  * @property {GameRules} rules
@@ -50,14 +50,14 @@ function isCompleted(state) {
   if (state.currentRound == null) {
     return false
   }
-  if (state.currentRound.progress.isCompeted) {
+  if (state.currentRound.progress.isCompleted) {
     return true
   }
 
   const { rules, progress } = state.currentRound
   return rules.targets.every(note => 
     progress.guesses.find(guess => 
-      guess.isCorrect && guess.note === note))
+      guess.isCorrect && guess.note.name === note.name))
 }
 
 /**
@@ -66,7 +66,7 @@ function isCompleted(state) {
  * @param {Note} note 
  */
 function isCorrectGuess(rules, note) {
-  return rules.targets.includes(note)
+  return rules.targets.some(t => t.name === note.name)
 }
 
 const gameSlice = createSlice({
@@ -98,7 +98,7 @@ const gameSlice = createSlice({
      * @param {NoteAction} action 
      */
     guess(state, action) {
-      if (!state.currentRound || state.currentRound.progress.isCompeted) {
+      if (!state.currentRound || state.currentRound.progress.isCompleted) {
         return
       }
       const note = action.payload
@@ -106,7 +106,7 @@ const gameSlice = createSlice({
       state.currentRound.progress.guesses.push({ note, isCorrect })
 
       if (isCompleted(current(state))) {
-        state.currentRound.progress.isCompeted = true
+        state.currentRound.progress.isCompleted = true
       }
     },
   }

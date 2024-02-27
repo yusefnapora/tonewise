@@ -23,7 +23,9 @@ export class StateController {
     host.addController(this)
   }
 
-
+  get state() {
+    return this.store.getState()
+  }
 
   /**
    * Called when the host is connected to the component tree. For custom
