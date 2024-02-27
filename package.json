@@ -5,6 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "clean": "rimraf ./dist",
     "serve": "web-dev-server --node-resolve --watch --open --root-dir ./src",
     "format": "prettier --write .",
     "test": "web-test-runner test/**/*.test.js --node-resolve"
@@ -13,12 +15,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
     "@types/chai": "^4.3.12",
     "@types/mocha": "^10.0.6",
     "@web/dev-server": "^0.4.3",
+    "@web/rollup-plugin-html": "^2.1.2",
     "@web/test-runner": "^0.18.0",
     "chai": "npm:@esm-bundle/chai@^4.3.4-fix.0",
-    "prettier": "3.2.5"
+    "prettier": "3.2.5",
+    "rimraf": "^5.0.5",
+    "rollup": "^4.12.0"
   },
   "dependencies": {
     "@lit/context": "^1.1.0",
