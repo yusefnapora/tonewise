@@ -3,7 +3,7 @@ import { LitElement, css, html } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { SoundContext } from '../../context/sound-context.js'
 import { StateController } from '../../state/controller.js'
-import { start } from '../../state/game-slice.js'
+import { guess, start } from '../../state/game-slice.js'
 import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 
 export class GameViewElement extends LitElement {
