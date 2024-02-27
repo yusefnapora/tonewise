@@ -25,6 +25,7 @@ html {
 
   background: var(--color-background);
   color: var(--color-text);
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 @media (prefers-color-scheme: light) {
