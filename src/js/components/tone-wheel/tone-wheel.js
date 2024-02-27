@@ -25,7 +25,7 @@ const DEFAULT_RADIUS = 500
 // global rotation of -90deg.
 const DEFAULT_ROTATION_OFFSET = -90
 
-const DEFAULT_FONT_SIZE = 30
+const DEFAULT_FONT_SIZE = 50
 
 export class ToneWheel extends LitElement {
   static styles = css`
@@ -48,7 +48,11 @@ export class ToneWheel extends LitElement {
       opacity: 0.3;
     }
 
-    .inner-wedge.active {
+    .tone-group:hover > .inner-wedge {
+      opacity: 0.5;
+    }
+
+    .tone-group > .inner-wedge.active {
       opacity: 0.7;
     }
   `
@@ -85,13 +89,7 @@ export class ToneWheel extends LitElement {
   }
 
   renderContent() {
-    const segments = []
-    const wedges = []
-    const labels = []
-    const pitchLines = []
-
     let styleContent = ''
-
     const elements = this.pitchClasses
 
     if (elements.length === 0) {
@@ -103,11 +101,12 @@ export class ToneWheel extends LitElement {
       return
     }
 
-    const edoStep = 360 / elements.length
     const pitchesWithAngles = getIntervalAngles(elements)
     pitchesWithAngles.sort((a, b) => a.angle - b.angle)
 
+    const groups = []
     for (let i = 0; i < pitchesWithAngles.length; i++) {
+      const groupContent = []
       const el = pitchesWithAngles[i].pitchClass
 
       // calculate start and end angles for this segment
@@ -134,7 +133,7 @@ export class ToneWheel extends LitElement {
         const event = new PitchClassSelectedEvent(el)
         this.dispatchEvent(event)
       }
-      wedges.push(this.#createInnerWedge({
+      groupContent.push(this.#createInnerWedge({
         startAngle: segmentStartAngle,
         endAngle: segmentEndAngle,
         className,
@@ -149,9 +148,9 @@ export class ToneWheel extends LitElement {
         className,
         clickHandler,
       })
-      segments.push(segmentPath)
+      groupContent.push(segmentPath)
       if (el.label) {
-        labels.push(
+        groupContent.push(
           this.#createSegmentLabel({
             label: el.label,
             position: intervalPoint,
@@ -181,14 +180,12 @@ export class ToneWheel extends LitElement {
           fill: ${color};
         }
 			`
+      groups.push(svg`<g class="tone-group ${className}">${groupContent}</g>`)
     }
 
     const content = svg`
     <g>
-      ${wedges}
-      ${pitchLines}
-      ${segments}
-      ${labels}
+      ${groups}
     </g>
     `
     return { content, styleContent }
@@ -245,7 +242,7 @@ export class ToneWheel extends LitElement {
     const { className } = args
     const center = { x: 500, y: 500 }
     const radius = this.radius
-    const thickness = args.thickness ?? 100
+    const thickness = args.thickness ?? 140
 
     const intervalAngle = args.intervalAngle + this.rotationOffset
 
