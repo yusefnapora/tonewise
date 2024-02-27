@@ -12,8 +12,8 @@ const randomNote = () => NOTES[Math.floor(Math.random()*NOTES.length)]
 export class GameViewElement extends LitElement {
   static styles = css`
     tone-wheel {
-      max-width: 50vw;
-      margin: auto;
+      max-width: min(50vw, 90vh);
+      margin: 30px auto;
     }
   `
 
@@ -91,7 +91,7 @@ export class GameViewElement extends LitElement {
 
   render() {
     return html`
-    <tone-wheel @pitchClassSelected=${this.#pitchSelected}>
+    <tone-wheel @pitchClassSelected=${this.#pitchSelected} no-pitch-constellation>
       <pitch-class id="C"  midi-note="60">C</pitch-class>
       <pitch-class id="C♯" midi-note="61">C♯</pitch-class>
       <pitch-class id="D"  midi-note="62">D</pitch-class>

@@ -42,6 +42,15 @@ export class ToneWheel extends LitElement {
     .rim-segment {
       cursor: pointer;
     }
+
+    .inner-wedge {
+      cursor: pointer;
+      opacity: 0.3;
+    }
+
+    .inner-wedge.active {
+      opacity: 0.7;
+    }
   `
 
   static properties = {
@@ -77,6 +86,7 @@ export class ToneWheel extends LitElement {
 
   renderContent() {
     const segments = []
+    const wedges = []
     const labels = []
     const pitchLines = []
 
@@ -124,6 +134,14 @@ export class ToneWheel extends LitElement {
         const event = new PitchClassSelectedEvent(el)
         this.dispatchEvent(event)
       }
+      wedges.push(this.#createInnerWedge({
+        startAngle: segmentStartAngle,
+        endAngle: segmentEndAngle,
+        className,
+        active: el.active,
+        clickHandler,
+      }))
+
       const { path: segmentPath, intervalPoint } = this.#createRimSegment({
         startAngle: segmentStartAngle,
         endAngle: segmentEndAngle,
@@ -141,21 +159,21 @@ export class ToneWheel extends LitElement {
           }),
         )
       }
-      if (el.active) {
-        // scale the pitch line width proportional to the wheel radius,
-        // and also shrink the width for pitches whose rim segment length
-        // is less than 1 EDO-step
-        const len = Math.min(edoStep, segmentLength)
-        const widthScalar = (len / 360) * (this.radius / DEFAULT_RADIUS)
-        const width = 1000 * widthScalar
-        pitchLines.push(
-          this.#createPitchLine({
-            className,
-            endpoint: intervalPoint,
-            width,
-          }),
-        )
-      }
+      // if (el.active) {
+      //   // scale the pitch line width proportional to the wheel radius,
+      //   // and also shrink the width for pitches whose rim segment length
+      //   // is less than 1 EDO-step
+      //   const len = Math.min(edoStep, segmentLength)
+      //   const widthScalar = (len / 360) * (this.radius / DEFAULT_RADIUS)
+      //   const width = 1000 * widthScalar
+      //   pitchLines.push(
+      //     this.#createPitchLine({
+      //       className,
+      //       endpoint: intervalPoint,
+      //       width,
+      //     }),
+      //   )
+      // }
       const color = colorForAngle(intervalAngle)
       styleContent += `
         .${className} { 
@@ -167,6 +185,7 @@ export class ToneWheel extends LitElement {
 
     const content = svg`
     <g>
+      ${wedges}
       ${pitchLines}
       ${segments}
       ${labels}
@@ -280,7 +299,37 @@ export class ToneWheel extends LitElement {
     />
     `
   }
+
+  /**
+   * @param {object} args
+   * @param {string} args.className CSS class name, used for stroke color
+   * @param {number} args.startAngle angle in degrees of the beginning of the wedge
+   * @param {number} args.endAngle angle in degrees of the end of the wedge
+   * @param {boolean} [args.active]
+   * @param {function} [args.clickHandler] optional event handler for clicks on the rim segment
+   */
+  #createInnerWedge(args) {
+    const { className,  clickHandler, active } = args
+    const startAngle = args.startAngle + this.rotationOffset
+    const endAngle = args.endAngle + this.rotationOffset
+    const center = { x: 500, y: 500 }
+
+    const pathString = rimSegmentSVGPath({ 
+      center,
+      radius: this.radius,
+      thickness: this.radius,
+      startAngle,
+      endAngle
+    })
+    
+    const fullClass = ['inner-wedge', className, active ? 'active' : ''].join(' ')
+    return svg`
+      <path class=${fullClass} d=${pathString} @click=${clickHandler} />
+    `
+  }
 }
+
+
 
 /**
  * Calculates the angle in degrees for each pitch class element,
