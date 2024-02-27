@@ -1,15 +1,15 @@
-import { LitElement, html, css } from 'lit'
 import { ContextConsumer } from '@lit/context'
+import { LitElement, css, html } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { SoundContext } from '../../context/sound-context.js'
-import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 import { StateController } from '../../state/controller.js'
-import { start, guess } from '../../state/game-slice.js'
+import { start } from '../../state/game-slice.js'
+import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 
 export class GameViewElement extends LitElement {
   static styles = css`
     tone-wheel {
-      max-width: min(50vw, 90vh);
+      max-width: min(500px, calc(100vw - 40px));
       margin: 30px auto;
     }
   `
@@ -117,14 +117,14 @@ export class GameViewElement extends LitElement {
    * @param {import('../tone-wheel/events.js').PitchClassSelectedEvent} e
    */
   #pitchSelected(e) {
-    e.pitchClass.active = !e.pitchClass.active
-    // TODO: make wheel auto-update when any pitch class changes active state
-    this.#wheel.requestUpdate()
+    // e.pitchClass.active = !e.pitchClass.active
+    // // TODO: make wheel auto-update when any pitch class changes active state
+    // this.#wheel.requestUpdate()
 
-    if (e.pitchClass.active) {
-      this.#triggerNote(e.pitchClass)
-      this.#stateController.dispatch(guess(e.pitchClass.toJsObject()))
-    }
+    // if (e.pitchClass.active) {
+    //   this.#triggerNote(e.pitchClass)
+    //   this.#stateController.dispatch(guess(e.pitchClass.toJsObject()))
+    // }
   }
 
   /**

@@ -1,11 +1,11 @@
-import { LitElement, html, css, svg } from 'lit'
+import { LitElement, css, html, svg } from 'lit'
 import {
   degreesBetween,
   polarToCartesian,
   rimSegmentSVGPath,
 } from '../../common/geometry.js'
-import { PitchClassElement } from './pitch-class.js'
 import { PitchClassSelectedEvent } from './events.js'
+import { PitchClassElement } from './pitch-class.js'
 
 import { colorForAngle } from '../../common/color.js'
 import { registerElement } from '../../common/dom.js'
@@ -48,8 +48,10 @@ export class ToneWheel extends LitElement {
       opacity: 0.3;
     }
 
-    .tone-group:hover > .inner-wedge {
-      opacity: 0.5;
+    @media(hover: hover) and (pointer: fine) {
+      .tone-group:hover > .inner-wedge {
+        opacity: 0.5;
+      }
     }
 
     .tone-group > .inner-wedge.active {

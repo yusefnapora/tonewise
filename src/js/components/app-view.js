@@ -1,12 +1,23 @@
-import { LitElement, html, css } from 'lit'
-import { ContextProvider } from '@lit/context'
-import { SoundContext } from '../context/sound-context.js'
+import { ContextProvider } from '@lit/context';
+import { LitElement, css, html } from 'lit';
 import { Sampler } from '../audio/sampler.js';
+import { SoundContext } from '../context/sound-context.js';
 
 export class AppViewElement extends LitElement {
   static styles = css`
-    tone-wheel {
-      max-width: 50vw;
+    :host {
+      max-width: 100vw;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; 
+    }
+    game-view {
+      max-width: 100vw;
+      width: 100%;
+      min-height: 100vh;
       margin: auto;
     }
   `;

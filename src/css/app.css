@@ -1,0 +1,39 @@
+
+:root {
+  --theme-dark-color-background: hsl(210deg, 30%, 8%); 
+  --theme-dark-color-muted: hsl(217, 38%, 15%);
+  --theme-dark-color-primary: hsl(342, 71.1%, 53.9%);
+  --theme-dark-color-text: white;
+  --theme-dark-color-text-muted: #aaa;
+
+  --theme-light-color-background: hsl(30, 67%, 98%); 
+  /* --theme-light-color-muted: hsl(208, 31.9%, 81.6%); */
+  /* --theme-light-color-muted: hsl(207.1, 31.3%, 80.6%); */
+  --theme-light-color-muted: hsl(208.7, 59%, 92.4%);
+  /* --theme-light-color-primary: var(--theme-dark-color-primary); */
+  --theme-light-color-primary: hsl(342.3, 84.9%, 46.9%);
+  --theme-light-color-text: black;
+  --theme-light-color-text-muted: #666;
+}
+
+html {
+  --color-background: var(--theme-dark-color-background);
+  --color-muted: var(--theme-dark-color-muted);
+  --color-primary: var(--theme-dark-color-primary);
+  --color-text: var(--theme-dark-color-text);
+  --color-text-muted: var(--theme-dark-color-text-muted);
+
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+@media (prefers-color-scheme: light) {
+  html {
+    color-scheme: light;
+    --color-background: var(--theme-light-color-background);
+    --color-muted: var(--theme-light-color-muted);
+    --color-primary: var(--theme-light-color-primary);
+    --color-text: var(--theme-light-color-text);
+    --color-text-muted: var(--theme-light-color-text-muted);  
+  }
+}
