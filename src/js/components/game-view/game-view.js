@@ -117,14 +117,14 @@ export class GameViewElement extends LitElement {
    * @param {import('../tone-wheel/events.js').PitchClassSelectedEvent} e
    */
   #pitchSelected(e) {
-    // e.pitchClass.active = !e.pitchClass.active
-    // // TODO: make wheel auto-update when any pitch class changes active state
-    // this.#wheel.requestUpdate()
+    e.pitchClass.active = !e.pitchClass.active
+    // TODO: make wheel auto-update when any pitch class changes active state
+    this.#wheel.requestUpdate()
 
-    // if (e.pitchClass.active) {
-    //   this.#triggerNote(e.pitchClass)
-    //   this.#stateController.dispatch(guess(e.pitchClass.toJsObject()))
-    // }
+    if (e.pitchClass.active) {
+      this.#triggerNote(e.pitchClass)
+    this.#stateController.dispatch(guess(e.pitchClass.toJsObject()))
+    }
   }
 
   /**
