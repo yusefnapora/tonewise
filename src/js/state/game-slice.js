@@ -1,33 +1,18 @@
-
 /**
- * @typedef {{ name: string, midiNote: number }} Note
- * 
- * @typedef {'sequential' | 'chord'} ChallengeMode
- * 
- * @typedef {object} GameRules
- * @property {Note} tonic the root note of the interval
- * @property {Note[]} targets the "hidden" notes that the player is trying to guess
- * @property {ChallengeMode} [challengeMode] whether the notes should play in sequence or at the same time when presenting the challenge
- * 
- * @typedef {object} PlayerGuess
- * @property {Note} note
- * @property {boolean} isCorrect
- * 
- * @typedef {object} GameProgress
- * @property {PlayerGuess[]} guesses
- * @property {boolean} [isCompleted]
- * 
- * @typedef {object} GameRound
- * @property {GameRules} rules
- * @property {GameProgress} progress
- * 
- * @typedef {object} GameState
- * @property {GameRound|null} currentRound
+ * @typedef {import('./types.d.js').Note} Note
+ * @typedef {import('./types.d.js').ChallengeMode} ChallengeMode
+ * @typedef {import('./types.d.js').GameRules} GameRules
+ * @typedef {import('./types.d.js').PlayerGuess} PlayerGuess
+ * @typedef {import('./types.d.js').GameProgress} GameProgress
+ * @typedef {import('./types.d.js').GameRound} GameRound
+ * @typedef {import('./types.d.js').GameState} GameState
  * 
  */
 
-/** @typedef {import('@reduxjs/toolkit').PayloadAction<GameRound>} GameRoundAction */
-/** @typedef {import('@reduxjs/toolkit').PayloadAction<Note>} NoteAction */
+/** 
+ * @typedef {import('@reduxjs/toolkit').PayloadAction<GameRound>} GameRoundAction
+ * @typedef {import('@reduxjs/toolkit').PayloadAction<Note>} NoteAction
+ */
 
 import { createSlice, current } from "@reduxjs/toolkit"
 
