@@ -34,18 +34,18 @@ export class ToneWheel extends LitElement {
     }
     
     .tone-label {
-      cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    .rim-segment {
-      cursor: pointer;
+    .inner-wedge {
+      opacity: 0.3;
     }
 
-    .inner-wedge {
-      cursor: pointer;
-      opacity: 0.3;
+    @media(pointer: fine) {
+      .tone-group {
+        cursor: pointer;
+      }
     }
 
     @media(hover: hover) and (pointer: fine) {
