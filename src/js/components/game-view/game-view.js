@@ -8,7 +8,14 @@ import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 
 export class GameViewElement extends LitElement {
   static styles = css`
+    :host {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
     tone-wheel {
+      width: 100%;
       max-width: min(500px, calc(100vw - 40px));
       margin: 30px auto;
     }
@@ -164,6 +171,9 @@ export class GameViewElement extends LitElement {
     const tonic = currentRound?.rules?.tonic
     const completed = currentRound?.progress.isCompleted ?? false
     
+    const tonicLabel = tonic ? `Tonic: ${tonic.name}` : ''
+
+
     return html`
     <tone-wheel @pitchClassSelected=${this.#pitchSelected} no-pitch-constellation>
       <pitch-class class="C"  midi-note="60">C</pitch-class>
@@ -181,9 +191,9 @@ export class GameViewElement extends LitElement {
     </tone-wheel>
 
     <div>
-    <div>${tonic?.name}</div>
-    <div>${completed ? 'Correct!' : undefined}</div>
-    <button @click=${this.#startNewGame}>New Game</button>
+      <button @click=${this.#startNewGame}>New Game</button>
+      <div>${tonicLabel}</div>
+      <div>${completed ? 'Correct!' : undefined}</div>
     </div>
   `
   }

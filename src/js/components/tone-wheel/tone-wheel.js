@@ -32,14 +32,19 @@ export class ToneWheel extends LitElement {
     :host {
       display: block;
     }
-    
+
     .tone-label {
       user-select: none;
       -webkit-user-select: none;
     }
 
     .inner-wedge {
-      opacity: 0.3;
+      opacity: 0;
+      stroke: none;
+    }
+
+    .inner-wedge.highlight {
+      opacity: 0.2;
     }
 
     @media(pointer: fine) {
@@ -50,13 +55,23 @@ export class ToneWheel extends LitElement {
 
     @media(hover: hover) and (pointer: fine) {
       .tone-group:hover > .inner-wedge {
-        opacity: 0.5;
+        opacity: 0.2;
       }
     }
 
+    
     .tone-group > .inner-wedge.active {
-      opacity: 0.7;
+      opacity: 0;
     }
+
+    .pitch-line {
+      opacity: 0;
+    }
+
+    .pitch-line.active {
+      opacity: 1.0;
+    }
+    
   `
 
   static properties = {
@@ -151,6 +166,23 @@ export class ToneWheel extends LitElement {
         clickHandler,
       })
       groupContent.push(segmentPath)
+
+      // scale the pitch line width proportional to the wheel radius,
+      // and also shrink the width for pitches whose rim segment length
+      // is less than 1 EDO-step
+      const edoStep = 360 / elements.length
+      const len = Math.min(edoStep, segmentLength)
+      const widthScalar = (len / 360) * (this.radius / DEFAULT_RADIUS)
+      const width = 100 * widthScalar
+      groupContent.push(
+        this.#createPitchLine({
+          className,
+          endpoint: intervalPoint,
+          width,
+          active: el.active,
+        }),
+      )
+
       if (el.label) {
         groupContent.push(
           this.#createSegmentLabel({
@@ -160,21 +192,7 @@ export class ToneWheel extends LitElement {
           }),
         )
       }
-      // if (el.active) {
-      //   // scale the pitch line width proportional to the wheel radius,
-      //   // and also shrink the width for pitches whose rim segment length
-      //   // is less than 1 EDO-step
-      //   const len = Math.min(edoStep, segmentLength)
-      //   const widthScalar = (len / 360) * (this.radius / DEFAULT_RADIUS)
-      //   const width = 1000 * widthScalar
-      //   pitchLines.push(
-      //     this.#createPitchLine({
-      //       className,
-      //       endpoint: intervalPoint,
-      //       width,
-      //     }),
-      //   )
-      // }
+
       const color = colorForAngle(intervalAngle)
       styleContent += `
         .${className} { 
@@ -279,17 +297,18 @@ export class ToneWheel extends LitElement {
    * @param {Point} args.endpoint (x,y) coords of line's endpoint
    * @param {string} args.className CSS class name, to set stroke color
    * @param {number} args.width width of line in viewbox units
+   * @param {boolean} [args.active]
    * @param {number} [args.cx] center x coord of wheel in viewbox units. defaults to 500
    * @param {number} [args.cy] center y coord of wheel in viewbox units. defaults to 500
    *
    */
   #createPitchLine(args) {
-    const { className, endpoint, width } = args
+    const { className, endpoint, width, active } = args
     const cx = args.cx ?? 500
     const cy = args.cy ?? 500
 
     return svg`
-    <line class=${className + ' pitch-line'}
+    <line class=${className + ' pitch-line' + (active ? 'active' : '')}
       x1=${cx} y1=${cy}
       x2=${endpoint.x} y2=${endpoint.y}
       stroke-width=${width}
