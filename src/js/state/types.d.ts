@@ -1,6 +1,5 @@
 export type Note = {
-  name: string
-  midiNote: number
+  id: string
 }
 
 export type ChallengeMode = 'sequential' | 'chord'

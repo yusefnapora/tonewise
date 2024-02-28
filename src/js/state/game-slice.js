@@ -42,7 +42,7 @@ function isCompleted(state) {
   const { rules, progress } = state.currentRound
   return rules.targets.every(note => 
     progress.guesses.find(guess => 
-      guess.isCorrect && guess.note.name === note.name))
+      guess.isCorrect && guess.note.id === note.id))
 }
 
 /**
@@ -51,7 +51,7 @@ function isCompleted(state) {
  * @param {Note} note 
  */
 function isCorrectGuess(rules, note) {
-  return rules.targets.some(t => t.name === note.name)
+  return rules.targets.some(t => t.id === note.id)
 }
 
 const gameSlice = createSlice({

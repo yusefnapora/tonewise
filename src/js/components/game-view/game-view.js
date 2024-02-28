@@ -60,13 +60,13 @@ export class GameViewElement extends LitElement {
       console.warn('chord mode not supported yet, playing sequentially')
     }
     const duration = 1
-    const tonicPC = this.#pitchClass(tonic.name)
+    const tonicPC = this.#pitchClass(tonic.id)
     if (!tonicPC) {
       return
     }
     await this.#playAndHighlight(tonicPC, { duration })
     for (const note of rules.targets) {
-      const pc = this.#pitchClass(note.name)
+      const pc = this.#pitchClass(note.id)
       if (!pc) {
         continue
       }
@@ -105,7 +105,7 @@ export class GameViewElement extends LitElement {
   /** @param {string} id  */
   #pitchClass(id) {
     return /** @type {PitchClassElement | undefined} */ (
-      this.renderRoot.querySelector(`pitch-class.${id}`)
+      this.renderRoot.querySelector(`pitch-class#${id}`)
     )
   }
 
@@ -160,7 +160,6 @@ export class GameViewElement extends LitElement {
    * @param {PitchClassElement} pitchClass 
    */
   #noteEnded(pitchClass) {
-    // TODO: fade animation
     pitchClass.active = false 
     this.#wheel.requestUpdate()
   }
@@ -171,23 +170,23 @@ export class GameViewElement extends LitElement {
     const tonic = currentRound?.rules?.tonic
     const completed = currentRound?.progress.isCompleted ?? false
     
-    const tonicLabel = tonic ? `Tonic: ${tonic.name}` : ''
+    const tonicLabel = tonic ? `Tonic: ${tonic.id}` : ''
 
 
     return html`
     <tone-wheel @pitchClassSelected=${this.#pitchSelected} no-pitch-constellation>
-      <pitch-class class="C"  midi-note="60">C</pitch-class>
-      <pitch-class class="C♯" midi-note="61">C♯</pitch-class>
-      <pitch-class class="D"  midi-note="62">D</pitch-class>
-      <pitch-class class="D♯" midi-note="63">D♯</pitch-class>
-      <pitch-class class="E"  midi-note="64">E</pitch-class>
-      <pitch-class class="F"  midi-note="65">F</pitch-class>
-      <pitch-class class="F♯" midi-note="66">F♯</pitch-class>
-      <pitch-class class="G"  midi-note="67">G</pitch-class>
-      <pitch-class class="G♯" midi-note="68">G♯</pitch-class>
-      <pitch-class class="A"  midi-note="69">A</pitch-class>
-      <pitch-class class="A♯" midi-note="70">A♯</pitch-class>
-      <pitch-class class="B"  midi-note="71">B</pitch-class>
+      <pitch-class id="C"  midi-note="60">C</pitch-class>
+      <pitch-class id="C♯" midi-note="61">C♯</pitch-class>
+      <pitch-class id="D"  midi-note="62">D</pitch-class>
+      <pitch-class id="D♯" midi-note="63">D♯</pitch-class>
+      <pitch-class id="E"  midi-note="64">E</pitch-class>
+      <pitch-class id="F"  midi-note="65">F</pitch-class>
+      <pitch-class id="F♯" midi-note="66">F♯</pitch-class>
+      <pitch-class id="G"  midi-note="67">G</pitch-class>
+      <pitch-class id="G♯" midi-note="68">G♯</pitch-class>
+      <pitch-class id="A"  midi-note="69">A</pitch-class>
+      <pitch-class id="A♯" midi-note="70">A♯</pitch-class>
+      <pitch-class id="B"  midi-note="71">B</pitch-class>
     </tone-wheel>
 
     <div>
