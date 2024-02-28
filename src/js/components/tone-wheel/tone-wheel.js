@@ -27,6 +27,8 @@ const DEFAULT_ROTATION_OFFSET = -90
 
 const DEFAULT_FONT_SIZE = 50
 
+const DEFAULT_PITCH_LINE_WIDTH = 200
+
 export class ToneWheel extends LitElement {
   static styles = css`
     :host {
@@ -155,7 +157,6 @@ export class ToneWheel extends LitElement {
         endAngle: segmentEndAngle,
         className,
         active: el.active,
-        clickHandler,
       }))
 
       const { path: segmentPath, intervalPoint } = this.#createRimSegment({
@@ -163,7 +164,6 @@ export class ToneWheel extends LitElement {
         endAngle: segmentEndAngle,
         intervalAngle: intervalAngle,
         className,
-        clickHandler,
       })
       groupContent.push(segmentPath)
 
@@ -173,7 +173,7 @@ export class ToneWheel extends LitElement {
       const edoStep = 360 / elements.length
       const len = Math.min(edoStep, segmentLength)
       const widthScalar = (len / 360) * (this.radius / DEFAULT_RADIUS)
-      const width = 100 * widthScalar
+      const width = DEFAULT_PITCH_LINE_WIDTH * widthScalar
       groupContent.push(
         this.#createPitchLine({
           className,
@@ -188,7 +188,6 @@ export class ToneWheel extends LitElement {
           this.#createSegmentLabel({
             label: el.label,
             position: intervalPoint,
-            clickHandler,
           }),
         )
       }
@@ -200,7 +199,7 @@ export class ToneWheel extends LitElement {
           fill: ${color};
         }
 			`
-      groups.push(svg`<g class="tone-group ${className}">${groupContent}</g>`)
+      groups.push(svg`<g @click=${clickHandler} class="tone-group ${className}">${groupContent}</g>`)
     }
 
     const content = svg`
@@ -300,10 +299,11 @@ export class ToneWheel extends LitElement {
    * @param {boolean} [args.active]
    * @param {number} [args.cx] center x coord of wheel in viewbox units. defaults to 500
    * @param {number} [args.cy] center y coord of wheel in viewbox units. defaults to 500
+   * @param {function} [args.clickHandler]
    *
    */
   #createPitchLine(args) {
-    const { className, endpoint, width, active } = args
+    const { className, endpoint, width, active, clickHandler } = args
     const cx = args.cx ?? 500
     const cy = args.cy ?? 500
 
