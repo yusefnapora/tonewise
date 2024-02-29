@@ -4,12 +4,13 @@
     "moduleResolution": "nodenext",
     "module": "NodeNext",
     "checkJs": true,
-    "types": ["mocha"]
+    "types": ["mocha"],
+		"noEmit": true
   },
 
   "include": [
     "./src/**/*.js", 
     "./src/**/*.d.ts",
-    "./test/**/*.js"
+		"./test/**/*.js"
   ]
 }

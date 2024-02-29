@@ -9,7 +9,8 @@
     "clean": "rimraf ./dist",
     "serve": "web-dev-server --node-resolve --watch --open --root-dir ./src",
     "format": "prettier --write .",
-    "test": "web-test-runner test/**/*.test.js --node-resolve"
+    "test": "web-test-runner test/**/*.test.js --node-resolve",
+		"typecheck": "tsc -p ./jsconfig.json"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +27,8 @@
     "prettier": "3.2.5",
     "rimraf": "^5.0.5",
     "rollup": "^4.12.0",
-    "rollup-plugin-copy": "^3.5.0"
+    "rollup-plugin-copy": "^3.5.0",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@lit/context": "^1.1.0",

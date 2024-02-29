@@ -1,3 +1,4 @@
+// @ts-expect-error
 import { expect } from 'chai'
 
 it('runs tests', () => {
