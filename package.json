@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "rollup -c rollup.config.js",
+    "build": "npm run clean && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "serve": "web-dev-server --node-resolve --watch --open --root-dir ./src",
     "format": "prettier --write .",
@@ -25,11 +25,13 @@
     "chai": "npm:@esm-bundle/chai@^4.3.4-fix.0",
     "prettier": "3.2.5",
     "rimraf": "^5.0.5",
-    "rollup": "^4.12.0"
+    "rollup": "^4.12.0",
+    "rollup-plugin-copy": "^3.5.0"
   },
   "dependencies": {
     "@lit/context": "^1.1.0",
     "@reduxjs/toolkit": "^2.2.1",
+    "@shoelace-style/shoelace": "^2.14.0",
     "lit": "^3.1.2",
     "smplr": "^0.12.2"
   }

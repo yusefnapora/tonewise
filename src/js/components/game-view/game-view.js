@@ -172,6 +172,13 @@ export class GameViewElement extends LitElement {
     
     const tonicLabel = tonic ? `Tonic: ${tonic.id}` : ''
 
+    const actionButton = (!!currentRound && !completed)
+      ? html`<sl-button variant="danger" @click=${this.#startNewGame}>Give up</sl-button>`
+      : html`<sl-button variant="primary" @click=${this.#startNewGame}>New game</sl-button>`
+
+    const replayButton = currentRound?.rules
+      ? html`<sl-button variant="neutral" @click=${() => this.#playChallenge(currentRound.rules)}>Replay</sl-button>`
+      : undefined
 
     return html`
     <tone-wheel @pitchClassSelected=${this.#pitchSelected} no-pitch-constellation>
@@ -190,9 +197,9 @@ export class GameViewElement extends LitElement {
     </tone-wheel>
 
     <div>
-      <button @click=${this.#startNewGame}>New Game</button>
-      <div>${tonicLabel}</div>
-      <div>${completed ? 'Correct!' : undefined}</div>
+      ${actionButton}
+      ${replayButton}
+      <div>${completed ? 'Correct!' : tonicLabel}</div>
     </div>
   `
   }
