@@ -33,6 +33,9 @@ export class ToneWheel extends LitElement {
   static styles = css`
     :host {
       display: block;
+
+			/* prevent browser from eating touch events for scrolling, etc */
+		  touch-action: none;
     }
 
     .tone-label {
