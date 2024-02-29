@@ -119,6 +119,7 @@ export class ToneWheel extends LitElement {
       console.error('<pitch-class> element not registered, unable to render')
       return
     }
+    let pointerIsDown = false
 
     const pitchesWithAngles = getIntervalAngles(elements)
     pitchesWithAngles.sort((a, b) => a.angle - b.angle)
@@ -147,11 +148,6 @@ export class ToneWheel extends LitElement {
 
       const className = `tone-${i}`
 
-      const clickHandler = () => {
-        console.log(`${el.label} (tone ${i}) clicked. active: ${el.active}`)
-        const event = new PitchClassSelectedEvent(el)
-        this.dispatchEvent(event)
-      }
       groupContent.push(this.#createInnerWedge({
         startAngle: segmentStartAngle,
         endAngle: segmentEndAngle,
@@ -199,7 +195,49 @@ export class ToneWheel extends LitElement {
           fill: ${color};
         }
 			`
-      groups.push(svg`<g @click=${clickHandler} class="tone-group ${className}">${groupContent}</g>`)
+
+      const clickHandler = () => {
+        console.log(`${el.label} (tone ${i}) clicked. active: ${el.active}`)
+        const event = new PitchClassSelectedEvent(el)
+        this.dispatchEvent(event)
+      }
+
+      const activated = () => {
+        console.log(`${el.label} (tone ${i}) entered. active: ${el.active}`)
+        const event = new PitchClassSelectedEvent(el)
+        this.dispatchEvent(event) 
+      }
+
+      /**
+       * 
+       * @param {PointerEvent} e 
+       */
+      const pointerDown = (e) => {
+        if (e.target instanceof Element) {
+          e.target.releasePointerCapture
+        }
+        activated()
+      }
+
+      /**
+       * @param {PointerEvent} e
+       */
+      const pointerEnter = (e) => {
+        if (e.pointerType !== 'touch' && e.buttons === 0) {
+          return
+        } 
+        activated()
+      }
+
+      groups.push(svg`
+        <g 
+          @pointerdown=${pointerDown}
+          @pointerenter=${pointerEnter} 
+          class="tone-group ${className}"
+        >
+          ${groupContent}
+        </g>
+      `)
     }
 
     const content = svg`
@@ -220,7 +258,7 @@ export class ToneWheel extends LitElement {
    * @returns {SVGTemplateResult}
    */
   #createSegmentLabel(args) {
-    const { label, position, clickHandler } = args
+    const { label, position } = args
     return svg`
       <text
         class="tone-label"
@@ -228,7 +266,6 @@ export class ToneWheel extends LitElement {
         fill="white"
         text-anchor="middle"
         font-size=${this.fontSize}
-        @click=${clickHandler}
         x=${position.x}
         y=${position.y}
       >
@@ -246,7 +283,6 @@ export class ToneWheel extends LitElement {
    * @param {number} args.startAngle angle in degrees of the beginning of the rim segment arc
    * @param {number} args.endAngle angle in degrees of the end of the rim segment arc
    * @param {number} [args.thickness] distance between inner and outer radii of the arc segment. defaults to 100
-   * @param {function} [args.clickHandler] optional event handler for clicks on the rim segment
    * @param {string} [args.className] CSS class name, used for stroke color
    *
    * @typedef {object} RimSegment
@@ -275,7 +311,7 @@ export class ToneWheel extends LitElement {
       thickness,
     })
     const path = svg`
-      <path class=${className + ' rim-segment'} d=${pathString} @click=${args.clickHandler} />
+      <path class=${className + ' rim-segment'} d=${pathString} />
     `
 
     // return the cartesian point that corresponds to the intervalAngle,
@@ -299,11 +335,10 @@ export class ToneWheel extends LitElement {
    * @param {boolean} [args.active]
    * @param {number} [args.cx] center x coord of wheel in viewbox units. defaults to 500
    * @param {number} [args.cy] center y coord of wheel in viewbox units. defaults to 500
-   * @param {function} [args.clickHandler]
    *
    */
   #createPitchLine(args) {
-    const { className, endpoint, width, active, clickHandler } = args
+    const { className, endpoint, width, active } = args
     const cx = args.cx ?? 500
     const cy = args.cy ?? 500
 
@@ -324,10 +359,9 @@ export class ToneWheel extends LitElement {
    * @param {number} args.startAngle angle in degrees of the beginning of the wedge
    * @param {number} args.endAngle angle in degrees of the end of the wedge
    * @param {boolean} [args.active]
-   * @param {function} [args.clickHandler] optional event handler for clicks on the rim segment
    */
   #createInnerWedge(args) {
-    const { className,  clickHandler, active } = args
+    const { className,  active } = args
     const startAngle = args.startAngle + this.rotationOffset
     const endAngle = args.endAngle + this.rotationOffset
     const center = { x: 500, y: 500 }
@@ -342,7 +376,7 @@ export class ToneWheel extends LitElement {
     
     const fullClass = ['inner-wedge', className, active ? 'active' : ''].join(' ')
     return svg`
-      <path class=${fullClass} d=${pathString} @click=${clickHandler} />
+      <path class=${fullClass} d=${pathString} />
     `
   }
 }
