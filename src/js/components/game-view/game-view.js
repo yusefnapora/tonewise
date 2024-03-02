@@ -6,7 +6,8 @@ import { StateController } from '../../state/controller.js'
 import { guess, start } from '../../state/slices/game-slice.js'
 import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 import { clearNoteHighlight, endPlayerNote, highlightNote, resetInstrumentState, startPlayerNote } from '../../state/slices/instrument-slice.js'
-import { triggerNoteStart, triggerNoteStop } from '../../state/slices/audio-slice.js'
+import { resumeAudio, triggerNoteStart, triggerNoteStop } from '../../state/slices/audio-slice.js'
+
 
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -61,6 +62,7 @@ export class GameViewElement extends LitElement {
     // if (!tonicPC) {
     //   return
     // }
+    // this.#triggerNote(tonicPC)
     // await this.#playAndHighlight(tonicPC, { duration })
     // for (const note of rules.targets) {
     //   const pc = this.#pitchClass(note.id)
@@ -77,16 +79,16 @@ export class GameViewElement extends LitElement {
   /** 
    * @param {PitchClassElement} pc
    */
-  async #playAndHighlight(pc) {
-    if (!pc.midiNote) {
-      return
-    }
-    const midiNote = pc.midiNote
-    const note = { id: pc.id }
+  // async #playAndHighlight(pc) {
+  //   if (!pc.midiNote) {
+  //     return
+  //   }
+  //   const midiNote = pc.midiNote
+  //   const note = { id: pc.id }
 
-    this.#stateController.dispatch(triggerNoteStart({ midiNote }))
-    this.#stateController.dispatch(highlightNote(note))
-  }
+  //   this.#stateController.dispatch(triggerNoteStart({ midiNote }))
+  //   this.#stateController.dispatch(highlightNote(note))
+  // }
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
   get #wheel() {
@@ -116,6 +118,7 @@ export class GameViewElement extends LitElement {
    */
   #pitchSelected(e) {
     const note = e.detail
+    resumeAudio()
     this.#stateController.dispatch(startPlayerNote(note))
 
     const pc = this.#pitchClass(note.id)
@@ -129,6 +132,7 @@ export class GameViewElement extends LitElement {
   #pitchDeselected(e) {
     const note = e.detail
     this.#stateController.dispatch(endPlayerNote(note)) 
+    this.#endNotePlayback(this.#pitchClass(note.id))
   }
 
   /**
@@ -140,7 +144,15 @@ export class GameViewElement extends LitElement {
     if (!midiNote) {
       return
     }
-    this.#stateController.dispatch(triggerNoteStop({ midiNote })) 
+    this.#stateController.dispatch(triggerNoteStart({ midiNote })) 
+  }
+
+  #endNotePlayback(pitchClass) {
+    const midiNote = pitchClass.midiNote
+    if (!midiNote) {
+      return
+    }
+    this.#stateController.dispatch(triggerNoteStop({ midiNote }))  
   }
 
 

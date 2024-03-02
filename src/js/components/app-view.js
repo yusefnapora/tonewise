@@ -1,7 +1,4 @@
-import { ContextProvider } from '@lit/context';
 import { LitElement, css, html } from 'lit';
-import { Sampler } from '../audio/sampler.js';
-import { SoundContext } from '../context/sound-context.js';
 import { dispatch } from '../state/store.js'
 import { loadSampler } from '../state/slices/audio-slice.js';
 
@@ -23,11 +20,6 @@ export class AppViewElement extends LitElement {
       margin: auto;
     }
   `;
-
-  #soundProvider = new ContextProvider(this, { 
-    context: SoundContext,
-    initialValue: new Sampler()
-  })
 
   connectedCallback() {
     super.connectedCallback()

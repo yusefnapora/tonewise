@@ -231,6 +231,9 @@ export class ToneWheel extends LitElement {
       }
 
       const pointerLeave = (e) => {
+        if (e.pointerType !== 'touch' && e.buttons === 0) {
+          return
+        } 
         deactivated()
       }
       const pointerUp = (e) => {

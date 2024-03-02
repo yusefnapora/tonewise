@@ -22,6 +22,13 @@ const AudioGlobals = {
   playbackMeta: {}
 }
 
+export function resumeAudio() {
+  if (AudioGlobals.context.state === 'suspended') {
+    console.log('resuming audio context')
+    return AudioGlobals.context.resume().then(() => console.log('context resumed'))
+  }
+}
+
 /** 
  * @typedef {import('./types.js').Note} Note
  * @typedef {import('./types.js').AudioState} AudioState
@@ -68,8 +75,12 @@ export const triggerNoteStart = createAsyncThunk(
     if (meta) {
       meta.stop()
     }
-    const { started, ended, stop } = await AudioGlobals.sampler.play({ note: midiNote })
+    const { started, ended, stop } = await AudioGlobals.sampler.play({ 
+      note: midiNote,
+      decayTime: 1, // TODO: add to args
+    })
     AudioGlobals.playbackMeta[midiNote] = { stop, ended }
+    console.log('triggered note playback', AudioGlobals.playbackMeta[midiNote])
     await started
     return { midiNote }
   },
@@ -121,6 +132,7 @@ const audioSlice = createSlice({
         state.samplerLoading = 'loaded'
       })
       .addCase(triggerNoteStart.fulfilled, (state, action) => {
+        console.log('note start fulfilled')
         state.soundingMidiNotes.push(action.payload.midiNote)
       })
       .addCase(triggerNoteStop.fulfilled, (state, action) => {
