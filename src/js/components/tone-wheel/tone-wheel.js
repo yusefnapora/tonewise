@@ -49,7 +49,7 @@ export class ToneWheel extends LitElement {
     }
 
     .inner-wedge.highlight {
-      opacity: 0.2;
+      opacity: 0.3;
     }
 
     @media(pointer: fine) {
@@ -60,7 +60,7 @@ export class ToneWheel extends LitElement {
 
     @media(hover: hover) and (pointer: fine) {
       .tone-group:hover > .inner-wedge {
-        opacity: 0.2;
+        opacity: 0.3;
       }
     }
 
@@ -77,6 +77,19 @@ export class ToneWheel extends LitElement {
       opacity: 1.0;
     }
     
+    /** todo: generate while building the wheel */
+    .gradient-background {
+      clip-path: url(#gradient-clip);
+      width: 100%;
+      height: 100%;
+      opacity: 0.5;
+    }
+
+    .gradient-blur {
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(30px);
+    }
   `
 
   static properties = {
@@ -126,7 +139,10 @@ export class ToneWheel extends LitElement {
     const pitchesWithAngles = getIntervalAngles(elements)
     pitchesWithAngles.sort((a, b) => a.angle - b.angle)
 
+    const rimThickness = 140
+
     const groups = []
+    const colors = []
     for (let i = 0; i < pitchesWithAngles.length; i++) {
       const groupContent = []
       const el = pitchesWithAngles[i].pitchClass
@@ -161,10 +177,10 @@ export class ToneWheel extends LitElement {
         startAngle: segmentStartAngle,
         endAngle: segmentEndAngle,
         intervalAngle: intervalAngle,
+        thickness: rimThickness,
         className,
       })
-      groupContent.push(segmentPath)
-
+      
       // scale the pitch line width proportional to the wheel radius,
       // and also shrink the width for pitches whose rim segment length
       // is less than 1 EDO-step
@@ -181,6 +197,9 @@ export class ToneWheel extends LitElement {
         }),
       )
 
+      // push rim segment after pitch line, so it renders on top
+      groupContent.push(segmentPath)
+
       if (el.label) {
         groupContent.push(
           this.#createSegmentLabel({
@@ -191,6 +210,7 @@ export class ToneWheel extends LitElement {
       }
 
       const color = colorForAngle(intervalAngle)
+      colors.push(color)
       styleContent += `
         .${className} { 
           stroke: ${color};
@@ -233,7 +253,7 @@ export class ToneWheel extends LitElement {
       const pointerLeave = (e) => {
         if (e.pointerType !== 'touch' && e.buttons === 0) {
           return
-        } 
+        }
         deactivated()
       }
       const pointerUp = (e) => {
@@ -253,12 +273,43 @@ export class ToneWheel extends LitElement {
       `)
     }
 
+    // repeat the first color at the end, so the
+    // to act as the end point for the last gradient stop
+    const backgroundColors = [...colors, colors[0]]
+    styleContent += `
+      .gradient-colors {
+        background: conic-gradient(
+          ${backgroundColors.join(', ')}
+        );
+      }
+    `
+
+    // clip the inner conic gradient background to extend just
+    // past the inner edge of the rim. Putting it right at the
+    // edge leads to a "glow" effect around the rim which is
+    // nice, but not quite what I want
+    const clipRadius = this.radius - (rimThickness/2)
     const content = svg`
     <g>
+      <clipPath id="gradient-clip">
+        <circle cx="500" cy="500" r=${clipRadius}/>
+      </clipPath>
+      <foreignObject width="100%" height="100%" top="0" left="0">
+        <div xmlns="http://www.w3.org/1999/xhtml" 
+          class="gradient-background gradient-colors">
+          <div xmlns="http://www.w3.org/1999/xhtml"
+            class="gradient-blur"
+          ></div>
+        </div>
+      </foreignObject>
       ${groups}
     </g>
     `
     return { content, styleContent }
+  }
+
+  #createInnerGradient() {
+
   }
 
   /**
@@ -356,13 +407,23 @@ export class ToneWheel extends LitElement {
     const cy = args.cy ?? 500
 
     return svg`
-    <line class=${className + ' pitch-line' + (active ? 'active' : '')}
+    <g class=${'pitch-line ' + (active ? 'active' : '')}>
+      <line 
+        x1=${cx} y1=${cy}
+        x2=${endpoint.x} y2=${endpoint.y}
+        stroke="white"
+        stroke-width=${width}
+        stroke-linecap="round"
+        opacity="0.7"
+      />
+      <line class=${className}
       x1=${cx} y1=${cy}
       x2=${endpoint.x} y2=${endpoint.y}
-      stroke-width=${width}
+      stroke-width=${width*0.8}
       stroke-linecap="round"
-      opacity="0.6"
+      opacity="0.9"
     />
+    </g>
     `
   }
 
