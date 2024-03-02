@@ -36,6 +36,20 @@ export class ToneWheel extends LitElement {
 
 			/* prevent browser from eating touch events for scrolling, etc */
 		  touch-action: none;
+
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+      place-content: center;
+      place-items: center;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      grid-row: 1;
+      grid-column: 1;
+      z-index: 5;
     }
 
     .tone-label {
@@ -83,9 +97,12 @@ export class ToneWheel extends LitElement {
       width: 100%;
       height: 100%;
       opacity: 0.5;
+      grid-row: 1;
+      grid-column: 1;
     }
 
     .gradient-blur {
+      clip-path: url(#gradient-clip);
       width: 100%;
       height: 100%;
       backdrop-filter: blur(30px);
@@ -117,6 +134,9 @@ export class ToneWheel extends LitElement {
     <style>
       ${styleContent}
     </style>
+    <div class="gradient-background gradient-colors">
+      <div class="gradient-blur"></div>
+    </div>
     <svg viewBox="0 0 1000 1000">
       ${content}
     </svg>
@@ -288,28 +308,16 @@ export class ToneWheel extends LitElement {
     // past the inner edge of the rim. Putting it right at the
     // edge leads to a "glow" effect around the rim which is
     // nice, but not quite what I want
-    const clipRadius = this.radius - (rimThickness/2)
+    const clipRadius = 0.5 - ((rimThickness / this.radius) / 2)
     const content = svg`
     <g>
-      <clipPath id="gradient-clip">
-        <circle cx="500" cy="500" r=${clipRadius}/>
+      <clipPath id="gradient-clip" clipPathUnits="objectBoundingBox">
+        <circle cx="0.5" cy="0.5" r=${clipRadius}/>
       </clipPath>
-      <foreignObject width="100%" height="100%" top="0" left="0">
-        <div xmlns="http://www.w3.org/1999/xhtml" 
-          class="gradient-background gradient-colors">
-          <div xmlns="http://www.w3.org/1999/xhtml"
-            class="gradient-blur"
-          ></div>
-        </div>
-      </foreignObject>
       ${groups}
     </g>
     `
     return { content, styleContent }
-  }
-
-  #createInnerGradient() {
-
   }
 
   /**
