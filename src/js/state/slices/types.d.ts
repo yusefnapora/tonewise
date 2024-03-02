@@ -28,3 +28,15 @@ export type GameRound = {
 export type GameState = {
   currentRound: GameRound | null
 }
+
+
+
+export type InstrumentState = {
+  /** Notes that have been highlighted by the game (E.g. when playing a challenge sequence)
+   * Does not include user-held notes
+   */
+  highlightedNotes: Note[]
+
+  /** The notes (if any) that are currently being held down by the player */
+  heldNotes: Note[]
+}

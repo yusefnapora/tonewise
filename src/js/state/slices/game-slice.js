@@ -1,11 +1,11 @@
 /**
- * @typedef {import('./types.d.js').Note} Note
- * @typedef {import('./types.d.js').ChallengeMode} ChallengeMode
- * @typedef {import('./types.d.js').GameRules} GameRules
- * @typedef {import('./types.d.js').PlayerGuess} PlayerGuess
- * @typedef {import('./types.d.js').GameProgress} GameProgress
- * @typedef {import('./types.d.js').GameRound} GameRound
- * @typedef {import('./types.d.js').GameState} GameState
+ * @typedef {import('./types.js').Note} Note
+ * @typedef {import('./types.js').ChallengeMode} ChallengeMode
+ * @typedef {import('./types.js').GameRules} GameRules
+ * @typedef {import('./types.js').PlayerGuess} PlayerGuess
+ * @typedef {import('./types.js').GameProgress} GameProgress
+ * @typedef {import('./types.js').GameRound} GameRound
+ * @typedef {import('./types.js').GameState} GameState
  * 
  */
 
@@ -99,4 +99,4 @@ const gameSlice = createSlice({
 
 const { actions, reducer } = gameSlice
 export const { start, reset, guess } = actions
-export { reducer }
+export default reducer

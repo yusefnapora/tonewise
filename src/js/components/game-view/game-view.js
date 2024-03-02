@@ -1,10 +1,11 @@
 import { ContextConsumer } from '@lit/context'
-import { LitElement, css, html } from 'lit'
+import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { SoundContext } from '../../context/sound-context.js'
 import { StateController } from '../../state/controller.js'
-import { guess, start } from '../../state/game-slice.js'
+import { guess, start } from '../../state/slices/game-slice.js'
 import { PitchClassElement } from '../tone-wheel/pitch-class.js'
+import { clearNoteHighlight, endPlayerNote, highlightNote, startPlayerNote } from '../../state/slices/instrument-slice.js'
 
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -46,7 +47,7 @@ export class GameViewElement extends LitElement {
   }
 
   /**
-   * @param {import('../../state/game-slice.js').GameRules} rules 
+   * @param {import('../../state/slices/game-slice.js').GameRules} rules 
    */
   async #playChallenge(rules) {
     const { tonic, challengeMode } = rules
@@ -86,14 +87,13 @@ export class GameViewElement extends LitElement {
     if (!pc.midiNote || !sampler) {
       return
     }
+    const note = { id: pc.id }
 
-    pc.active = true
-    this.#wheel.requestUpdate()
+    this.#stateController.dispatch(highlightNote(note))
     const { ended } = await sampler.play({ note: pc.midiNote, ...options})
     await ended
     if (!keepHighlighted) {
-      pc.active = false
-      this.#wheel.requestUpdate()
+      this.#stateController.dispatch(clearNoteHighlight(note))
     }
   }
 
@@ -121,15 +121,23 @@ export class GameViewElement extends LitElement {
   }
 
   /** 
-   * @param {import('../tone-wheel/events.js').PitchClassSelectedEvent} e
+   * @param {import('../tone-wheel/events.js').NoteHoldBeganEvent} e
    */
   #pitchSelected(e) {
-    e.pitchClass.active = true
-    // TODO: make wheel auto-update when any pitch class changes active state
-    this.#wheel.requestUpdate()
+    const note = e.detail
+    this.#stateController.dispatch(startPlayerNote(note))
 
-    this.#triggerNote(e.pitchClass)
-    this.#stateController.dispatch(guess(e.pitchClass.toJsObject()))
+    const pc = this.#pitchClass(note.id)
+    this.#triggerNote(pc)
+    this.#stateController.dispatch(guess(note))
+  }
+
+   /** 
+   * @param {import('../tone-wheel/events.js').NoteHoldEndedEvent} e
+   */ 
+  #pitchDeselected(e) {
+    const note = e.detail
+    this.#stateController.dispatch(endPlayerNote(note)) 
   }
 
   /**
@@ -160,8 +168,9 @@ export class GameViewElement extends LitElement {
    * @param {PitchClassElement} pitchClass 
    */
   #noteEnded(pitchClass) {
-    pitchClass.active = false 
-    this.#wheel.requestUpdate()
+    console.log('note ended', pitchClass)
+    // todo: trigger note end on pointer up event
+    // this.#stateController.dispatch(endPlayerNote({ id: pitchClass.id }))
   }
 
   render() {
@@ -172,6 +181,12 @@ export class GameViewElement extends LitElement {
     
     const tonicLabel = tonic ? `Tonic: ${tonic.id}` : ''
 
+    const allActive = new Set([
+      ...state.instrument.heldNotes, 
+      ...state.instrument.highlightedNotes
+    ].map(n => n.id))
+    
+
     const actionButton = (!!currentRound && !completed)
       ? html`<sl-button variant="danger" @click=${this.#startNewGame}>Give up</sl-button>`
       : html`<sl-button variant="primary" @click=${this.#startNewGame}>New game</sl-button>`
@@ -180,20 +195,25 @@ export class GameViewElement extends LitElement {
       ? html`<sl-button variant="neutral" @click=${() => this.#playChallenge(currentRound.rules)}>Replay</sl-button>`
       : undefined
 
+      // todo: define notes & midi mapping elsewhere
+    const noteIds = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B']
+    const pitchClasses = noteIds.map((id, i) => {
+      const midiNote = i + 60
+      const active = allActive.has(id)
+      return html`
+      <pitch-class id=${id} midi-note=${midiNote} active=${active || nothing}>${id}</pitch-class>
+      `
+    })
+    
+    // TODO: make tone-wheel update itself when active pitch classes change
+    this.#wheel?.requestUpdate()
+
     return html`
-    <tone-wheel @pitchClassSelected=${this.#pitchSelected} no-pitch-constellation>
-      <pitch-class id="C"  midi-note="60">C</pitch-class>
-      <pitch-class id="C♯" midi-note="61">C♯</pitch-class>
-      <pitch-class id="D"  midi-note="62">D</pitch-class>
-      <pitch-class id="D♯" midi-note="63">D♯</pitch-class>
-      <pitch-class id="E"  midi-note="64">E</pitch-class>
-      <pitch-class id="F"  midi-note="65">F</pitch-class>
-      <pitch-class id="F♯" midi-note="66">F♯</pitch-class>
-      <pitch-class id="G"  midi-note="67">G</pitch-class>
-      <pitch-class id="G♯" midi-note="68">G♯</pitch-class>
-      <pitch-class id="A"  midi-note="69">A</pitch-class>
-      <pitch-class id="A♯" midi-note="70">A♯</pitch-class>
-      <pitch-class id="B"  midi-note="71">B</pitch-class>
+    <tone-wheel 
+      @note:holdBegan=${this.#pitchSelected}
+      @note:holdEnded=${this.#pitchDeselected}
+    >
+      ${pitchClasses}
     </tone-wheel>
 
     <div>

@@ -4,7 +4,7 @@ import {
   polarToCartesian,
   rimSegmentSVGPath,
 } from '../../common/geometry.js'
-import { PitchClassSelectedEvent } from './events.js'
+import { NoteHoldBeganEvent, NoteHoldEndedEvent, PitchClassSelectedEvent } from './events.js'
 import { PitchClassElement } from './pitch-class.js'
 
 import { colorForAngle } from '../../common/color.js'
@@ -122,7 +122,6 @@ export class ToneWheel extends LitElement {
       console.error('<pitch-class> element not registered, unable to render')
       return
     }
-    let pointerIsDown = false
 
     const pitchesWithAngles = getIntervalAngles(elements)
     pitchesWithAngles.sort((a, b) => a.angle - b.angle)
@@ -199,16 +198,15 @@ export class ToneWheel extends LitElement {
         }
 			`
 
-      const clickHandler = () => {
-        console.log(`${el.label} (tone ${i}) clicked. active: ${el.active}`)
-        const event = new PitchClassSelectedEvent(el)
-        this.dispatchEvent(event)
+      const activated = () => {
+        const event = new NoteHoldBeganEvent({ id: el.id })
+        this.dispatchEvent(event) 
       }
 
-      const activated = () => {
-        console.log(`${el.label} (tone ${i}) entered. active: ${el.active}`)
-        const event = new PitchClassSelectedEvent(el)
-        this.dispatchEvent(event) 
+      const deactivated = () => {
+        // console.log('note hold end', el.id)
+        const event = new NoteHoldEndedEvent({ id: el.id })
+        this.dispatchEvent(event)
       }
 
       /**
@@ -232,10 +230,19 @@ export class ToneWheel extends LitElement {
         activated()
       }
 
+      const pointerLeave = (e) => {
+        deactivated()
+      }
+      const pointerUp = (e) => {
+        deactivated()
+      }
+
       groups.push(svg`
         <g 
           @pointerdown=${pointerDown}
           @pointerenter=${pointerEnter} 
+          @pointerleave=${pointerLeave}
+          @pointerup=${pointerUp}
           class="tone-group ${className}"
         >
           ${groupContent}
