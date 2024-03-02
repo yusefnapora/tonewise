@@ -80,7 +80,6 @@ export const triggerNoteStart = createAsyncThunk(
       decayTime: 1, // TODO: add to args
     })
     AudioGlobals.playbackMeta[midiNote] = { stop, ended }
-    console.log('triggered note playback', AudioGlobals.playbackMeta[midiNote])
     await started
     return { midiNote }
   },
@@ -132,7 +131,6 @@ const audioSlice = createSlice({
         state.samplerLoading = 'loaded'
       })
       .addCase(triggerNoteStart.fulfilled, (state, action) => {
-        console.log('note start fulfilled')
         state.soundingMidiNotes.push(action.payload.midiNote)
       })
       .addCase(triggerNoteStop.fulfilled, (state, action) => {
