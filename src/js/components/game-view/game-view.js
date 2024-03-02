@@ -5,7 +5,7 @@ import { SoundContext } from '../../context/sound-context.js'
 import { StateController } from '../../state/controller.js'
 import { guess, start } from '../../state/slices/game-slice.js'
 import { PitchClassElement } from '../tone-wheel/pitch-class.js'
-import { clearNoteHighlight, endPlayerNote, highlightNote, startPlayerNote } from '../../state/slices/instrument-slice.js'
+import { clearNoteHighlight, endPlayerNote, highlightNote, resetInstrumentState, startPlayerNote } from '../../state/slices/instrument-slice.js'
 
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -44,6 +44,7 @@ export class GameViewElement extends LitElement {
 
     this.#playChallenge(rules)
     this.#stateController.dispatch(start({ rules, progress }))
+    this.#stateController.dispatch(resetInstrumentState())
   }
 
   /**

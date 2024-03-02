@@ -16,6 +16,10 @@ const instrumentSlice = createSlice({
   name: 'instrument',
   initialState,
   reducers: {
+    reset(_state) {
+      return initialState
+    },
+
     /**
      * @param {InstrumentState} state 
      * @param {NoteAction} action 
@@ -52,5 +56,5 @@ const instrumentSlice = createSlice({
 })
 
 const { actions, reducer } = instrumentSlice
-export const { startPlayerNote, endPlayerNote, highlightNote, clearNoteHighlight } = actions
+export const { startPlayerNote, endPlayerNote, highlightNote, clearNoteHighlight, reset: resetInstrumentState } = actions
 export default reducer
