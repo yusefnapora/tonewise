@@ -2,6 +2,8 @@ import { ContextProvider } from '@lit/context';
 import { LitElement, css, html } from 'lit';
 import { Sampler } from '../audio/sampler.js';
 import { SoundContext } from '../context/sound-context.js';
+import { dispatch } from '../state/store.js'
+import { loadSampler } from '../state/slices/audio-slice.js';
 
 export class AppViewElement extends LitElement {
   static styles = css`
@@ -26,6 +28,12 @@ export class AppViewElement extends LitElement {
     context: SoundContext,
     initialValue: new Sampler()
   })
+
+  connectedCallback() {
+    super.connectedCallback()
+    // todo: show welcome screen before game view
+    dispatch(loadSampler())
+  }
 
   render() {
     return html`<game-view></game-view>`

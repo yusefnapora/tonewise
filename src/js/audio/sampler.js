@@ -25,7 +25,8 @@ export class Sampler {
   }
 
   async enable() { 
-    return this.#instrument.load
+    await this.#instrument.load
+    return this
   }
 
   /**
@@ -40,16 +41,18 @@ export class Sampler {
 
     /** @type {Promise<SampleStart>} */
     let ended
+    /** @type {(time?: number) => void} */
+    let stop 
     /** @type {Promise<SampleStart>} */
     const started = new Promise(resolveStart => {
       ended = new Promise(resolveEnd => {
-        this.#instrument.start({ 
+        stop = this.#instrument.start({ 
           onStart: resolveStart,
           onEnded: resolveEnd,
           ...note,
         })
       })
     })
-    return { started, ended }
+    return { started, ended, stop }
   }
 }

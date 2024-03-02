@@ -6,6 +6,7 @@ import { StateController } from '../../state/controller.js'
 import { guess, start } from '../../state/slices/game-slice.js'
 import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 import { clearNoteHighlight, endPlayerNote, highlightNote, resetInstrumentState, startPlayerNote } from '../../state/slices/instrument-slice.js'
+import { triggerNoteStart, triggerNoteStop } from '../../state/slices/audio-slice.js'
 
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -23,7 +24,6 @@ export class GameViewElement extends LitElement {
   `
 
   #stateController = new StateController(this)
-  #sampler = new ContextConsumer(this, { context: SoundContext })
 
   connectedCallback() {
     super.connectedCallback()
@@ -51,51 +51,41 @@ export class GameViewElement extends LitElement {
    * @param {import('../../state/slices/game-slice.js').GameRules} rules 
    */
   async #playChallenge(rules) {
-    const { tonic, challengeMode } = rules
-    const sampler = this.#sampler.value
-    if (!sampler) {
-      console.error('no sampler available')
-      return
-    }
+    // const { tonic, challengeMode } = rules
 
-    if (challengeMode === 'chord') {
-      console.warn('chord mode not supported yet, playing sequentially')
-    }
-    const duration = 1
-    const tonicPC = this.#pitchClass(tonic.id)
-    if (!tonicPC) {
-      return
-    }
-    await this.#playAndHighlight(tonicPC, { duration })
-    for (const note of rules.targets) {
-      const pc = this.#pitchClass(note.id)
-      if (!pc) {
-        continue
-      }
-      const { ended } = await sampler.play({ note: pc.midiNote, duration })
-      await ended
-    }
+    // if (challengeMode === 'chord') {
+    //   console.warn('chord mode not supported yet, playing sequentially')
+    // }
+    // const duration = 1
+    // const tonicPC = this.#pitchClass(tonic.id)
+    // if (!tonicPC) {
+    //   return
+    // }
+    // await this.#playAndHighlight(tonicPC, { duration })
+    // for (const note of rules.targets) {
+    //   const pc = this.#pitchClass(note.id)
+    //   if (!pc) {
+    //     continue
+    //   }
+    //   const { ended } = await sampler.play({ note: pc.midiNote, duration })
+    //   await ended
+    // }
 
-    await this.#playAndHighlight(tonicPC, { duration }, true)
+    // await this.#playAndHighlight(tonicPC, { duration }, true)
   }
 
   /** 
    * @param {PitchClassElement} pc
-   * @param {Omit<import('../../audio/smplr-types.js').SampleStart, 'note'>} options
    */
-  async #playAndHighlight(pc, options, keepHighlighted = false) {
-    const sampler = this.#sampler.value
-    if (!pc.midiNote || !sampler) {
+  async #playAndHighlight(pc) {
+    if (!pc.midiNote) {
       return
     }
+    const midiNote = pc.midiNote
     const note = { id: pc.id }
 
+    this.#stateController.dispatch(triggerNoteStart({ midiNote }))
     this.#stateController.dispatch(highlightNote(note))
-    const { ended } = await sampler.play({ note: pc.midiNote, ...options})
-    await ended
-    if (!keepHighlighted) {
-      this.#stateController.dispatch(clearNoteHighlight(note))
-    }
   }
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
@@ -145,34 +135,14 @@ export class GameViewElement extends LitElement {
    * 
    * @param {PitchClassElement} pitchClass 
    */
-  async #triggerNote(pitchClass) {
-    const note = pitchClass.midiNote
-    if (!note) {
+  #triggerNote(pitchClass) {
+    const midiNote = pitchClass.midiNote
+    if (!midiNote) {
       return
     }
-    const sampler = this.#sampler.value
-    if (!sampler) {
-      console.warn('no sampler available in context')
-      return
-    }
-    await sampler.enable()
-    console.log('triggering note', note)
-    await sampler.play({ 
-      note,
-      duration: 1,
-      onEnded: () => this.#noteEnded(pitchClass)
-    })
+    this.#stateController.dispatch(triggerNoteStop({ midiNote })) 
   }
 
-  /**
-   * 
-   * @param {PitchClassElement} pitchClass 
-   */
-  #noteEnded(pitchClass) {
-    console.log('note ended', pitchClass)
-    // todo: trigger note end on pointer up event
-    // this.#stateController.dispatch(endPlayerNote({ id: pitchClass.id }))
-  }
 
   render() {
     const { state } = this.#stateController

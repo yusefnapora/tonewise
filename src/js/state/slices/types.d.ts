@@ -40,3 +40,12 @@ export type InstrumentState = {
   /** The notes (if any) that are currently being held down by the player */
   heldNotes: Note[]
 }
+
+
+export type SamplerLoadingState = 'idle' | 'loading' | 'loaded'
+
+export type AudioState = {
+  samplerLoading: SamplerLoadingState
+  soundingMidiNotes: number[]
+
+}
