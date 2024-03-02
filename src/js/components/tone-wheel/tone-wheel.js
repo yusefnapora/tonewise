@@ -215,7 +215,7 @@ export class ToneWheel extends LitElement {
        */
       const pointerDown = (e) => {
         if (e.target instanceof Element) {
-          e.target.releasePointerCapture
+          e.target.releasePointerCapture(e.pointerId)
         }
         activated()
       }
