@@ -4,7 +4,7 @@ import {
   polarToCartesian,
   rimSegmentSVGPath,
 } from '../../common/geometry.js'
-import { NoteHoldBeganEvent, NoteHoldEndedEvent, PitchClassSelectedEvent } from './events.js'
+import { NoteHoldBeganEvent, NoteHoldEndedEvent } from './events.js'
 import { PitchClassElement } from './pitch-class.js'
 
 import { colorForAngle } from '../../common/color.js'
@@ -37,6 +37,11 @@ export class ToneWheel extends LitElement {
 			/* prevent browser from eating touch events for scrolling, etc */
 		  touch-action: none;
 
+      /** 
+       * Layout children in a 1x1 grid, so that they overlap back-to-front
+       * Used to position the gradient background so that it is positioned
+       * directly behind the wheel with the same width & height.
+       */
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr;
@@ -49,7 +54,7 @@ export class ToneWheel extends LitElement {
       height: 100%;
       grid-row: 1;
       grid-column: 1;
-      z-index: 5;
+      z-index: 2;
     }
 
     .tone-label {
@@ -78,8 +83,7 @@ export class ToneWheel extends LitElement {
       }
     }
 
-    
-    .tone-group > .inner-wedge.active {
+    .tone-group.active > .inner-wedge {
       opacity: 0;
     }
 
@@ -87,7 +91,7 @@ export class ToneWheel extends LitElement {
       opacity: 0;
     }
 
-    .pitch-line.active {
+    .tone-group.active > .pitch-line {
       opacity: 1.0;
     }
     
@@ -190,7 +194,6 @@ export class ToneWheel extends LitElement {
         startAngle: segmentStartAngle,
         endAngle: segmentEndAngle,
         className,
-        active: el.active,
       }))
 
       const { path: segmentPath, intervalPoint } = this.#createRimSegment({
@@ -213,7 +216,6 @@ export class ToneWheel extends LitElement {
           className,
           endpoint: intervalPoint,
           width,
-          active: el.active,
         }),
       )
 
@@ -292,7 +294,7 @@ export class ToneWheel extends LitElement {
           @pointerenter=${pointerEnter} 
           @pointerleave=${pointerLeave}
           @pointerup=${pointerUp}
-          class="tone-group ${className}"
+          class="tone-group ${className} ${el.active ? 'active' : undefined}"
         >
           ${groupContent}
         </g>
@@ -414,18 +416,17 @@ export class ToneWheel extends LitElement {
    * @param {Point} args.endpoint (x,y) coords of line's endpoint
    * @param {string} args.className CSS class name, to set stroke color
    * @param {number} args.width width of line in viewbox units
-   * @param {boolean} [args.active]
    * @param {number} [args.cx] center x coord of wheel in viewbox units. defaults to 500
    * @param {number} [args.cy] center y coord of wheel in viewbox units. defaults to 500
    *
    */
   #createPitchLine(args) {
-    const { className, endpoint, width, active } = args
+    const { className, endpoint, width } = args
     const cx = args.cx ?? 500
     const cy = args.cy ?? 500
 
     return svg`
-    <g class=${'pitch-line ' + (active ? 'active' : '')}>
+    <g class="pitch-line">
       <line 
         x1=${cx} y1=${cy}
         x2=${endpoint.x} y2=${endpoint.y}
@@ -435,12 +436,12 @@ export class ToneWheel extends LitElement {
         opacity="0.7"
       />
       <line class=${className}
-      x1=${cx} y1=${cy}
-      x2=${endpoint.x} y2=${endpoint.y}
-      stroke-width=${width*0.8}
-      stroke-linecap="round"
-      opacity="0.9"
-    />
+        x1=${cx} y1=${cy}
+        x2=${endpoint.x} y2=${endpoint.y}
+        stroke-width=${width*0.8}
+        stroke-linecap="round"
+        opacity="0.9"
+      />
     </g>
     `
   }
@@ -450,10 +451,9 @@ export class ToneWheel extends LitElement {
    * @param {string} args.className CSS class name, used for stroke color
    * @param {number} args.startAngle angle in degrees of the beginning of the wedge
    * @param {number} args.endAngle angle in degrees of the end of the wedge
-   * @param {boolean} [args.active]
    */
   #createInnerWedge(args) {
-    const { className,  active } = args
+    const { className } = args
     const startAngle = args.startAngle + this.rotationOffset
     const endAngle = args.endAngle + this.rotationOffset
     const center = { x: 500, y: 500 }
@@ -466,7 +466,7 @@ export class ToneWheel extends LitElement {
       endAngle
     })
     
-    const fullClass = ['inner-wedge', className, active ? 'active' : ''].join(' ')
+    const fullClass = ['inner-wedge', className].join(' ')
     return svg`
       <path class=${fullClass} d=${pathString} />
     `
