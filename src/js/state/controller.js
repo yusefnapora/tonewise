@@ -5,7 +5,7 @@
  * @typedef {import('./store.js').RootState} RootState
  *
  * @typedef {object} StateListener 
- * @property {(RootState) => void} stateChanged
+ * @property {(RootState) => void} [stateChanged]
 */
 
 import { store } from './store.js'
@@ -34,7 +34,11 @@ export class StateController {
    */
   hostConnected() {
     this.store.subscribe(() => {
-      this.host.stateChanged(this.store.getState())
+      if (this.host.stateChanged) {
+        this.host.stateChanged(this.store.getState())
+      } else {
+        this.host.requestUpdate()
+      }
     })
   }
   /**

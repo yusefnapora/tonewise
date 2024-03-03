@@ -6,6 +6,7 @@ import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 import { clearNoteHighlight, endPlayerNote, highlightNote, resetInstrumentState, startPlayerNote } from '../../state/slices/instrument-slice.js'
 import { resumeAudio, triggerNoteStart, triggerNoteStop } from '../../state/slices/audio-slice.js'
 import { NoteIdMidiMap, NoteIds } from '../../audio/notes.js'
+import { isGameCompleted, isGameStarted, selectActiveNoteIds } from '../../state/selectors/selectors.js'
 
 
 export class GameViewElement extends LitElement {
@@ -125,23 +126,13 @@ export class GameViewElement extends LitElement {
     const { state } = this.#stateController
     const { currentRound } = state.game
     const tonic = currentRound?.rules?.tonic
-    const completed = currentRound?.progress.isCompleted ?? false
-    
+    const started = isGameStarted(state)
+    const completed = isGameCompleted(state)
+    const allActive = selectActiveNoteIds(state)
+
     const tonicLabel = tonic ? `Tonic: ${tonic.id}` : ''
 
-    const allActive = new Set([
-      ...state.instrument.heldNotes, 
-      ...state.instrument.highlightedNotes
-    ].map(n => n.id))
-
-    currentRound?.rules.targets.forEach(targetNote => {
-      if (currentRound?.progress.guesses.some(guess => guess.isCorrect && guess.note.id === targetNote.id)) {
-        allActive.add(targetNote.id)
-      }
-    })
-    
-
-    const actionButton = (!!currentRound && !completed)
+    const actionButton = (started && !completed)
       ? html`<sl-button variant="danger" @click=${() => this.#startGame()}>Give up</sl-button>`
       : html`<sl-button variant="primary" @click=${() => this.#startGame()}>New game</sl-button>`
 
