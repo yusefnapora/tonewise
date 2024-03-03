@@ -14,6 +14,11 @@
   --theme-light-color-primary: hsl(342.3, 84.9%, 46.9%);
   --theme-light-color-text: black;
   --theme-light-color-text-muted: #666;
+
+
+  --wheel-gradient-background-opacity: 0.5;
+  --wheel-gradient-background-vibrant-opacity: 1;
+  --wheel-gradient-background-blur: 30px;
 }
 
 html {

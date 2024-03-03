@@ -100,16 +100,21 @@ export class ToneWheel extends LitElement {
       clip-path: url(#gradient-clip);
       width: 100%;
       height: 100%;
-      opacity: 0.5;
+      opacity: var(--wheel-gradient-background-opacity, 0.5);
       grid-row: 1;
       grid-column: 1;
+    }
+
+    .vibrant {
+      clip-path: url(#vibrant-gradient-reveal);
+      opacity: var(--wheel-gradient-background-vibrant-opacity, 1);
     }
 
     .gradient-blur {
       clip-path: url(#gradient-clip);
       width: 100%;
       height: 100%;
-      backdrop-filter: blur(30px);
+      backdrop-filter: blur(var(--wheel-gradient-background-blur, 30px));
     }
   `
 
@@ -139,6 +144,9 @@ export class ToneWheel extends LitElement {
       ${styleContent}
     </style>
     <div class="gradient-background gradient-colors">
+      <div class="gradient-blur"></div>
+    </div>
+    <div class="gradient-background vibrant gradient-colors">
       <div class="gradient-blur"></div>
     </div>
     <svg viewBox="0 0 1000 1000">
@@ -321,11 +329,40 @@ export class ToneWheel extends LitElement {
     // scaled to cover the area of the clipped object thanks to
     // clipPathUnits="objectBoundingBox" 
     const clipRadius = (this.radius - (rimThickness/2)) / 1000
+
+    // reveal the "vibrant" form of the inner gradient background
+    // in between each of the currently "active" pitch classes
+    //
+    // TODO: pass in a list of pitch-class ids to be highlighted
+    // instead of assuming we always want the active ones in the
+    // default order.
+    const activeIntervalAngles = pitchesWithAngles
+      .filter(({ pitchClass }) => pitchClass.active)
+      .map(({ angle}) => angle)
+
+    let revealMaskPath = ''
+    if (activeIntervalAngles.length >= 2) {
+      const startAngle = activeIntervalAngles[0] + this.rotationOffset
+      const endAngle = activeIntervalAngles[activeIntervalAngles.length-1] + this.rotationOffset
+      revealMaskPath = rimSegmentSVGPath({ 
+        center: {x: 0.5, y: 0.5},
+        radius: this.radius / 1000,
+        thickness: this.radius / 1000,
+        startAngle,
+        endAngle,
+      }) 
+    }
+    
     const content = svg`
-    <g>
+    <defs>
       <clipPath id="gradient-clip" clipPathUnits="objectBoundingBox">
-        <circle cx="0.5" cy="0.5" r=${clipRadius}/>
+        <circle cx="0.5" cy="0.5" r=${clipRadius} />
+      </clipPath>      
+      <clipPath id="vibrant-gradient-reveal" clipPathUnits="objectBoundingBox">
+        <path d=${revealMaskPath} />
       </clipPath>
+    </defs>
+    <g>
       ${groups}
     </g>
     `
