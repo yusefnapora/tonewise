@@ -10,11 +10,15 @@
  */
 
 /** 
+ * @typedef {import('@reduxjs/toolkit').Dispatch} Dispatch
  * @typedef {import('@reduxjs/toolkit').PayloadAction<GameRound>} GameRoundAction
  * @typedef {import('@reduxjs/toolkit').PayloadAction<Note>} NoteAction
  */
 
-import { createSlice, current } from "@reduxjs/toolkit"
+import { createSlice, current, createAsyncThunk } from "@reduxjs/toolkit"
+import { triggerNoteStart, triggerNoteStop } from "./audio-slice.js"
+import { NoteIdMidiMap } from "../../audio/notes.js"
+import { clearNoteHighlight, highlightNote } from "./instrument-slice.js"
 
 /** @type {GameState} */
 const initialState = {
@@ -53,6 +57,42 @@ function isCompleted(state) {
 function isCorrectGuess(rules, note) {
   return rules.targets.some(t => t.id === note.id)
 }
+
+/** @type {import('@reduxjs/toolkit').AsyncThunk<unknown, unknown, { state: { game: GameState }}>} */
+export const playChallengeSequence = createAsyncThunk(
+  'game/playChallengeSequence',
+  /**
+   * 
+   * @param {unknown} _ 
+   * @param {{ getState: () => { game: GameState }, dispatch: Function }} thunkAPI
+   */
+  async (_, { getState, dispatch }) => {
+    const { game } = getState()
+    if (!game.currentRound) {
+      return
+    }
+
+    const duration = 1000
+    const sleep = t => new Promise(resolve => setTimeout(resolve, t))
+    const { tonic, targets } = game.currentRound.rules
+    const notes = [tonic, ...targets, tonic]
+    for (let i = 0; i < notes.length; i++) {
+      const note = notes[i]
+      const highlight = i === 0 || i === notes.length - 1
+      const midiNote = NoteIdMidiMap[note.id]
+      // play and highlight tonic note
+      dispatch(triggerNoteStart({ midiNote }))
+      highlight && dispatch(highlightNote(note))
+      
+      await sleep(duration)
+      dispatch(triggerNoteStop({ midiNote }))
+      if (i === 0) {
+        dispatch(clearNoteHighlight(note))
+      }
+    }
+  }
+)
+
 
 const gameSlice = createSlice({
   name: 'game',
@@ -94,6 +134,19 @@ const gameSlice = createSlice({
         state.currentRound.progress.isCompleted = true
       }
     },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(playChallengeSequence.pending, (state) => {
+        if (state.currentRound) {
+          state.currentRound.challengePlaying = true
+        }
+      })
+      .addCase(playChallengeSequence.fulfilled, (state) => {
+        if (state.currentRound) {
+          state.currentRound.challengePlaying = false
+        }
+      })
   }
 })
 

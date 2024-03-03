@@ -23,6 +23,7 @@ export type GameProgress = {
 export type GameRound = {
   rules: GameRules
   progress: GameProgress
+  challengePlaying?: boolean
 }
 
 export type GameState = {

@@ -1,10 +1,11 @@
 import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { guess, start } from '../../state/slices/game-slice.js'
+import { guess, playChallengeSequence, start } from '../../state/slices/game-slice.js'
 import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 import { clearNoteHighlight, endPlayerNote, highlightNote, resetInstrumentState, startPlayerNote } from '../../state/slices/instrument-slice.js'
 import { resumeAudio, triggerNoteStart, triggerNoteStop } from '../../state/slices/audio-slice.js'
+import { NoteIdMidiMap, NoteIds } from '../../audio/notes.js'
 
 
 export class GameViewElement extends LitElement {
@@ -32,61 +33,27 @@ export class GameViewElement extends LitElement {
     this.requestUpdate()
   }
 
-  #startNewGame() {
-    const tonic = this.#getRandomPitchClass().toJsObject()
-    const target = this.#getRandomPitchClass().toJsObject()
-    const rules = { tonic, targets: [ target ]}
-    const progress = { guesses: [] }
-    for (const pc of this.#pitchClasses()) {
-      pc.active = false
-    }
+  /**
+   * 
+   * @param {import('../../state/slices/types.js').GameRules|undefined} [rules]
+   */
+  #startGame(rules) {
 
-    this.#playChallenge(rules)
+    if (!rules) {
+      const tonic = this.#getRandomPitchClass().toJsObject()
+      let target = this.#getRandomPitchClass().toJsObject()
+      while (target.id === tonic.id) {
+        target = this.#getRandomPitchClass().toJsObject() 
+      }
+      rules = { tonic, targets: [ target ]}
+    }
+    const progress = { guesses: [] }
+
     this.#stateController.dispatch(start({ rules, progress }))
     this.#stateController.dispatch(resetInstrumentState())
+    this.#stateController.dispatch(playChallengeSequence())
   }
 
-  /**
-   * @param {import('../../state/slices/game-slice.js').GameRules} rules 
-   */
-  async #playChallenge(rules) {
-    // const { tonic, challengeMode } = rules
-
-    // if (challengeMode === 'chord') {
-    //   console.warn('chord mode not supported yet, playing sequentially')
-    // }
-    // const duration = 1
-    // const tonicPC = this.#pitchClass(tonic.id)
-    // if (!tonicPC) {
-    //   return
-    // }
-    // this.#triggerNote(tonicPC)
-    // await this.#playAndHighlight(tonicPC, { duration })
-    // for (const note of rules.targets) {
-    //   const pc = this.#pitchClass(note.id)
-    //   if (!pc) {
-    //     continue
-    //   }
-    //   const { ended } = await sampler.play({ note: pc.midiNote, duration })
-    //   await ended
-    // }
-
-    // await this.#playAndHighlight(tonicPC, { duration }, true)
-  }
-
-  /** 
-   * @param {PitchClassElement} pc
-   */
-  // async #playAndHighlight(pc) {
-  //   if (!pc.midiNote) {
-  //     return
-  //   }
-  //   const midiNote = pc.midiNote
-  //   const note = { id: pc.id }
-
-  //   this.#stateController.dispatch(triggerNoteStart({ midiNote }))
-  //   this.#stateController.dispatch(highlightNote(note))
-  // }
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
   get #wheel() {
@@ -169,17 +136,15 @@ export class GameViewElement extends LitElement {
     
 
     const actionButton = (!!currentRound && !completed)
-      ? html`<sl-button variant="danger" @click=${this.#startNewGame}>Give up</sl-button>`
-      : html`<sl-button variant="primary" @click=${this.#startNewGame}>New game</sl-button>`
+      ? html`<sl-button variant="danger" @click=${() => this.#startGame()}>Give up</sl-button>`
+      : html`<sl-button variant="primary" @click=${() => this.#startGame()}>New game</sl-button>`
 
     const replayButton = currentRound?.rules
-      ? html`<sl-button variant="neutral" @click=${() => this.#playChallenge(currentRound.rules)}>Replay</sl-button>`
+      ? html`<sl-button variant="neutral" @click=${() => this.#startGame(currentRound.rules)}>Replay</sl-button>`
       : undefined
 
-      // todo: define notes & midi mapping elsewhere
-    const noteIds = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B']
-    const pitchClasses = noteIds.map((id, i) => {
-      const midiNote = i + 60
+    const pitchClasses = NoteIds.map((id) => {
+      const midiNote = NoteIdMidiMap[id]
       const active = allActive.has(id)
       return html`
       <pitch-class id=${id} midi-note=${midiNote} active=${active || nothing}>${id}</pitch-class>
