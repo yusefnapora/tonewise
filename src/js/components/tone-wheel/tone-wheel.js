@@ -313,8 +313,12 @@ export class ToneWheel extends LitElement {
     // clip the inner conic gradient background to extend just
     // past the inner edge of the rim. Putting it right at the
     // edge leads to a "glow" effect around the rim which is
-    // nice, but not quite what I want
-    const clipRadius = 0.5 - ((rimThickness / this.radius) / 2)
+    // nice, but not quite what I want.
+    // also note that we're dividing by 1000 (viewbox width / height),
+    // so that we end up covering a 1x1 unit area, which will be
+    // scaled to cover the area of the clipped object thanks to
+    // clipPathUnits="objectBoundingBox" 
+    const clipRadius = (this.radius - (rimThickness/2)) / 1000
     const content = svg`
     <g>
       <clipPath id="gradient-clip" clipPathUnits="objectBoundingBox">
