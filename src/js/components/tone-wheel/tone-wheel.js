@@ -257,6 +257,7 @@ export class ToneWheel extends LitElement {
         if (e.target instanceof Element) {
           e.target.releasePointerCapture(e.pointerId)
         }
+        e.preventDefault()
         activated()
       }
 
@@ -279,9 +280,14 @@ export class ToneWheel extends LitElement {
       const pointerUp = (e) => {
         deactivated()
       }
+      const touchDown = (e) => {
+        e.preventDefault()
+      }
+      
 
       groups.push(svg`
         <g 
+          @touchstart=${touchDown}
           @pointerdown=${pointerDown}
           @pointerenter=${pointerEnter} 
           @pointerleave=${pointerLeave}
