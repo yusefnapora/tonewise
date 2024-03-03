@@ -133,6 +133,12 @@ export class GameViewElement extends LitElement {
       ...state.instrument.heldNotes, 
       ...state.instrument.highlightedNotes
     ].map(n => n.id))
+
+    currentRound?.rules.targets.forEach(targetNote => {
+      if (currentRound?.progress.guesses.some(guess => guess.isCorrect && guess.note.id === targetNote.id)) {
+        allActive.add(targetNote.id)
+      }
+    })
     
 
     const actionButton = (!!currentRound && !completed)
