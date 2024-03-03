@@ -1,7 +1,5 @@
-import { ContextConsumer } from '@lit/context'
 import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
-import { SoundContext } from '../../context/sound-context.js'
 import { StateController } from '../../state/controller.js'
 import { guess, start } from '../../state/slices/game-slice.js'
 import { PitchClassElement } from '../tone-wheel/pitch-class.js'

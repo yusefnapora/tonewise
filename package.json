@@ -10,7 +10,7 @@
     "serve": "web-dev-server --node-resolve --watch --open --root-dir ./src",
     "format": "prettier --write .",
     "test": "web-test-runner test/**/*.test.js --node-resolve",
-		"typecheck": "tsc -p ./jsconfig.json"
+    "typecheck": "tsc -p ./jsconfig.json"
   },
   "keywords": [],
   "author": "",
@@ -31,7 +31,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@lit/context": "^1.1.0",
     "@reduxjs/toolkit": "^2.2.1",
     "@shoelace-style/shoelace": "^2.14.0",
     "lit": "^3.1.2",
