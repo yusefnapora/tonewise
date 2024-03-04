@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit'
+import { LitElement, css, html, nothing } from 'lit'
 import { NoteIds } from '../../audio/notes.js'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
@@ -16,6 +16,7 @@ export class ProgressViewElement extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 64px;
     }
     sl-card {
       width: 100%;
@@ -32,44 +33,20 @@ export class ProgressViewElement extends LitElement {
       justify-content: space-between;
     }
 
-    note-badge {
-      width: 32px;
+    .badges {
+      display: flex;
+      flex-direction: row;
+    }
 
-      height: 32px;
+    .badges note-badge {
+      width: 48px;
+      height: 48px;
+      margin-left: 12px;
+      margin-right: 12px;
     }
   `
 
   #stateController = new StateController(this)
-
-  /**
-   *
-   * @param {import('../../state/slices/types.js').GameRules|undefined} [rules]
-   */
-  #startGame(rules) {
-    if (!rules) {
-      const tonic = this.#getRandomNote()
-      let target = this.#getRandomNote()
-      while (target.id === tonic.id) {
-        target = this.#getRandomNote()
-      }
-      rules = { tonic, targets: [target] }
-    }
-    const progress = { guesses: [] }
-
-    this.#stateController.dispatch(start({ rules, progress }))
-    this.#stateController.dispatch(resetInstrumentState())
-    this.#stateController.dispatch(playChallengeSequence())
-  }
-
-  #leaveGame() {
-    this.#stateController.dispatch(reset())
-    this.#stateController.dispatch(resetInstrumentState())
-  }
-
-  #getRandomNote() {
-    const id = NoteIds[Math.floor(Math.random() * NoteIds.length)]
-    return { id }
-  }
 
   render() {
     const { state } = this.#stateController
@@ -78,56 +55,32 @@ export class ProgressViewElement extends LitElement {
     const started = isGameStarted(state)
     const completed = isGameCompleted(state)
 
-    const actionButton =
-      started && !completed
-        ? html`
-          <sl-tooltip content="Leave game">
-            <sl-icon-button 
-              name="x-octagon-fill" label="Leave game" 
-              @click=${() => this.#leaveGame()}>
-            </sl-icon-button>
-          </sl-tooltip>
-          `
-        : html`
-          <sl-tooltip content="New game">
-            <sl-icon-button
-              name="play-fill" label="New game" 
-              @click=${() => this.#startGame()}>
-            </sl-icon-button>
-          </sl-tooltip>
-        `
-
-    const replayButton = currentRound?.rules
-      ? html`
-        <sl-tooltip content="Replay">
-          <sl-icon-button
-            name="arrow-counterclockwise"
-            @click=${() => this.#startGame(currentRound.rules)}
-            >
-          </sl-icon-button>
-        </sl-tooltip>
-          `
-      : undefined
+    
     const tonicLabel = tonic ? `Tonic: ${tonic.id}` : ''
+
+
+    const targetNoteBadges = currentRound?.rules.targets.map(note => {
+      const reveal = currentRound?.progress.guesses
+        .some(guess => guess.isCorrect && guess.note.id === note.id)
+      return html`
+        <note-badge note-id=${note.id} reveal=${reveal ? 'true' : nothing}></note-badge>
+      `
+    })
 
     const statusView = started 
       ? html`
         <div>
-          ${completed ? 'Correct!' : tonicLabel}
-          <note-badge></note-badge>
+          <div class="badges">
+            <note-badge note-id=${tonic?.id} reveal></note-badge>
+            ${targetNoteBadges}
+          </div>
         </div>`
       : undefined
 
-    const contentClass = `content ${started ? 'in-progress' : ''}`
     return html`
-      <sl-card>
-        <div class=${contentClass}>
+        <div class="in-progress">
           ${statusView}
-          <div>
-            ${actionButton} ${replayButton}
-          </div>
         </div>
-      </sl-card>
     `
   }
 }

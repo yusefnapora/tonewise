@@ -23,10 +23,14 @@ export class GameViewElement extends LitElement {
       align-items: center;
       justify-content: center;
     }
-    tone-wheel {
+    sl-card {
       width: 100%;
       max-width: min(500px, calc(100vw - 40px));
       margin: 30px auto;
+    }
+    tone-wheel {
+      margin-top: 64px;
+      margin-bottom: 16px;
     }
   `
 
@@ -112,13 +116,18 @@ export class GameViewElement extends LitElement {
     this.#wheel?.requestUpdate()
 
     return html`
-      <tone-wheel
-        @note:holdBegan=${this.#pitchSelected}
-        @note:holdEnded=${this.#pitchDeselected}
-      >
-        ${pitchClasses}
-      </tone-wheel>
-      <progress-view></progress-view>
+      <sl-card class="card-header">
+        <div slot="header">
+          <game-view-toolbar></game-view-toolbar>
+        </div>
+        <tone-wheel
+          @note:holdBegan=${this.#pitchSelected}
+          @note:holdEnded=${this.#pitchDeselected}
+        >
+          ${pitchClasses}
+        </tone-wheel>
+        <progress-view></progress-view>
+      </sl-card>
     `
   }
 }

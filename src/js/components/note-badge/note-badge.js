@@ -5,7 +5,7 @@ import { degreesBetween, rimSegmentSVGPath } from '../../common/geometry.js'
 
 // TODO: make tuning a part of redux state
 const DEFAULT_TUNING = {
-  pitchClases: [
+  pitchClasses: [
     { id: 'C', angle: 0 },
     { id: 'C♯', angle: 30 },
     { id: 'D', angle: 60 },
@@ -26,17 +26,38 @@ export class NoteBadgeElement extends LitElement {
     :host {
       display: block;
     }
+
+    .badge-rim-segment {
+      stroke: var(--color-text-muted);
+      fill: var(--color-text-muted);
+    }
+
+    .badge-rim-segment.highlighted {
+      stroke: var(--color-text);
+      fill: var(--color-text);
+    }
+
+    .revealed {
+      opacity: 1;
+    }
+    .hidden {
+      opacity: 0;
+    }
   `
 
   static properties = {
-    activeNoteId: { type: String, attribute: 'active-note' }
+    noteId: { type: String, attribute: 'note-id' },
+    reveal: { type: Boolean },
+    highlight: { type: Boolean },
   }
 
   constructor() {
     super()
     this.tuning = DEFAULT_TUNING
-    this.rotationOffset = 90
-    this.activeNoteId = undefined
+    this.rotationOffset = -90
+    this.noteId = undefined
+    this.reveal = false
+    this.highlight = false
   }
 
   render() {
@@ -48,15 +69,16 @@ export class NoteBadgeElement extends LitElement {
   }
 
   #svgContent() {
-    let activeNote = this.activeNoteId == null
+    let activeNote = this.noteId == null
       ? null
-      : this.tuning.pitchClases.find(n => n.id === this.activeNoteId)
+      : this.tuning.pitchClasses.find(n => n.id === this.noteId)
 
     const gapDegrees = 10
 
     const content = []
     const colors = []
-    const elements = this.tuning.pitchClases
+    const segmentStyles = []
+    const elements = this.tuning.pitchClasses
     for (let i = 0; i < elements.length; i++) {
       const note = elements[i]
       colors[i] = colorForAngle(note.angle)
@@ -76,18 +98,62 @@ export class NoteBadgeElement extends LitElement {
       startAngle += gapDegrees / 2
       endAngle -= gapDegrees / 2
 
+      const className = `badge-segment-${i}`
+      let fullClass = className
+      if (this.highlight) {
+        fullClass += ' highlight'
+      }
+      if (this.reveal && note.id === this.noteId) {
+        fullClass += ' active-note'
+      }
+
       const segment = this.#createRimSegment({
-        className: `badge-note-${i}`,
+        className: fullClass,
         startAngle,
         endAngle
       })
       content.push(segment)
+
+      const color = colorForAngle(intervalAngle)
+      segmentStyles.push(`
+        .${className}.active-note {
+          stroke: ${color};
+          fill: ${color};
+        }
+      `)
     }
 
-    const color = activeNote ? colorForAngle(activeNote.angle) : null
+    const activeNoteColor = activeNote ? colorForAngle(activeNote.angle) : null
     const label = activeNote?.id
 
+    const fontSize = 400
+    const yOffset = fontSize * 0.25
+    const transform = `translate(0 ${yOffset})`
+    const labelClass = 'note-label ' + (this.reveal ? 'revealed' : 'hidden')
+    const labelText = svg`
+      <text
+        class=${labelClass}
+        x="500"
+        y="500"
+        text-anchor="middle"
+        font-size=${fontSize}
+        transform=${transform}
+      >
+        ${label}
+      </text>
+    `
+    content.push(labelText)
+    const labelStyle = `
+      text.note-label {
+        stroke: ${activeNoteColor};
+        fill: ${activeNoteColor};
+      }
+    `
     return svg`
+      <style>
+        ${segmentStyles.join('\n')}
+        ${labelStyle}
+      </style>
       <g>${content}</g>
     `
   }
@@ -116,7 +182,7 @@ export class NoteBadgeElement extends LitElement {
     })
     const className = args.className + ' badge-rim-segment'
     return svg`
-      <path class=${className} d=${pathString} fill="white" />
+      <path class=${className} d=${pathString} />
     `
   }
 }
