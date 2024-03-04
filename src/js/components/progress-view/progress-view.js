@@ -1,11 +1,11 @@
-import { LitElement, html, css } from 'lit'
+import { LitElement, css, html } from 'lit'
+import { NoteIds } from '../../audio/notes.js'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
   isGameCompleted,
   isGameStarted,
 } from '../../state/selectors/selectors.js'
-import { NoteIds } from '../../audio/notes.js'
 import { playChallengeSequence, reset, start } from '../../state/slices/game-slice.js'
 import { resetInstrumentState } from '../../state/slices/instrument-slice.js'
 
@@ -30,6 +30,12 @@ export class ProgressViewElement extends LitElement {
 
     .in-progress {
       justify-content: space-between;
+    }
+
+    note-badge {
+      width: 32px;
+
+      height: 32px;
     }
   `
 
@@ -108,6 +114,7 @@ export class ProgressViewElement extends LitElement {
       ? html`
         <div>
           ${completed ? 'Correct!' : tonicLabel}
+          <note-badge></note-badge>
         </div>`
       : undefined
 
