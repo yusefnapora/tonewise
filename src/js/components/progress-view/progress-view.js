@@ -25,6 +25,10 @@ export class ProgressViewElement extends LitElement {
       display: flex;
       flex-direction: row;
       align-items: center;
+      justify-content: center;
+    }
+
+    .in-progress {
       justify-content: space-between;
     }
   `
@@ -107,13 +111,14 @@ export class ProgressViewElement extends LitElement {
         </div>`
       : undefined
 
+    const contentClass = `content ${started ? 'in-progress' : ''}`
     return html`
       <sl-card>
-        <div class="content">
+        <div class=${contentClass}>
+          ${statusView}
           <div>
             ${actionButton} ${replayButton}
           </div>
-          ${statusView}
         </div>
       </sl-card>
     `
