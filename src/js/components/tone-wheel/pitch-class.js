@@ -31,7 +31,7 @@ export class PitchClassElement extends LitElement {
  * Parses out interval ratio strings, which can either be floating
  * point numbers, or two numbers separated by either `/` or `:`
  * to divide two numbers.
- * @param {string} s 
+ * @param {string} s
  * @returns number | undefined
  */
 function convertIntervalString(s) {

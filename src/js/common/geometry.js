@@ -3,9 +3,9 @@
  */
 
 /**
- * 
- * @param {Point} a 
- * @param {Point} b 
+ *
+ * @param {Point} a
+ * @param {Point} b
  * @returns {Point}
  */
 export function pointAdd(a, b) {
@@ -29,10 +29,10 @@ export function toDegrees(radians) {
 }
 
 /**
- * 
- * @param {number} a 
- * @param {number} b 
- * @returns {number} 
+ *
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
  */
 export function degreesBetween(a, b) {
   const dist = normalizeAngle(Math.max(a, b) - Math.min(a, b))

@@ -4,10 +4,9 @@ import { SplendidGrandPiano, CacheStorage } from 'smplr'
  * @typedef {import('./smplr-types.d.ts').SampleStart} SampleStart
  */
 
-const NOTES_TO_LOAD = [...Array(12).keys()].map(n => n + 60)
+const NOTES_TO_LOAD = [...Array(12).keys()].map((n) => n + 60)
 const VELOCITY = 100
 export class Sampler {
-
   /** @type { AudioContext } */
   #audioContext
 
@@ -21,19 +20,19 @@ export class Sampler {
     this.#audioContext = opts?.context ?? new AudioContext()
     const storage = new CacheStorage()
     // todo: option for named soundfont
-    
-    this.#instrument = new SplendidGrandPiano(this.#audioContext, { 
+
+    this.#instrument = new SplendidGrandPiano(this.#audioContext, {
       storage,
       notesToLoad: {
         notes: NOTES_TO_LOAD,
-        velocityRange: [VELOCITY, VELOCITY]
-      }
+        velocityRange: [VELOCITY, VELOCITY],
+      },
     })
 
     console.log('sampler constructor', this)
   }
 
-  async enable() { 
+  async enable() {
     await this.#instrument.load
     return this
   }
@@ -51,11 +50,11 @@ export class Sampler {
     /** @type {Promise<SampleStart>} */
     let ended
     /** @type {(time?: number) => void} */
-    let stop 
+    let stop
     /** @type {Promise<SampleStart>} */
-    const started = new Promise(resolveStart => {
-      ended = new Promise(resolveEnd => {
-        stop = this.#instrument.start({ 
+    const started = new Promise((resolveStart) => {
+      ended = new Promise((resolveEnd) => {
+        stop = this.#instrument.start({
           onStart: resolveStart,
           onEnded: resolveEnd,
           ...note,

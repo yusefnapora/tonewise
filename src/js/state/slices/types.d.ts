@@ -30,8 +30,6 @@ export type GameState = {
   currentRound: GameRound | null
 }
 
-
-
 export type InstrumentState = {
   /** Notes that have been highlighted by the game (E.g. when playing a challenge sequence)
    * Does not include user-held notes
@@ -42,11 +40,9 @@ export type InstrumentState = {
   heldNotes: Note[]
 }
 
-
 export type SamplerLoadingState = 'idle' | 'loading' | 'loaded'
 
 export type AudioState = {
   samplerLoading: SamplerLoadingState
   soundingMidiNotes: number[]
-
 }

@@ -1,19 +1,18 @@
-
 /**
  * @typedef {import('lit').ReactiveControllerHost} ReactiveControllerHost
  * @typedef {import('./store.js').StateStore} StateStore
  * @typedef {import('./store.js').RootState} RootState
  *
- * @typedef {object} StateListener 
+ * @typedef {object} StateListener
  * @property {(RootState) => void} [stateChanged]
-*/
+ */
 
 import { store } from './store.js'
 
 export class StateController {
   /**
-   * 
-   * @param {ReactiveControllerHost & StateListener} host 
+   *
+   * @param {ReactiveControllerHost & StateListener} host
    */
   constructor(host) {
     this.host = host

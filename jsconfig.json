@@ -5,12 +5,8 @@
     "module": "NodeNext",
     "checkJs": true,
     "types": ["mocha"],
-		"noEmit": true
+    "noEmit": true
   },
 
-  "include": [
-    "./src/**/*.js", 
-    "./src/**/*.d.ts",
-		"./test/**/*.js"
-  ]
+  "include": ["./src/**/*.js", "./src/**/*.d.ts", "./test/**/*.js"]
 }

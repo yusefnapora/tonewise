@@ -1,6 +1,6 @@
-import { LitElement, css, html } from 'lit';
+import { LitElement, css, html } from 'lit'
 import { dispatch } from '../state/store.js'
-import { loadSampler } from '../state/slices/audio-slice.js';
+import { loadSampler } from '../state/slices/audio-slice.js'
 
 export class AppViewElement extends LitElement {
   static styles = css`
@@ -11,7 +11,7 @@ export class AppViewElement extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center; 
+      justify-content: center;
     }
     game-view {
       max-width: 100vw;
@@ -19,7 +19,7 @@ export class AppViewElement extends LitElement {
       min-height: 100vh;
       margin: auto;
     }
-  `;
+  `
 
   connectedCallback() {
     super.connectedCallback()

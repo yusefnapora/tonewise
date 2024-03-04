@@ -12,7 +12,7 @@ import { registerElement } from '../../common/dom.js'
 /**
  * @typedef {import('../../common/types.d.ts').Point} Point
  * @typedef {import('../../common/types.d.ts').Rect} Rect
- * 
+ *
  * @typedef {import('lit').TemplateResult<2>} SVGTemplateResult
  */
 
@@ -34,8 +34,8 @@ export class ToneWheel extends LitElement {
     :host {
       display: block;
 
-			/* prevent browser from eating touch events for scrolling, etc */
-		  touch-action: none;
+      /* prevent browser from eating touch events for scrolling, etc */
+      touch-action: none;
 
       /** 
        * Layout children in a 1x1 grid, so that they overlap back-to-front
@@ -71,13 +71,13 @@ export class ToneWheel extends LitElement {
       opacity: 0.3;
     }
 
-    @media(pointer: fine) {
+    @media (pointer: fine) {
       .tone-group {
         cursor: pointer;
       }
     }
 
-    @media(hover: hover) and (pointer: fine) {
+    @media (hover: hover) and (pointer: fine) {
       .tone-group:hover > .inner-wedge {
         opacity: 0.3;
       }
@@ -92,9 +92,9 @@ export class ToneWheel extends LitElement {
     }
 
     .tone-group.active > .pitch-line {
-      opacity: 1.0;
+      opacity: 1;
     }
-    
+
     /** todo: generate while building the wheel */
     .gradient-background {
       clip-path: url(#gradient-clip);
@@ -133,25 +133,23 @@ export class ToneWheel extends LitElement {
 
   get pitchClasses() {
     return /** @type {PitchClassElement[]} */ ([
-      ...this.querySelectorAll(':scope > pitch-class')
+      ...this.querySelectorAll(':scope > pitch-class'),
     ])
   }
 
   render() {
     const { content, styleContent } = this.renderContent()
     return html`
-    <style>
-      ${styleContent}
-    </style>
-    <div class="gradient-background gradient-colors">
-      <div class="gradient-blur"></div>
-    </div>
-    <div class="gradient-background vibrant gradient-colors">
-      <div class="gradient-blur"></div>
-    </div>
-    <svg viewBox="0 0 1000 1000">
-      ${content}
-    </svg>
+      <style>
+        ${styleContent}
+      </style>
+      <div class="gradient-background gradient-colors">
+        <div class="gradient-blur"></div>
+      </div>
+      <div class="gradient-background vibrant gradient-colors">
+        <div class="gradient-blur"></div>
+      </div>
+      <svg viewBox="0 0 1000 1000">${content}</svg>
     `
   }
 
@@ -198,11 +196,13 @@ export class ToneWheel extends LitElement {
 
       const className = `tone-${i}`
 
-      groupContent.push(this.#createInnerWedge({
-        startAngle: segmentStartAngle,
-        endAngle: segmentEndAngle,
-        className,
-      }))
+      groupContent.push(
+        this.#createInnerWedge({
+          startAngle: segmentStartAngle,
+          endAngle: segmentEndAngle,
+          className,
+        }),
+      )
 
       const { path: segmentPath, intervalPoint } = this.#createRimSegment({
         startAngle: segmentStartAngle,
@@ -211,7 +211,7 @@ export class ToneWheel extends LitElement {
         thickness: rimThickness,
         className,
       })
-      
+
       // scale the pitch line width proportional to the wheel radius,
       // and also shrink the width for pitches whose rim segment length
       // is less than 1 EDO-step
@@ -250,7 +250,7 @@ export class ToneWheel extends LitElement {
 
       const activated = () => {
         const event = new NoteHoldBeganEvent({ id: el.id })
-        this.dispatchEvent(event) 
+        this.dispatchEvent(event)
       }
 
       const deactivated = () => {
@@ -260,8 +260,8 @@ export class ToneWheel extends LitElement {
       }
 
       /**
-       * 
-       * @param {PointerEvent} e 
+       *
+       * @param {PointerEvent} e
        */
       const pointerDown = (e) => {
         if (e.target instanceof Element) {
@@ -277,7 +277,7 @@ export class ToneWheel extends LitElement {
       const pointerEnter = (e) => {
         if (e.pointerType !== 'touch' && e.buttons === 0) {
           return
-        } 
+        }
         activated()
       }
 
@@ -293,7 +293,6 @@ export class ToneWheel extends LitElement {
       const touchDown = (e) => {
         e.preventDefault()
       }
-      
 
       groups.push(svg`
         <g 
@@ -327,8 +326,8 @@ export class ToneWheel extends LitElement {
     // also note that we're dividing by 1000 (viewbox width / height),
     // so that we end up covering a 1x1 unit area, which will be
     // scaled to cover the area of the clipped object thanks to
-    // clipPathUnits="objectBoundingBox" 
-    const clipRadius = (this.radius - (rimThickness/2)) / 1000
+    // clipPathUnits="objectBoundingBox"
+    const clipRadius = (this.radius - rimThickness / 2) / 1000
 
     // reveal the "vibrant" form of the inner gradient background
     // in between each of the currently "active" pitch classes
@@ -338,21 +337,23 @@ export class ToneWheel extends LitElement {
     // default order.
     const activeIntervalAngles = pitchesWithAngles
       .filter(({ pitchClass }) => pitchClass.active)
-      .map(({ angle}) => angle)
+      .map(({ angle }) => angle)
 
     let revealMaskPath = ''
     if (activeIntervalAngles.length >= 2) {
       const startAngle = activeIntervalAngles[0] + this.rotationOffset
-      const endAngle = activeIntervalAngles[activeIntervalAngles.length-1] + this.rotationOffset
-      revealMaskPath = rimSegmentSVGPath({ 
-        center: {x: 0.5, y: 0.5},
+      const endAngle =
+        activeIntervalAngles[activeIntervalAngles.length - 1] +
+        this.rotationOffset
+      revealMaskPath = rimSegmentSVGPath({
+        center: { x: 0.5, y: 0.5 },
         radius: this.radius / 1000,
         thickness: this.radius / 1000,
         startAngle,
         endAngle,
-      }) 
+      })
     }
-    
+
     const content = svg`
     <defs>
       <clipPath id="gradient-clip" clipPathUnits="objectBoundingBox">
@@ -475,7 +476,7 @@ export class ToneWheel extends LitElement {
       <line class=${className}
         x1=${cx} y1=${cy}
         x2=${endpoint.x} y2=${endpoint.y}
-        stroke-width=${width*0.8}
+        stroke-width=${width * 0.8}
         stroke-linecap="round"
         opacity="0.9"
       />
@@ -495,22 +496,20 @@ export class ToneWheel extends LitElement {
     const endAngle = args.endAngle + this.rotationOffset
     const center = { x: 500, y: 500 }
 
-    const pathString = rimSegmentSVGPath({ 
+    const pathString = rimSegmentSVGPath({
       center,
       radius: this.radius,
       thickness: this.radius,
       startAngle,
-      endAngle
+      endAngle,
     })
-    
+
     const fullClass = ['inner-wedge', className].join(' ')
     return svg`
       <path class=${fullClass} d=${pathString} />
     `
   }
 }
-
-
 
 /**
  * Calculates the angle in degrees for each pitch class element,

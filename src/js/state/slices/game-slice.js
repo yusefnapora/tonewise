@@ -6,19 +6,19 @@
  * @typedef {import('./types.js').GameProgress} GameProgress
  * @typedef {import('./types.js').GameRound} GameRound
  * @typedef {import('./types.js').GameState} GameState
- * 
+ *
  */
 
-/** 
+/**
  * @typedef {import('@reduxjs/toolkit').Dispatch} Dispatch
  * @typedef {import('@reduxjs/toolkit').PayloadAction<GameRound>} GameRoundAction
  * @typedef {import('@reduxjs/toolkit').PayloadAction<Note>} NoteAction
  */
 
-import { createSlice, current, createAsyncThunk } from "@reduxjs/toolkit"
-import { triggerNoteStart, triggerNoteStop } from "./audio-slice.js"
-import { NoteIdMidiMap } from "../../audio/notes.js"
-import { clearNoteHighlight, highlightNote } from "./instrument-slice.js"
+import { createSlice, current, createAsyncThunk } from '@reduxjs/toolkit'
+import { triggerNoteStart, triggerNoteStop } from './audio-slice.js'
+import { NoteIdMidiMap } from '../../audio/notes.js'
+import { clearNoteHighlight, highlightNote } from './instrument-slice.js'
 
 /** @type {GameState} */
 const initialState = {
@@ -26,14 +26,14 @@ const initialState = {
 }
 
 /**
- * @param {GameState} state  
+ * @param {GameState} state
  */
 export function isStarted(state) {
   return state.currentRound != null
 }
 
 /**
- * @param {GameState} state 
+ * @param {GameState} state
  */
 function isCompleted(state) {
   if (state.currentRound == null) {
@@ -44,26 +44,28 @@ function isCompleted(state) {
   }
 
   const { rules, progress } = state.currentRound
-  return rules.targets.every(note => 
-    progress.guesses.find(guess => 
-      guess.isCorrect && guess.note.id === note.id))
+  return rules.targets.every((note) =>
+    progress.guesses.find(
+      (guess) => guess.isCorrect && guess.note.id === note.id,
+    ),
+  )
 }
 
 /**
- * 
- * @param {GameRules} rules 
- * @param {Note} note 
+ *
+ * @param {GameRules} rules
+ * @param {Note} note
  */
 function isCorrectGuess(rules, note) {
-  return rules.targets.some(t => t.id === note.id)
+  return rules.targets.some((t) => t.id === note.id)
 }
 
 /** @type {import('@reduxjs/toolkit').AsyncThunk<unknown, unknown, { state: { game: GameState }}>} */
 export const playChallengeSequence = createAsyncThunk(
   'game/playChallengeSequence',
   /**
-   * 
-   * @param {unknown} _ 
+   *
+   * @param {unknown} _
    * @param {{ getState: () => { game: GameState }, dispatch: Function }} thunkAPI
    */
   async (_, { getState, dispatch }) => {
@@ -73,7 +75,7 @@ export const playChallengeSequence = createAsyncThunk(
     }
 
     const duration = 1000
-    const sleep = t => new Promise(resolve => setTimeout(resolve, t))
+    const sleep = (t) => new Promise((resolve) => setTimeout(resolve, t))
     const { tonic, targets } = game.currentRound.rules
     const notes = [tonic, ...targets, tonic]
     for (let i = 0; i < notes.length; i++) {
@@ -83,16 +85,15 @@ export const playChallengeSequence = createAsyncThunk(
       // play and highlight tonic note
       dispatch(triggerNoteStart({ midiNote }))
       highlight && dispatch(highlightNote(note))
-      
+
       await sleep(duration)
       dispatch(triggerNoteStop({ midiNote }))
       if (i === 0) {
         dispatch(clearNoteHighlight(note))
       }
     }
-  }
+  },
 )
-
 
 const gameSlice = createSlice({
   name: 'game',
@@ -100,7 +101,7 @@ const gameSlice = createSlice({
   reducers: {
     /**
      * Resets to initial state.
-     * @param {GameState} _state 
+     * @param {GameState} _state
      * @returns {GameState}
      */
     reset(_state) {
@@ -109,18 +110,17 @@ const gameSlice = createSlice({
 
     /**
      * Starts a new game, replacing any existing value for `state.currentRound`
-     * @param {GameState} state 
-     * @param {GameRoundAction} action 
+     * @param {GameState} state
+     * @param {GameRoundAction} action
      */
     start(state, action) {
       state.currentRound = action.payload
     },
 
-
     /**
      * Submits a new guess from the player
-     * @param {GameState} state 
-     * @param {NoteAction} action 
+     * @param {GameState} state
+     * @param {NoteAction} action
      */
     guess(state, action) {
       if (!state.currentRound || state.currentRound.progress.isCompleted) {
@@ -147,7 +147,7 @@ const gameSlice = createSlice({
           state.currentRound.challengePlaying = false
         }
       })
-  }
+  },
 })
 
 const { actions, reducer } = gameSlice

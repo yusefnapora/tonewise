@@ -1,13 +1,19 @@
 import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { guess, playChallengeSequence, start } from '../../state/slices/game-slice.js'
+import { guess } from '../../state/slices/game-slice.js'
 import { PitchClassElement } from '../tone-wheel/pitch-class.js'
-import { clearNoteHighlight, endPlayerNote, highlightNote, resetInstrumentState, startPlayerNote } from '../../state/slices/instrument-slice.js'
-import { resumeAudio, triggerNoteStart, triggerNoteStop } from '../../state/slices/audio-slice.js'
+import {
+  endPlayerNote,
+  startPlayerNote,
+} from '../../state/slices/instrument-slice.js'
+import {
+  resumeAudio,
+  triggerNoteStart,
+  triggerNoteStop,
+} from '../../state/slices/audio-slice.js'
 import { NoteIdMidiMap, NoteIds } from '../../audio/notes.js'
-import { isGameCompleted, isGameStarted, selectActiveNoteIds } from '../../state/selectors/selectors.js'
-
+import { selectActiveNoteIds } from '../../state/selectors/selectors.js'
 
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -34,7 +40,6 @@ export class GameViewElement extends LitElement {
     this.requestUpdate()
   }
 
-
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
   get #wheel() {
     return this.renderRoot.querySelector('tone-wheel')
@@ -47,8 +52,7 @@ export class GameViewElement extends LitElement {
     )
   }
 
-
-  /** 
+  /**
    * @param {import('../tone-wheel/events.js').NoteHoldBeganEvent} e
    */
   #pitchSelected(e) {
@@ -61,25 +65,25 @@ export class GameViewElement extends LitElement {
     this.#stateController.dispatch(guess(note))
   }
 
-   /** 
+  /**
    * @param {import('../tone-wheel/events.js').NoteHoldEndedEvent} e
-   */ 
+   */
   #pitchDeselected(e) {
     const note = e.detail
-    this.#stateController.dispatch(endPlayerNote(note)) 
+    this.#stateController.dispatch(endPlayerNote(note))
     this.#endNotePlayback(this.#pitchClass(note.id))
   }
 
   /**
-   * 
-   * @param {PitchClassElement} pitchClass 
+   *
+   * @param {PitchClassElement} pitchClass
    */
   #triggerNote(pitchClass) {
     const midiNote = pitchClass.midiNote
     if (!midiNote) {
       return
     }
-    this.#stateController.dispatch(triggerNoteStart({ midiNote })) 
+    this.#stateController.dispatch(triggerNoteStart({ midiNote }))
   }
 
   #endNotePlayback(pitchClass) {
@@ -87,9 +91,8 @@ export class GameViewElement extends LitElement {
     if (!midiNote) {
       return
     }
-    this.#stateController.dispatch(triggerNoteStop({ midiNote }))  
+    this.#stateController.dispatch(triggerNoteStop({ midiNote }))
   }
-
 
   render() {
     const { state } = this.#stateController
@@ -99,23 +102,25 @@ export class GameViewElement extends LitElement {
       const midiNote = NoteIdMidiMap[id]
       const active = allActive.has(id)
       return html`
-      <pitch-class id=${id} midi-note=${midiNote} active=${active || nothing}>${id}</pitch-class>
+        <pitch-class id=${id} midi-note=${midiNote} active=${active || nothing}
+          >${id}</pitch-class
+        >
       `
     })
-    
+
     // TODO: make tone-wheel update itself when active pitch classes change
     this.#wheel?.requestUpdate()
 
     return html`
-    <tone-wheel 
-      @note:holdBegan=${this.#pitchSelected}
-      @note:holdEnded=${this.#pitchDeselected}
-    >
-      ${pitchClasses}
-    </tone-wheel>
+      <tone-wheel
+        @note:holdBegan=${this.#pitchSelected}
+        @note:holdEnded=${this.#pitchDeselected}
+      >
+        ${pitchClasses}
+      </tone-wheel>
 
-    <progress-view></progress-view>
-  `
+      <progress-view></progress-view>
+    `
   }
 }
 
