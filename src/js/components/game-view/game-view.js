@@ -118,7 +118,6 @@ export class GameViewElement extends LitElement {
       >
         ${pitchClasses}
       </tone-wheel>
-
       <progress-view></progress-view>
     `
   }

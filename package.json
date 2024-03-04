@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npm run clean && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
-    "serve": "web-dev-server --node-resolve --watch --open --root-dir ./src",
+    "serve": "web-dev-server --node-resolve --watch --open --app-index src/index.html",
     "format": "prettier --write .",
     "test": "web-test-runner test/**/*.test.js --node-resolve",
     "typecheck": "tsc -p ./jsconfig.json"

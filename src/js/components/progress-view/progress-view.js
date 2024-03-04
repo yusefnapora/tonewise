@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit'
+import { LitElement, html, css } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
@@ -6,10 +6,29 @@ import {
   isGameStarted,
 } from '../../state/selectors/selectors.js'
 import { NoteIds } from '../../audio/notes.js'
-import { playChallengeSequence, start } from '../../state/slices/game-slice.js'
+import { playChallengeSequence, reset, start } from '../../state/slices/game-slice.js'
 import { resetInstrumentState } from '../../state/slices/instrument-slice.js'
 
 export class ProgressViewElement extends LitElement {
+  static styles = css`
+    :host {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    sl-card {
+      width: 100%;
+      max-width: min(500px, calc(100vw - 40px));
+    }
+    .content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  `
+
   #stateController = new StateController(this)
 
   /**
@@ -32,6 +51,11 @@ export class ProgressViewElement extends LitElement {
     this.#stateController.dispatch(playChallengeSequence())
   }
 
+  #leaveGame() {
+    this.#stateController.dispatch(reset())
+    this.#stateController.dispatch(resetInstrumentState())
+  }
+
   #getRandomNote() {
     const id = NoteIds[Math.floor(Math.random() * NoteIds.length)]
     return { id }
@@ -46,27 +70,50 @@ export class ProgressViewElement extends LitElement {
 
     const actionButton =
       started && !completed
-        ? html`<sl-button variant="danger" @click=${() => this.#startGame()}
-            >Give up</sl-button
-          >`
-        : html`<sl-button variant="primary" @click=${() => this.#startGame()}
-            >New game</sl-button
-          >`
+        ? html`
+          <sl-tooltip content="Leave game">
+            <sl-icon-button 
+              name="x-octagon-fill" label="Leave game" 
+              @click=${() => this.#leaveGame()}>
+            </sl-icon-button>
+          </sl-tooltip>
+          `
+        : html`
+          <sl-tooltip content="New game">
+            <sl-icon-button
+              name="play-fill" label="New game" 
+              @click=${() => this.#startGame()}>
+            </sl-icon-button>
+          </sl-tooltip>
+        `
 
     const replayButton = currentRound?.rules
-      ? html`<sl-button
-          variant="neutral"
-          @click=${() => this.#startGame(currentRound.rules)}
-          >Replay</sl-button
-        >`
+      ? html`
+        <sl-tooltip content="Replay">
+          <sl-icon-button
+            name="arrow-counterclockwise"
+            @click=${() => this.#startGame(currentRound.rules)}
+            >
+          </sl-icon-button>
+        </sl-tooltip>
+          `
       : undefined
     const tonicLabel = tonic ? `Tonic: ${tonic.id}` : ''
 
+    const statusView = started 
+      ? html`
+        <div>
+          ${completed ? 'Correct!' : tonicLabel}
+        </div>`
+      : undefined
+
     return html`
       <sl-card>
-        <div>
-          ${actionButton} ${replayButton}
-          <div>${completed ? 'Correct!' : tonicLabel}</div>
+        <div class="content">
+          <div>
+            ${actionButton} ${replayButton}
+          </div>
+          ${statusView}
         </div>
       </sl-card>
     `
