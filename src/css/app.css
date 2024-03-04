@@ -44,6 +44,14 @@ html {
   }
 }
 
+html.light-theme {
+  --color-background: var(--theme-light-color-background);
+  --color-muted: var(--theme-light-color-muted);
+  --color-primary: var(--theme-light-color-primary);
+  --color-text: var(--theme-light-color-text);
+  --color-text-muted: var(--theme-light-color-text-muted);   
+}
+
 
 *:not(input):not(textarea) {
   user-select: none;

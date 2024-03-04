@@ -34,27 +34,6 @@ export class GameViewElement extends LitElement {
     this.requestUpdate()
   }
 
-  /**
-   * 
-   * @param {import('../../state/slices/types.js').GameRules|undefined} [rules]
-   */
-  #startGame(rules) {
-
-    if (!rules) {
-      const tonic = this.#getRandomPitchClass().toJsObject()
-      let target = this.#getRandomPitchClass().toJsObject()
-      while (target.id === tonic.id) {
-        target = this.#getRandomPitchClass().toJsObject() 
-      }
-      rules = { tonic, targets: [ target ]}
-    }
-    const progress = { guesses: [] }
-
-    this.#stateController.dispatch(start({ rules, progress }))
-    this.#stateController.dispatch(resetInstrumentState())
-    this.#stateController.dispatch(playChallengeSequence())
-  }
-
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
   get #wheel() {
@@ -68,16 +47,6 @@ export class GameViewElement extends LitElement {
     )
   }
 
-  #pitchClasses() {
-    return /** @type {PitchClassElement[]} */ (
-      [...this.renderRoot.querySelectorAll('pitch-class')]
-    )
-  }
-
-  #getRandomPitchClass() {
-    const classes = this.#pitchClasses()
-    return classes[Math.floor(Math.random()*classes.length)]
-  }
 
   /** 
    * @param {import('../tone-wheel/events.js').NoteHoldBeganEvent} e
@@ -124,21 +93,7 @@ export class GameViewElement extends LitElement {
 
   render() {
     const { state } = this.#stateController
-    const { currentRound } = state.game
-    const tonic = currentRound?.rules?.tonic
-    const started = isGameStarted(state)
-    const completed = isGameCompleted(state)
     const allActive = selectActiveNoteIds(state)
-
-    const tonicLabel = tonic ? `Tonic: ${tonic.id}` : ''
-
-    const actionButton = (started && !completed)
-      ? html`<sl-button variant="danger" @click=${() => this.#startGame()}>Give up</sl-button>`
-      : html`<sl-button variant="primary" @click=${() => this.#startGame()}>New game</sl-button>`
-
-    const replayButton = currentRound?.rules
-      ? html`<sl-button variant="neutral" @click=${() => this.#startGame(currentRound.rules)}>Replay</sl-button>`
-      : undefined
 
     const pitchClasses = NoteIds.map((id) => {
       const midiNote = NoteIdMidiMap[id]
@@ -159,11 +114,7 @@ export class GameViewElement extends LitElement {
       ${pitchClasses}
     </tone-wheel>
 
-    <div>
-      ${actionButton}
-      ${replayButton}
-      <div>${completed ? 'Correct!' : tonicLabel}</div>
-    </div>
+    <progress-view></progress-view>
   `
   }
 }
