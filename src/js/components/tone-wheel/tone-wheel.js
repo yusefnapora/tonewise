@@ -1,5 +1,6 @@
 import { LitElement, css, html, svg } from 'lit'
 import {
+  calculateSegmentAngles,
   degreesBetween,
   polarToCartesian,
   rimSegmentSVGPath,
@@ -168,30 +169,19 @@ export class ToneWheel extends LitElement {
 
     const pitchesWithAngles = getIntervalAngles(elements)
     pitchesWithAngles.sort((a, b) => a.angle - b.angle)
+    const angles = calculateSegmentAngles(pitchesWithAngles)
 
     const rimThickness = 140
 
     const groups = []
     const colors = []
-    for (let i = 0; i < pitchesWithAngles.length; i++) {
+    for (let i = 0; i < angles.length; i++) {
       const groupContent = []
-      const el = pitchesWithAngles[i].pitchClass
 
-      // calculate start and end angles for this segment
-      // by finding midpoints between our intervalAngle and the
-      // intervalAngle of the previous and next segments.
-
-      const nextIndex = i === elements.length - 1 ? 0 : i + 1
-      const prevIndex = i === 0 ? elements.length - 1 : i - 1
-
-      const intervalAngle = pitchesWithAngles[i].angle
-      const prevIntervalAngle = pitchesWithAngles[prevIndex].angle
-      const nextIntervalAngle = pitchesWithAngles[nextIndex].angle
-
-      const segmentStartAngle =
-        intervalAngle - degreesBetween(prevIntervalAngle, intervalAngle) / 2
-      const segmentEndAngle =
-        intervalAngle + degreesBetween(intervalAngle, nextIntervalAngle) / 2
+      const el = angles[i].input.pitchClass
+      const intervalAngle = angles[i].input.angle
+      const segmentStartAngle = angles[i].startAngle
+      const segmentEndAngle = angles[i].endAngle
       const segmentLength = degreesBetween(segmentStartAngle, segmentEndAngle)
 
       const className = `tone-${i}`

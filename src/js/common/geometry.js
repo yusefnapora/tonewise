@@ -154,3 +154,41 @@ export function rimSegmentSVGPath(args) {
   ].join(' ')
   return path
 }
+
+/**
+ * Calculates the start and end angles for each segment of a wheel
+ * by finding the midpoint between each of the input angles.
+ * 
+ * @template {{ angle: number }} InputT
+ * 
+ * @param {InputT[]} inputs
+ * @param {object} [options]
+ * @param {number} [options.gapDegrees]
+ * 
+ * @returns {Array<{ input: InputT, startAngle: number, endAngle: number}>}
+ */
+export function calculateSegmentAngles(inputs, options) {
+  const gapDegrees = options?.gapDegrees ?? 0
+
+  const outputs = []
+  for (let i = 0; i < inputs.length; i++) {
+    const input = inputs[i]
+
+    const nextIndex = i === inputs.length - 1 ? 0 : i + 1
+    const prevIndex = i === 0 ? inputs.length - 1 : i - 1
+
+    const intervalAngle = inputs[i].angle
+    const prevIntervalAngle = inputs[prevIndex].angle
+    const nextIntervalAngle = inputs[nextIndex].angle
+
+    let startAngle =
+      intervalAngle - (degreesBetween(prevIntervalAngle, intervalAngle) / 2)
+    let endAngle =
+      intervalAngle + (degreesBetween(intervalAngle, nextIntervalAngle) / 2)
+      
+    startAngle += (gapDegrees / 2)
+    endAngle -= (gapDegrees / 2)
+    outputs.push({ input, startAngle, endAngle })
+  }
+  return outputs
+}

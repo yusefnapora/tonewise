@@ -1,7 +1,7 @@
 import { LitElement, css, html, svg } from 'lit'
 import { colorForAngle } from '../../common/color.js'
 import { registerElement } from '../../common/dom.js'
-import { degreesBetween, rimSegmentSVGPath } from '../../common/geometry.js'
+import { calculateSegmentAngles, degreesBetween, rimSegmentSVGPath } from '../../common/geometry.js'
 
 // TODO: make tuning a part of redux state
 const DEFAULT_TUNING = {
@@ -78,25 +78,13 @@ export class NoteBadgeElement extends LitElement {
     const content = []
     const colors = []
     const segmentStyles = []
-    const elements = this.tuning.pitchClasses
+    const elements = calculateSegmentAngles(this.tuning.pitchClasses, { gapDegrees })
+
+
     for (let i = 0; i < elements.length; i++) {
-      const note = elements[i]
+      const note = elements[i].input
+      const { startAngle, endAngle } = elements[i]
       colors[i] = colorForAngle(note.angle)
-
-      const nextIndex = i === elements.length - 1 ? 0 : i + 1
-      const prevIndex = i === 0 ? elements.length - 1 : i - 1
-
-      const intervalAngle = elements[i].angle
-      const prevIntervalAngle = elements[prevIndex].angle
-      const nextIntervalAngle = elements[nextIndex].angle
-
-      let startAngle =
-        intervalAngle - (degreesBetween(prevIntervalAngle, intervalAngle) / 2)
-      let endAngle =
-        intervalAngle + (degreesBetween(intervalAngle, nextIntervalAngle) / 2) 
-  
-      startAngle += gapDegrees / 2
-      endAngle -= gapDegrees / 2
 
       const className = `badge-segment-${i}`
       let fullClass = className
@@ -114,7 +102,7 @@ export class NoteBadgeElement extends LitElement {
       })
       content.push(segment)
 
-      const color = colorForAngle(intervalAngle)
+      const color = colorForAngle(note.angle)
       segmentStyles.push(`
         .${className}.active-note {
           stroke: ${color};
