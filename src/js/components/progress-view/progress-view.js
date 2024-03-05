@@ -1,13 +1,10 @@
 import { LitElement, css, html, nothing } from 'lit'
-import { NoteIds } from '../../audio/notes.js'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
   isGameCompleted,
   isGameStarted,
 } from '../../state/selectors/selectors.js'
-import { playChallengeSequence, reset, start } from '../../state/slices/game-slice.js'
-import { resetInstrumentState } from '../../state/slices/instrument-slice.js'
 
 export class ProgressViewElement extends LitElement {
   static styles = css`
@@ -18,6 +15,13 @@ export class ProgressViewElement extends LitElement {
       justify-content: center;
       min-height: 64px;
     }
+
+    @media (orientation: landscape) {
+      :host {
+        flex-direction: column;
+      }
+    }
+
     sl-card {
       width: 100%;
       max-width: min(500px, calc(100vw - 40px));

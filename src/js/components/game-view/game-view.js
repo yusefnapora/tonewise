@@ -20,17 +20,65 @@ export class GameViewElement extends LitElement {
     :host {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: space-evenly;
     }
+
+    .contents {
+      display: grid;
+      flex: 1;
+
+      column-gap: 0;
+      row-gap: 0;
+
+      grid-template-areas:
+        "toolbar"
+        "wheel"
+        "progress";
+      place-items: center;
+    }
+
+    sl-card.toolbar {
+      grid-area: toolbar;
+    }    
+
+    sl-card.wheel {
+      grid-area: wheel;
+    }
+
+    sl-card.progress {
+      grid-area: progress;
+    }
+
+    @media (max-height: 740px) {
+      .contents {
+        display: grid;
+        flex: 1;
+        grid-template-areas:
+          "toolbar wheel"
+          "progress wheel";
+      }
+
+      sl-card.toolbar {
+        place-self: center stretch;
+      }
+      sl-card.toolbar::part(base) {
+        height: 100%;
+        width: 100%;
+       }
+      sl-card.progress {
+        place-self: center stretch;
+
+      }
+      sl-card.progress::part(base) {
+        height: 100%;
+        width: 100%;
+      }
+    }
+
     sl-card {
       width: 100%;
-      max-width: min(500px, calc(100vw - 40px));
+      max-width: min(500px, calc(100vw - 40px), 90vh);
+      max-height: min(500px, calc(100vw - 40px));
       margin: 5px auto;
-    }
-    tone-wheel {
-      margin-top: 64px;
-      margin-bottom: 16px;
     }
   `
 
@@ -116,20 +164,22 @@ export class GameViewElement extends LitElement {
     this.#wheel?.requestUpdate()
 
     return html`
-      <sl-card>
-          <game-view-toolbar></game-view-toolbar>
-      </sl-card>
-      <sl-card>
-          <tone-wheel
-          @note:holdBegan=${this.#pitchSelected}
-          @note:holdEnded=${this.#pitchDeselected}
-        >
-          ${pitchClasses}
-        </tone-wheel>
-      </sl-card>
-      <sl-card> 
-        <progress-view></progress-view>
-      </sl-card>
+      <div class="contents">
+        <sl-card class="toolbar">
+            <game-view-toolbar></game-view-toolbar>
+        </sl-card>
+        <sl-card class="wheel">
+            <tone-wheel
+            @note:holdBegan=${this.#pitchSelected}
+            @note:holdEnded=${this.#pitchDeselected}
+          >
+            ${pitchClasses}
+          </tone-wheel>
+        </sl-card>
+        <sl-card class="progress"> 
+          <progress-view></progress-view>
+        </sl-card>
+      </div>
     `
   }
 }
