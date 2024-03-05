@@ -10,6 +10,17 @@ import { playChallengeSequence, reset, start } from '../../state/slices/game-sli
 import { resetInstrumentState } from '../../state/slices/instrument-slice.js'
 
 export class GameViewToolbarElement extends LitElement {
+  static styles = css`
+    :host {
+      font-size: 2rem;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  `
   #stateController = new StateController(this)
 
 
