@@ -1,7 +1,11 @@
 import { LitElement, css, html, svg } from 'lit'
 import { colorForAngle } from '../../common/color.js'
 import { registerElement } from '../../common/dom.js'
-import { calculateSegmentAngles, degreesBetween, rimSegmentSVGPath } from '../../common/geometry.js'
+import {
+  calculateSegmentAngles,
+  degreesBetween,
+  rimSegmentSVGPath,
+} from '../../common/geometry.js'
 
 // TODO: make tuning a part of redux state
 const DEFAULT_TUNING = {
@@ -18,7 +22,7 @@ const DEFAULT_TUNING = {
     { id: 'A', angle: 270 },
     { id: 'A♯', angle: 300 },
     { id: 'B', angle: 330 },
-  ]
+  ],
 }
 
 export class NoteBadgeElement extends LitElement {
@@ -61,25 +65,23 @@ export class NoteBadgeElement extends LitElement {
   }
 
   render() {
-    return html`
-      <svg viewBox="0 0 1000 1000">
-        ${this.#svgContent()}
-      </svg>
-    `
+    return html` <svg viewBox="0 0 1000 1000">${this.#svgContent()}</svg> `
   }
 
   #svgContent() {
-    let activeNote = this.noteId == null
-      ? null
-      : this.tuning.pitchClasses.find(n => n.id === this.noteId)
+    let activeNote =
+      this.noteId == null
+        ? null
+        : this.tuning.pitchClasses.find((n) => n.id === this.noteId)
 
     const gapDegrees = 10
 
     const content = []
     const colors = []
     const segmentStyles = []
-    const elements = calculateSegmentAngles(this.tuning.pitchClasses, { gapDegrees })
-
+    const elements = calculateSegmentAngles(this.tuning.pitchClasses, {
+      gapDegrees,
+    })
 
     for (let i = 0; i < elements.length; i++) {
       const note = elements[i].input
@@ -98,7 +100,7 @@ export class NoteBadgeElement extends LitElement {
       const segment = this.#createRimSegment({
         className: fullClass,
         startAngle,
-        endAngle
+        endAngle,
       })
       content.push(segment)
 
@@ -147,7 +149,7 @@ export class NoteBadgeElement extends LitElement {
   }
 
   /**
-   * 
+   *
    * @param {object} args
    * @param {string} args.className
    * @param {number} args.startAngle
@@ -157,7 +159,6 @@ export class NoteBadgeElement extends LitElement {
     const center = { x: 500, y: 500 }
     const radius = 500
     const thickness = 140
-
 
     const startAngle = args.startAngle + this.rotationOffset
     const endAngle = args.endAngle + this.rotationOffset

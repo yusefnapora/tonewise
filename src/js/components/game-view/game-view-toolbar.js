@@ -6,7 +6,11 @@ import {
   isGameStarted,
 } from '../../state/selectors/selectors.js'
 import { NoteIds } from '../../audio/notes.js'
-import { playChallengeSequence, reset, start } from '../../state/slices/game-slice.js'
+import {
+  playChallengeSequence,
+  reset,
+  start,
+} from '../../state/slices/game-slice.js'
 import { resetInstrumentState } from '../../state/slices/instrument-slice.js'
 
 export class GameViewToolbarElement extends LitElement {
@@ -18,7 +22,7 @@ export class GameViewToolbarElement extends LitElement {
     .buttons {
       display: flex;
       align-items: center;
-      justify-content: space-between; 
+      justify-content: space-between;
     }
     @media (max-height: 740px) {
       :host {
@@ -30,7 +34,6 @@ export class GameViewToolbarElement extends LitElement {
     }
   `
   #stateController = new StateController(this)
-
 
   /**
    *
@@ -71,40 +74,39 @@ export class GameViewToolbarElement extends LitElement {
     const actionButton =
       started && !completed
         ? html`
-          <sl-tooltip content="Leave game">
-            <sl-icon-button 
-              name="x-octagon-fill" label="Leave game" 
-              @click=${() => this.#leaveGame()}>
-            </sl-icon-button>
-          </sl-tooltip>
+            <sl-tooltip content="Leave game">
+              <sl-icon-button
+                name="x-octagon-fill"
+                label="Leave game"
+                @click=${() => this.#leaveGame()}
+              >
+              </sl-icon-button>
+            </sl-tooltip>
           `
         : html`
-          <sl-tooltip content="New game">
-            <sl-icon-button
-              name="play-fill" label="New game" 
-              @click=${() => this.#startGame()}>
-            </sl-icon-button>
-          </sl-tooltip>
-        `
+            <sl-tooltip content="New game">
+              <sl-icon-button
+                name="play-fill"
+                label="New game"
+                @click=${() => this.#startGame()}
+              >
+              </sl-icon-button>
+            </sl-tooltip>
+          `
 
     const replayButton = currentRound?.rules
       ? html`
-        <sl-tooltip content="Replay">
-          <sl-icon-button
-            name="arrow-counterclockwise"
-            @click=${() => this.#startGame(currentRound.rules)}
+          <sl-tooltip content="Replay">
+            <sl-icon-button
+              name="arrow-counterclockwise"
+              @click=${() => this.#startGame(currentRound.rules)}
             >
-          </sl-icon-button>
-        </sl-tooltip>
-          `
+            </sl-icon-button>
+          </sl-tooltip>
+        `
       : undefined
 
-    return html`
-      <div class="buttons">
-        ${actionButton}
-        ${replayButton}
-      </div>
-    `
+    return html` <div class="buttons">${actionButton} ${replayButton}</div> `
   }
 }
 

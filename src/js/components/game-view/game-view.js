@@ -30,16 +30,16 @@ export class GameViewElement extends LitElement {
       row-gap: 0;
 
       grid-template-areas:
-        "info"
-        "toolbar"
-        "wheel"
-        "progress";
+        'info'
+        'toolbar'
+        'wheel'
+        'progress';
       place-items: center;
     }
 
     sl-card.toolbar {
       grid-area: toolbar;
-    }    
+    }
 
     sl-card.wheel {
       grid-area: wheel;
@@ -56,17 +56,16 @@ export class GameViewElement extends LitElement {
 
         grid-column-gap: 10px;
         grid-template-columns: 
-         /* info     */ 1fr 
-         /* toolbar  */ 96px
-         /* wheel    */ min(500px, calc(100vw - 40px), 90vh)
-         /* progress */ 96px
-         /* .        */ 1fr;
+         /* info     */
+          1fr
+          /* toolbar  */ 96px
+          /* wheel    */ min(500px, calc(100vw - 40px), 90vh)
+          /* progress */ 96px
+          /* .        */ 0px;
         grid-template-areas:
-          "info toolbar wheel progress . "
-          "info toolbar wheel progress . "
-          "info toolbar wheel progress . "
-          ;
-
+          'info toolbar wheel progress . '
+          'info toolbar wheel progress . '
+          'info toolbar wheel progress . ';
       }
 
       sl-card.toolbar {
@@ -75,10 +74,9 @@ export class GameViewElement extends LitElement {
       sl-card.toolbar::part(base) {
         height: 100%;
         /* width: 100%; */
-       }
+      }
       sl-card.progress {
         place-self: stretch;
-
       }
       sl-card.progress::part(base) {
         height: 100%;
@@ -166,9 +164,9 @@ export class GameViewElement extends LitElement {
       const midiNote = NoteIdMidiMap[id]
       const active = allActive.has(id)
       return html`
-        <pitch-class id=${id} midi-note=${midiNote} active=${active || nothing}
-          >${id}</pitch-class
-        >
+        <pitch-class id=${id} midi-note=${midiNote} active=${active || nothing}>
+          ${id}
+        </pitch-class>
       `
     })
 
@@ -178,17 +176,17 @@ export class GameViewElement extends LitElement {
     return html`
       <div class="contents">
         <sl-card class="toolbar">
-            <game-view-toolbar></game-view-toolbar>
+          <game-view-toolbar></game-view-toolbar>
         </sl-card>
         <sl-card class="wheel">
-            <tone-wheel
+          <tone-wheel
             @note:holdBegan=${this.#pitchSelected}
             @note:holdEnded=${this.#pitchDeselected}
           >
             ${pitchClasses}
           </tone-wheel>
         </sl-card>
-        <sl-card class="progress"> 
+        <sl-card class="progress">
           <progress-view></progress-view>
         </sl-card>
       </div>

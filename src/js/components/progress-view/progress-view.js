@@ -58,21 +58,22 @@ export class ProgressViewElement extends LitElement {
     const started = isGameStarted(state)
     const completed = isGameCompleted(state)
 
-    
     const tonicLabel = tonic ? `Tonic: ${tonic.id}` : ''
 
-
-    const targetNoteBadges = currentRound?.rules.targets.map(note => {
-      const reveal = currentRound?.progress.guesses
-        .some(guess => guess.isCorrect && guess.note.id === note.id)
+    const targetNoteBadges = currentRound?.rules.targets.map((note) => {
+      const reveal = currentRound?.progress.guesses.some(
+        (guess) => guess.isCorrect && guess.note.id === note.id,
+      )
       return html`
-        <note-badge note-id=${note.id} reveal=${reveal ? 'true' : nothing}></note-badge>
+        <note-badge
+          note-id=${note.id}
+          reveal=${reveal ? 'true' : nothing}
+        ></note-badge>
       `
     })
 
-    const statusView = started 
-      ? html`
-        <div>
+    const statusView = started
+      ? html` <div>
           <div class="badges">
             <note-badge note-id=${tonic?.id} reveal></note-badge>
             ${targetNoteBadges}
@@ -80,11 +81,7 @@ export class ProgressViewElement extends LitElement {
         </div>`
       : undefined
 
-    return html`
-        <div class="in-progress">
-          ${statusView}
-        </div>
-    `
+    return html` <div class="in-progress">${statusView}</div> `
   }
 }
 
