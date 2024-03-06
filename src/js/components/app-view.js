@@ -1,6 +1,8 @@
 import { LitElement, css, html } from 'lit'
-import { dispatch } from '../state/store.js'
 import { loadSampler } from '../state/slices/audio-slice.js'
+import { dispatch } from '../state/store.js'
+
+
 
 export class AppViewElement extends LitElement {
   static styles = css`
@@ -28,7 +30,8 @@ export class AppViewElement extends LitElement {
   }
 
   render() {
-    return html`<game-view></game-view>`
+    // return html`<game-view></game-view>`
+    return html`<app-router></app-router>`
   }
 }
 customElements.define('app-view', AppViewElement)
