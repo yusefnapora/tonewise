@@ -17,6 +17,8 @@
   --wheel-gradient-background-opacity: 0.5;
   --wheel-gradient-background-vibrant-opacity: 1;
   --wheel-gradient-background-blur: 30px;
+
+  --landscape-layout-max-height: 740px;
 }
 
 html {

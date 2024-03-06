@@ -30,6 +30,7 @@ export class GameViewElement extends LitElement {
       row-gap: 0;
 
       grid-template-areas:
+        "info"
         "toolbar"
         "wheel"
         "progress";
@@ -52,25 +53,36 @@ export class GameViewElement extends LitElement {
       .contents {
         display: grid;
         flex: 1;
+
+        grid-column-gap: 10px;
+        grid-template-columns: 
+         /* info     */ 1fr 
+         /* toolbar  */ 96px
+         /* wheel    */ min(500px, calc(100vw - 40px), 90vh)
+         /* progress */ 96px
+         /* .        */ 1fr;
         grid-template-areas:
-          "toolbar wheel"
-          "progress wheel";
+          "info toolbar wheel progress . "
+          "info toolbar wheel progress . "
+          "info toolbar wheel progress . "
+          ;
+
       }
 
       sl-card.toolbar {
-        place-self: center stretch;
+        place-self: stretch;
       }
       sl-card.toolbar::part(base) {
         height: 100%;
-        width: 100%;
+        /* width: 100%; */
        }
       sl-card.progress {
-        place-self: center stretch;
+        place-self: stretch;
 
       }
       sl-card.progress::part(base) {
         height: 100%;
-        width: 100%;
+        /* width: 100%; */
       }
     }
 

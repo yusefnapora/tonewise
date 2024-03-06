@@ -17,8 +17,16 @@ export class GameViewToolbarElement extends LitElement {
 
     .buttons {
       display: flex;
-      flex-direction: row;
-      justify-content: space-between;
+      align-items: center;
+      justify-content: space-between; 
+    }
+    @media (max-height: 740px) {
+      :host {
+        flex-direction: column;
+      }
+      .buttons {
+        flex-direction: column;
+      }
     }
   `
   #stateController = new StateController(this)

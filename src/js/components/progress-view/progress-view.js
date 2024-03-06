@@ -16,12 +16,6 @@ export class ProgressViewElement extends LitElement {
       min-height: 64px;
     }
 
-    @media (orientation: landscape) {
-      :host {
-        flex-direction: column;
-      }
-    }
-
     sl-card {
       width: 100%;
       max-width: min(500px, calc(100vw - 40px));
@@ -45,8 +39,13 @@ export class ProgressViewElement extends LitElement {
     .badges note-badge {
       width: 48px;
       height: 48px;
-      margin-left: 12px;
-      margin-right: 12px;
+      margin: 12px;
+    }
+
+    @media (max-height: 740px) {
+      .badges {
+        flex-direction: column;
+      }
     }
   `
 
