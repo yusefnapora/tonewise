@@ -1,7 +1,7 @@
 import { LitElement, css, html } from 'lit'
 import { loadSampler } from '../state/slices/audio-slice.js'
 import { dispatch } from '../state/store.js'
-
+import { RouteController } from '../route-controller.js'
 
 
 export class AppViewElement extends LitElement {
@@ -16,22 +16,17 @@ export class AppViewElement extends LitElement {
       align-items: center;
       justify-content: center;
     }
-    game-view {
-      max-width: 100vw;
-      width: 100%;
-      margin: auto;
-    }
   `
+
+  #routeController = new RouteController(this)
 
   connectedCallback() {
     super.connectedCallback()
-    // todo: show welcome screen before game view
     dispatch(loadSampler())
   }
 
   render() {
-    // return html`<game-view></game-view>`
-    return html`<app-router></app-router>`
+    return this.#routeController.content
   }
 }
 customElements.define('app-view', AppViewElement)
