@@ -42,7 +42,7 @@ export class ProgressViewElement extends LitElement {
       margin: 12px;
     }
 
-    @media (max-height: 740px) {
+    @media (max-height: 600px) {
       .badges {
         flex-direction: column;
       }

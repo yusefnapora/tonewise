@@ -17,20 +17,26 @@ import { selectActiveNoteIds } from '../../state/selectors/selectors.js'
 
 export class GameViewElement extends LitElement {
   static styles = css`
-    :host {
+    /* :host {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
+    } */
+
+    :root {
+      --panel-size: 72px;
+      --grid-panel-gap: 10px;
     }
 
     .contents {
       display: grid;
       flex: 1;
 
-      column-gap: 0;
-      row-gap: 0;
+      column-gap: 10px;
+      row-gap: 10px;
 
+      
       grid-template-areas:
-        'info'
         'toolbar'
         'wheel'
         'progress';
@@ -49,18 +55,20 @@ export class GameViewElement extends LitElement {
       grid-area: progress;
     }
 
-    @media (max-height: 740px) {
+    @media (max-height: 600px) {
+      /* :host {
+        flex-direction: row;
+      } */
       .contents {
         display: grid;
         flex: 1;
 
-        grid-column-gap: 10px;
         grid-template-columns: 
          /* info     */
           1fr
-          /* toolbar  */ 96px
-          /* wheel    */ min(500px, calc(100vw - 40px), 90vh)
-          /* progress */ 96px
+          /* toolbar  */ 72px
+          /* wheel    */ min(500px, calc(100vw - 40px), 90vh, 90dvh)
+          /* progress */ 72px
           /* .        */ 0px;
         grid-template-areas:
           'info toolbar wheel progress . '
@@ -86,9 +94,10 @@ export class GameViewElement extends LitElement {
 
     sl-card {
       width: 100%;
-      max-width: min(500px, calc(100vw - 40px), 90vh);
-      max-height: min(500px, calc(100vw - 40px));
-      margin: 5px auto;
+      max-width: min(500px, calc(100vw - 40px), 90vh, 90dvh);
+      max-height: min(500px, calc(100vw - 40px), 90vh, 90dvh);
+      /* margin: 5px auto; */
+      margin: 0;
     }
   `
 

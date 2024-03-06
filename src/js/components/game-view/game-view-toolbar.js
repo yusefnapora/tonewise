@@ -24,7 +24,7 @@ export class GameViewToolbarElement extends LitElement {
       align-items: center;
       justify-content: space-between;
     }
-    @media (max-height: 740px) {
+    @media (max-height: 600px) {
       :host {
         flex-direction: column;
       }
