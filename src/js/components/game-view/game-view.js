@@ -55,7 +55,7 @@ export class GameViewElement extends LitElement {
       grid-area: progress;
     }
 
-    @media (max-height: 600px) {
+    @media (orientation: landscape) {
       /* :host {
         flex-direction: row;
       } */
