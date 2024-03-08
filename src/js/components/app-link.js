@@ -1,8 +1,19 @@
-import { LitElement, html } from "lit"
+import { LitElement, html, css } from "lit"
 import { sharedRouter } from "../route-controller.js"
 import { registerElement } from "../common/dom.js"
 
 export class AppLinkElement extends LitElement {
+  static styles = css`
+    a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+    a:hover {
+      color: color-mix(in lch, var(--color-primary), white 20%);
+      text-decoration: underline;
+    }
+  `
+
   static properties = {
     href: { type: String }
   }

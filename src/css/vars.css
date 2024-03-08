@@ -1,7 +1,7 @@
 :root {
   --theme-dark-color-background: hsl(229, 13%, 17%);
-  --theme-dark-color-glass-background: rgba(49, 35, 35, 0.21);
-  --theme-dark-color-glass-border: rgba(49, 35, 35, 0.23);
+  --theme-dark-color-glass-background: rgba(49, 35, 35, 0.41);
+  --theme-dark-color-glass-border: rgba(49, 35, 35, 0.43);
   --theme-dark-color-muted: hsl(217, 38%, 15%);
   --theme-dark-color-primary: hsl(342, 71.1%, 53.9%);
   --theme-dark-color-text: white;
@@ -24,4 +24,6 @@
   --wheel-gradient-background-opacity: 0.5;
   --wheel-gradient-background-vibrant-opacity: 1;
   --wheel-gradient-background-blur: 30px;
+
+  --heading-font-family: 'Timeburner';
 }

@@ -74,35 +74,29 @@ export class GameViewToolbarElement extends LitElement {
     const actionButton =
       started && !completed
         ? html`
-            <sl-tooltip content="Leave game">
-              <sl-icon-button
-                name="x-octagon-fill"
-                label="Leave game"
-                @click=${() => this.#leaveGame()}
-              >
-              </sl-icon-button>
-            </sl-tooltip>
+            <sl-icon-button
+              name="x-octagon-fill"
+              label="Leave game"
+              @click=${() => this.#leaveGame()}
+            >
+            </sl-icon-button>
           `
         : html`
-            <sl-tooltip content="New game">
-              <sl-icon-button
-                name="play-fill"
-                label="New game"
-                @click=${() => this.#startGame()}
-              >
-              </sl-icon-button>
-            </sl-tooltip>
+            <sl-icon-button
+              name="play-fill"
+              label="New game"
+              @click=${() => this.#startGame()}
+            >
+            </sl-icon-button>
           `
 
     const replayButton = currentRound?.rules
       ? html`
-          <sl-tooltip content="Replay">
-            <sl-icon-button
-              name="arrow-counterclockwise"
-              @click=${() => this.#startGame(currentRound.rules)}
-            >
-            </sl-icon-button>
-          </sl-tooltip>
+          <sl-icon-button
+            name="arrow-counterclockwise"
+            @click=${() => this.#startGame(currentRound.rules)}
+          >
+          </sl-icon-button>
         `
       : undefined
 

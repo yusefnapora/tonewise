@@ -1,20 +1,20 @@
 import { LitElement, css, html, nothing } from 'lit'
-import { NoteIdMidiMap, NoteIds } from '../../audio/notes.js'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { selectActiveNoteIds } from '../../state/selectors/selectors.js'
+import { guess } from '../../state/slices/game-slice.js'
+import { PitchClassElement } from '../tone-wheel/pitch-class.js'
+import {
+  endPlayerNote,
+  startPlayerNote,
+} from '../../state/slices/instrument-slice.js'
 import {
   resumeAudio,
   triggerNoteStart,
   triggerNoteStop,
 } from '../../state/slices/audio-slice.js'
-import { guess } from '../../state/slices/game-slice.js'
-import {
-  endPlayerNote,
-  startPlayerNote,
-} from '../../state/slices/instrument-slice.js'
-import { PitchClassElement } from '../tone-wheel/pitch-class.js'
-
+import { NoteIdMidiMap, NoteIds } from '../../audio/notes.js'
+import { selectActiveNoteIds } from '../../state/selectors/selectors.js'
+import { cardStyleBase } from '../../styles.js'
 export class GameViewElement extends LitElement {
   static styles = css`
 
@@ -95,25 +95,7 @@ export class GameViewElement extends LitElement {
       margin: 0;
     }
 
-    sl-card::part(base) {
-      background: rgba(49, 35, 35, 0.21);
-      /* border-radius: 16px; */
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(5.1px);
-      -webkit-backdrop-filter: blur(5.1px);
-      border: 1px solid rgba(49, 35, 35, 0.23);
-    }
-
-    @media (prefers-color-scheme: light) {
-      sl-card::part(base) {
-      background: rgba(255, 255, 255, 0.51);
-      /* border-radius: 16px; */
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(5.1px);
-      -webkit-backdrop-filter: blur(5.1px);
-      border: 1px solid rgba(220, 220, 220, 0.23);
-    } 
-    }
+    ${cardStyleBase}
   `
 
   #stateController = new StateController(this)
