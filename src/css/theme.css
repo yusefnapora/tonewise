@@ -44,6 +44,9 @@ html {
     --color-text-muted: var(--theme-light-color-text-muted);
     --color-glass-background: var(--theme-light-color-glass-background);
     --color-glass-border: var(--theme-light-color-glass-border);  
+    
+    --bgcolor-lightness: 60%;
+    --bgcolor-chroma: 0.075;
   }
 }
 

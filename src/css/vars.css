@@ -26,4 +26,7 @@
   --wheel-gradient-background-blur: 30px;
 
   --heading-font-family: 'Timeburner';
+
+  --bgcolor-lightness: 40%;
+  --bgcolor-chroma: 0.075;
 }
