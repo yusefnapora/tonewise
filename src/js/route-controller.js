@@ -9,6 +9,8 @@ const APP_BASE_PATH = process.env.NODE_ENV === 'development' ? '/src' : '/'
 // @ts-expect-error
 export const sharedRouter = new Navigo(APP_BASE_PATH)
 
+export const { navigate } = sharedRouter
+
 /**
  * @typedef {(match: Navigo.Match) => import('lit').TemplateResult<1>} RouteHandler
  * @typedef {import('lit').ReactiveControllerHost} ReactiveControllerHost
