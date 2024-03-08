@@ -31,6 +31,11 @@ export class NoteBadgeElement extends LitElement {
       display: block;
     }
 
+    .background {
+      fill: var(--color-background);
+      opacity: 0.5;
+    }
+
     .badge-rim-segment {
       stroke: var(--color-text-muted);
       fill: var(--color-text-muted);
@@ -76,7 +81,11 @@ export class NoteBadgeElement extends LitElement {
 
     const gapDegrees = 10
 
-    const content = []
+    const backgroundCircle = this.reveal ? svg`
+      <circle class="background" r="360" cx="500" cy="500" />
+    ` : undefined
+
+    const content = [backgroundCircle]
     const colors = []
     const segmentStyles = []
     const elements = calculateSegmentAngles(this.tuning.pitchClasses, {
