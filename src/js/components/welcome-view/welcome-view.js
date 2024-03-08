@@ -7,8 +7,7 @@ const welcomeText = `
 Welcome to ${appName}, a game that helps you learn to recognize musical intervals.
 `
 
-export class WelcomeViewElement extends LitElement { 
-
+export class WelcomeViewElement extends LitElement {
   static styles = css`
     :host {
       padding: 16px;

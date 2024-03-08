@@ -17,32 +17,32 @@ export const { navigate } = sharedRouter
  */
 
 export class RouteController {
-  /** 
-	 * @param {ReactiveControllerHost} host
-	 * @param {Record<string, RouteHandler>} routes
-	 * @param {Navigo.default} router
-	 **/
+  /**
+   * @param {ReactiveControllerHost} host
+   * @param {Record<string, RouteHandler>} routes
+   * @param {Navigo.default} router
+   **/
   constructor(host, routes = defaultRoutes, router = sharedRouter) {
     this.host = host
-		this.router = router
-		this.routes = routes
-		this.content = html``
-		host.addController(this)
+    this.router = router
+    this.routes = routes
+    this.content = html``
+    host.addController(this)
   }
 
   hostConnected() {
     for (const [path, render] of Object.entries(this.routes)) {
-			this.router.on(path, (match) => {
-				this.content = render(match)
-				this.host.requestUpdate()
-			})
-		}
-		this.router.resolve()
+      this.router.on(path, (match) => {
+        this.content = render(match)
+        this.host.requestUpdate()
+      })
+    }
+    this.router.resolve()
   }
 
   hostDisconnected() {
-		for (const path of Object.keys(this.routes)) {
-			this.router.off(path)
-		}
+    for (const path of Object.keys(this.routes)) {
+      this.router.off(path)
+    }
   }
 }

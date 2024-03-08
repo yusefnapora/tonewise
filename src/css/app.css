@@ -1,5 +1,3 @@
-
-
 *:not(input):not(textarea) {
   user-select: none;
   -webkit-user-select: none; /* disable selection/Copy of UIWebView */
@@ -11,9 +9,20 @@
   src: url('/assets/fonts/Timeburner.woff2') format('woff2');
 }
 
-
 body {
   background: conic-gradient(
-      oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -0deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -30deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -60deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -90deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -120deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -150deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -180deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -210deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -240deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -270deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -300deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -330deg), oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -0deg)
-    );
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -0deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -30deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -60deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -90deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -120deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -150deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -180deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -210deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -240deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -270deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -300deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -330deg),
+    oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -0deg)
+  );
 }

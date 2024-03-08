@@ -1,6 +1,6 @@
-import { LitElement, html, css } from "lit"
-import { sharedRouter } from "../route-controller.js"
-import { registerElement } from "../common/dom.js"
+import { LitElement, html, css } from 'lit'
+import { sharedRouter } from '../route-controller.js'
+import { registerElement } from '../common/dom.js'
 
 export class AppLinkElement extends LitElement {
   static styles = css`
@@ -15,17 +15,17 @@ export class AppLinkElement extends LitElement {
   `
 
   static properties = {
-    href: { type: String }
+    href: { type: String },
   }
 
   constructor() {
     super()
-    this.href = "#"
+    this.href = '#'
   }
 
   /**
-   * 
-   * @param {MouseEvent} e 
+   *
+   * @param {MouseEvent} e
    */
   #handleClick(e) {
     e.preventDefault()

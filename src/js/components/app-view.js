@@ -3,7 +3,6 @@ import { RouteController } from '../route-controller.js'
 import { loadSampler } from '../state/slices/audio-slice.js'
 import { dispatch } from '../state/store.js'
 
-
 export class AppViewElement extends LitElement {
   static styles = css`
     :host {
@@ -14,8 +13,6 @@ export class AppViewElement extends LitElement {
 
       display: grid;
       place-items: center;
-
-
     }
 
     game-view {

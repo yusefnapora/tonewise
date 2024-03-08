@@ -1,9 +1,7 @@
 import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import {
-  isGameStarted,
-} from '../../state/selectors/selectors.js'
+import { isGameStarted } from '../../state/selectors/selectors.js'
 
 export class ProgressViewElement extends LitElement {
   static styles = css`

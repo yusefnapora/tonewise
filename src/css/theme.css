@@ -17,7 +17,6 @@
   --wheel-gradient-background-opacity: 0.5;
   --wheel-gradient-background-vibrant-opacity: 1;
   --wheel-gradient-background-blur: 30px;
-
 }
 
 html {
@@ -43,8 +42,8 @@ html {
     --color-text: var(--theme-light-color-text);
     --color-text-muted: var(--theme-light-color-text-muted);
     --color-glass-background: var(--theme-light-color-glass-background);
-    --color-glass-border: var(--theme-light-color-glass-border);  
-    
+    --color-glass-border: var(--theme-light-color-glass-border);
+
     --bgcolor-lightness: 60%;
     --bgcolor-chroma: 0.075;
   }
@@ -57,5 +56,5 @@ html.light-theme {
   --color-text: var(--theme-light-color-text);
   --color-text-muted: var(--theme-light-color-text-muted);
   --color-glass-background: var(--theme-light-color-glass-background);
-   --color-glass-border: var(--theme-light-color-glass-border);  
+  --color-glass-border: var(--theme-light-color-glass-border);
 }

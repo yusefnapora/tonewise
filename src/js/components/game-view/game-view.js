@@ -17,7 +17,6 @@ import { selectActiveNoteIds } from '../../state/selectors/selectors.js'
 import { cardStyleBase } from '../../styles.js'
 export class GameViewElement extends LitElement {
   static styles = css`
-
     :root {
       --panel-size: 72px;
       --grid-panel-gap: 10px;
@@ -30,7 +29,6 @@ export class GameViewElement extends LitElement {
       column-gap: 10px;
       row-gap: 10px;
 
-      
       grid-template-areas:
         'toolbar'
         'wheel'
