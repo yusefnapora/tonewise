@@ -20,8 +20,8 @@ export class WelcomeViewElement extends LitElement {
       <p class="welcome-text">Welcome to Training Wheels, a game about musical intervals.</p>
       <nav>
         <ul>
-          <li><sl-button @click=${() => navigate('play')}>Play</sl-button></li>
-          <li><sl-button @click=${() => navigate('settings')}>Settings</sl-button></li>
+          <li><app-link href="play">Play</app-link></li>
+          <li><app-link href="settings">Settings</app-link></li>
         </ul>
       </nav>
     `
