@@ -69,3 +69,25 @@ html.light-theme {
   -webkit-user-select: none; /* disable selection/Copy of UIWebView */
   -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
 }
+
+
+.glass {
+    /* From https://css.glass */
+    background: rgba(49, 35, 35, 0.21);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5.1px);
+    -webkit-backdrop-filter: blur(5.1px);
+    border: 1px solid rgba(49, 35, 35, 0.23);
+}
+
+
+
+sl-card::part(base) {
+  background: rgba(49, 35, 35, 0.21);
+  /* border-radius: 16px; */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.1px);
+  -webkit-backdrop-filter: blur(5.1px);
+  border: 1px solid rgba(49, 35, 35, 0.23);
+}

@@ -1,16 +1,29 @@
-import { LitElement, html, css } from 'lit'
+import { LitElement, css, html } from 'lit'
 import { registerElement } from '../../common/dom.js'
-import { navigate } from '../../route-controller.js'
 
 
 export class WelcomeViewElement extends LitElement { 
 
   static styles = css`
     :host {
-      padding: 4rem;
+      margin: 16px;
+      padding: 48px;
       border-radius: 10px;
-      min-width: min(400px, 80vw, 80dvw);
-      background-color: var(--color-muted);
+      /* min-width: min(350px, 80vw, 80dvw); */
+
+      background: rgba(49, 35, 35, 0.21);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5.1px);
+      -webkit-backdrop-filter: blur(5.1px);
+      border: 1px solid rgba(49, 35, 35, 0.23);
+    }
+
+    @media (prefers-color-scheme: light) {
+      :host {
+        background: rgba(255, 255, 255, 0.51);
+        border: 1px solid rgba(255, 255, 255, 0.23);
+      }
     }
   `
 
