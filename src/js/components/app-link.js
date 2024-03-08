@@ -29,6 +29,9 @@ export class AppLinkElement extends LitElement {
    */
   #handleClick(e) {
     e.preventDefault()
+    if (typeof this.onclick === 'function') {
+      this.onclick(e)
+    }
     sharedRouter.navigate(this.href)
   }
 

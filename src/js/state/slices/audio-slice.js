@@ -50,10 +50,13 @@ export const loadSampler = createAsyncThunk(
    * @param {{ getState: () => { audio: AudioState }}} thunkAPI
    */
   async (args, thunkAPI) => {
+    const start = new Date()
     AudioGlobals.sampler = new Sampler({
       context: AudioGlobals.context,
     })
     await AudioGlobals.sampler.enable()
+    const elapsed = new Date().getTime() - start.getTime()
+    console.log(`sampler loaded in ${elapsed}ms`)
   },
   {
     condition: (_, { getState }) => {

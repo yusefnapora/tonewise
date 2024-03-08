@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { cardStyleBase } from '../../styles.js'
+import { resumeAudio } from '../../state/slices/audio-slice.js'
 
 const appName = `Training Wheels`
 const welcomeText = `
@@ -71,7 +72,7 @@ export class WelcomeViewElement extends LitElement {
           <p class="welcome-text">${welcomeText}</p>
           <nav>
             <ul>
-              <li><app-link href="play">Play</app-link></li>
+              <li><app-link @click=${() => resumeAudio()} href="play">Play</app-link></li>
               <li><app-link href="settings">Settings</app-link></li>
             </ul>
           </nav>
