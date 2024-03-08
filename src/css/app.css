@@ -10,6 +10,7 @@
 }
 
 body {
+  background: red;
   background: conic-gradient(
     oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -0deg),
     oklch(var(--bgcolor-lightness, 60%) var(--bgcolor-chroma, 0.26) -30deg),
