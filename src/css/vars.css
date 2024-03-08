@@ -1,0 +1,27 @@
+:root {
+  --theme-dark-color-background: hsl(229, 13%, 17%);
+  --theme-dark-color-glass-background: rgba(49, 35, 35, 0.21);
+  --theme-dark-color-glass-border: rgba(49, 35, 35, 0.23);
+  --theme-dark-color-muted: hsl(217, 38%, 15%);
+  --theme-dark-color-primary: hsl(342, 71.1%, 53.9%);
+  --theme-dark-color-text: white;
+  --theme-dark-color-text-muted: #aaa;
+
+  --theme-light-color-background: hsl(30, 67%, 98%);
+  --theme-light-color-glass-background: rgba(255, 255, 255, 0.51);
+  --theme-light-color-glass-border: rgba(220, 220, 220, 0.23);
+  /* --theme-light-color-muted: hsl(208, 31.9%, 81.6%); */
+  /* --theme-light-color-muted: hsl(207.1, 31.3%, 80.6%); */
+  --theme-light-color-muted: hsl(208.7, 59%, 92.4%);
+  /* --theme-light-color-primary: var(--theme-dark-color-primary); */
+  --theme-light-color-primary: hsl(342.3, 84.9%, 46.9%);
+  --theme-light-color-text: black;
+  --theme-light-color-text-muted: #666;
+
+  --glass-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  --glass-backdrop-filter: blur(5px);
+
+  --wheel-gradient-background-opacity: 0.5;
+  --wheel-gradient-background-vibrant-opacity: 1;
+  --wheel-gradient-background-blur: 30px;
+}

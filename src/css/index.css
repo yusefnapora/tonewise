@@ -1,4 +1,7 @@
 @import './reset.css';
+@import './vars.css';
+@import './theme.css';
 @import './shoelace/light.css';
 @import './shoelace/dark.css';
+@import './shoelace/custom.css';
 @import './app.css';
