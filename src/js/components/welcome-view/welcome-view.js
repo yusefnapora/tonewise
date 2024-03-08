@@ -7,6 +7,8 @@ export class WelcomeViewElement extends LitElement {
 
   static styles = css`
     :host {
+      padding: 4rem;
+      border-radius: 10px;
       min-width: min(400px, 80vw, 80dvw);
       background-color: var(--color-muted);
     }

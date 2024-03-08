@@ -15,6 +15,10 @@ export class AppViewElement extends LitElement {
       display: grid;
       place-items: center;
     }
+
+    game-view {
+      min-width: 100vw;
+    }
   `
 
   #routeController = new RouteController(this)

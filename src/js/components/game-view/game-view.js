@@ -17,11 +17,6 @@ import { selectActiveNoteIds } from '../../state/selectors/selectors.js'
 
 export class GameViewElement extends LitElement {
   static styles = css`
-    /* :host {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    } */
 
     :root {
       --panel-size: 72px;
@@ -69,7 +64,7 @@ export class GameViewElement extends LitElement {
           /* toolbar  */ 72px
           /* wheel    */ min(500px, calc(100vw - 40px), 90vh, 90dvh)
           /* progress */ 72px
-          /* .        */ 0px;
+          /* .        */ 1fr;
         grid-template-areas:
           'info toolbar wheel progress . '
           'info toolbar wheel progress . '

@@ -2,7 +2,6 @@ import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
-  isGameCompleted,
   isGameStarted,
 } from '../../state/selectors/selectors.js'
 
@@ -18,7 +17,6 @@ export class ProgressViewElement extends LitElement {
 
     sl-card {
       width: 100%;
-      max-width: min(500px, calc(100vw - 40px));
     }
     .content {
       display: flex;
@@ -56,9 +54,6 @@ export class ProgressViewElement extends LitElement {
     const { currentRound } = state.game
     const tonic = currentRound?.rules?.tonic
     const started = isGameStarted(state)
-    const completed = isGameCompleted(state)
-
-    const tonicLabel = tonic ? `Tonic: ${tonic.id}` : ''
 
     const targetNoteBadges = currentRound?.rules.targets.map((note) => {
       const reveal = currentRound?.progress.guesses.some(
