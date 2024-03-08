@@ -9,7 +9,6 @@ export class AppViewElement extends LitElement {
       max-width: 100vw;
       width: 100%;
       min-height: min(100vh, 100dvh);
-      max-height: min(100vh, 100dvh);
 
       display: grid;
       place-items: center;
