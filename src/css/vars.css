@@ -8,7 +8,7 @@
   --theme-dark-color-text-muted: #aaa;
 
   --theme-light-color-background: hsl(30, 67%, 98%);
-  --theme-light-color-glass-background: rgba(255, 255, 255, 0.51);
+  --theme-light-color-glass-background: rgba(255, 255, 255, 0.6);
   --theme-light-color-glass-border: rgba(220, 220, 220, 0.23);
   /* --theme-light-color-muted: hsl(208, 31.9%, 81.6%); */
   /* --theme-light-color-muted: hsl(207.1, 31.3%, 80.6%); */
@@ -19,14 +19,11 @@
   --theme-light-color-text-muted: #666;
 
   --glass-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  --glass-backdrop-filter: blur(5px);
+  --glass-backdrop-filter: blur(15px);
 
   --wheel-gradient-background-opacity: 0.5;
   --wheel-gradient-background-vibrant-opacity: 1;
   --wheel-gradient-background-blur: 30px;
 
   --heading-font-family: 'Timeburner';
-
-  --bgcolor-lightness: 40%;
-  --bgcolor-chroma: 0.075;
 }

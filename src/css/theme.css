@@ -28,6 +28,9 @@ html {
   --color-glass-background: var(--theme-dark-color-glass-background);
   --color-glass-border: var(--theme-dark-color-glass-border);
 
+  --bgcolor-lightness: 40%;
+  --bgcolor-chroma: 0.075;
+
   background: var(--color-background);
   color: var(--color-text);
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -45,7 +48,7 @@ html {
     --color-glass-border: var(--theme-light-color-glass-border);
 
     --bgcolor-lightness: 60%;
-    --bgcolor-chroma: 0.075;
+    --bgcolor-chroma: 0.15;
   }
 }
 
