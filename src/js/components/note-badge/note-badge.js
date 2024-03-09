@@ -81,9 +81,11 @@ export class NoteBadgeElement extends LitElement {
 
     const gapDegrees = 10
 
-    const backgroundCircle = this.reveal ? svg`
+    const backgroundCircle = this.reveal
+      ? svg`
       <circle class="background" r="360" cx="500" cy="500" />
-    ` : undefined
+    `
+      : undefined
 
     const content = [backgroundCircle]
     const colors = []

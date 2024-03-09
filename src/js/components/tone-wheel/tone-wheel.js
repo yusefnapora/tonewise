@@ -387,7 +387,7 @@ export class ToneWheel extends LitElement {
   #createSegmentLabel(args) {
     const { label, position } = args
     const x = position.x
-    const y = position.y + (this.fontSize * 0.25)
+    const y = position.y + this.fontSize * 0.25
     return svg`
       <text
         class="tone-label"

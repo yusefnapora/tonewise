@@ -46,3 +46,21 @@ export type AudioState = {
   samplerLoading: SamplerLoadingState
   soundingMidiNotes: number[]
 }
+
+export type EnharmonicPresentation = 'sharp' | 'flat'
+
+export type NoteDisplay = {
+  label: string
+  enharmonicLabels?: Record<EnharmonicPresentation, string>
+}
+
+export type TuningState = {
+  noteIds: string[]
+  midiNotes: Record<string, number>
+  display: Record<string, NoteDisplay>
+}
+
+export type ColorState = {
+  /** A map of note ids to css color strings */
+  noteColors: Record<string, string>
+}

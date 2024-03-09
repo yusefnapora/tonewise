@@ -72,7 +72,11 @@ export class WelcomeViewElement extends LitElement {
           <p class="welcome-text">${welcomeText}</p>
           <nav>
             <ul>
-              <li><app-link @click=${() => resumeAudio()} href="play">Play</app-link></li>
+              <li>
+                <app-link @click=${() => resumeAudio()} href="play"
+                  >Play</app-link
+                >
+              </li>
               <li><app-link href="settings">Settings</app-link></li>
             </ul>
           </nav>
