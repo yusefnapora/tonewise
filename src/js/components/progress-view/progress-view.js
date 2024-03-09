@@ -10,7 +10,7 @@ export class ProgressViewElement extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 64px;
+      min-height: 80px;
     }
 
     sl-card {
@@ -33,9 +33,9 @@ export class ProgressViewElement extends LitElement {
     }
 
     .badges note-badge {
-      width: 48px;
-      height: 48px;
-      margin: 12px;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
     }
 
     @media (orientation: landscape) {

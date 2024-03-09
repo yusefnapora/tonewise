@@ -26,7 +26,7 @@ const DEFAULT_RADIUS = 500
 // global rotation of -90deg.
 const DEFAULT_ROTATION_OFFSET = -90
 
-const DEFAULT_FONT_SIZE = 50
+const DEFAULT_FONT_SIZE = 75
 
 const DEFAULT_PITCH_LINE_WIDTH = 200
 
@@ -61,6 +61,9 @@ export class ToneWheel extends LitElement {
     .tone-label {
       user-select: none;
       -webkit-user-select: none;
+
+      stroke: var(--color-text);
+      fill: var(--color-text);
     }
 
     .inner-wedge {
@@ -90,6 +93,18 @@ export class ToneWheel extends LitElement {
 
     .pitch-line {
       opacity: 0;
+    }
+
+    @media (prefers-color-scheme: light) {
+      .pitch-line .outline {
+        stroke: black;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .pitch-line .outline {
+        stroke: white;
+      }
     }
 
     .tone-group.active > .pitch-line {
@@ -371,6 +386,8 @@ export class ToneWheel extends LitElement {
    */
   #createSegmentLabel(args) {
     const { label, position } = args
+    const x = position.x
+    const y = position.y + (this.fontSize * 0.25)
     return svg`
       <text
         class="tone-label"
@@ -378,8 +395,8 @@ export class ToneWheel extends LitElement {
         fill="white"
         text-anchor="middle"
         font-size=${this.fontSize}
-        x=${position.x}
-        y=${position.y}
+        x=${x}
+        y=${y}
       >
         ${label}
       </text>
@@ -455,10 +472,10 @@ export class ToneWheel extends LitElement {
 
     return svg`
     <g class="pitch-line">
-      <line 
+      <line
+        class="outline" 
         x1=${cx} y1=${cy}
         x2=${endpoint.x} y2=${endpoint.y}
-        stroke="white"
         stroke-width=${width}
         stroke-linecap="round"
         opacity="0.7"
