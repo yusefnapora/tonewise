@@ -28,6 +28,9 @@ export class GameViewElement extends LitElement {
 
       column-gap: 10px;
       row-gap: 10px;
+      padding: 20px;
+
+      grid-template-rows: minmax(72px, 1fr) max-content minmax(72px, 1fr);
 
       grid-template-areas:
         'toolbar'
@@ -59,9 +62,9 @@ export class GameViewElement extends LitElement {
         grid-template-columns: 
          /* info     */
           1fr
-          /* toolbar  */ 72px
-          /* wheel    */ min(500px, calc(100vw - 40px), 90vh, 90dvh)
-          /* progress */ 72px
+          /* toolbar  */ minmax(72px, 1fr)
+          /* wheel    */ min(800px, calc(100vw - 40px), 90vh, 90dvh)
+          /* progress */ minmax(72px, 1fr)
           /* .        */ 1fr;
         grid-template-areas:
           'info toolbar wheel progress . '
@@ -87,8 +90,8 @@ export class GameViewElement extends LitElement {
 
     sl-card {
       width: 100%;
-      max-width: min(500px, calc(100vw - 40px), 90vh, 90dvh);
-      max-height: min(500px, calc(100vw - 40px), 90vh, 90dvh);
+      /* max-width: min(500px, calc(100vw - 40px), 90vh, 90dvh); */
+      /* max-height: min(500px, calc(100vw - 40px), 90vh, 90dvh); */
       /* margin: 5px auto; */
       margin: 0;
     }
