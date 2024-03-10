@@ -1,7 +1,7 @@
-import { LitElement, css } from 'lit'
-import { RouteController } from '../route-controller.js'
-import { loadSampler } from '../state/slices/audio-slice.js'
-import { dispatch } from '../state/store.js'
+import { LitElement, css, html } from 'lit'
+import { RouteController } from '../../route-controller.js'
+import { loadSampler } from '../../state/slices/audio-slice.js'
+import { dispatch } from '../../state/store.js'
 
 export class AppViewElement extends LitElement {
   static styles = css`
@@ -12,6 +12,13 @@ export class AppViewElement extends LitElement {
 
       display: grid;
       place-items: center;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+    }
+
+    :host > * {
+      grid-row: 1;
+      grid-column: 1;
     }
 
     game-view {
@@ -28,7 +35,10 @@ export class AppViewElement extends LitElement {
   }
 
   render() {
-    return this.#routeController.content
+    return html`
+      <app-background></app-background>
+      ${this.#routeController.content}
+    `
   }
 }
 customElements.define('app-view', AppViewElement)

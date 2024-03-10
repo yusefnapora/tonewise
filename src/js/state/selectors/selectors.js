@@ -91,6 +91,18 @@ export const selectMidiNote = createSelector(
   }
 )
 
+export const selectNoteAngle = createSelector(
+  [
+    selectTuningState,
+    /**
+     * @param {RootState} _state 
+     * @param {string} noteId 
+     */
+    (_state, noteId) => noteId
+  ],
+  (tuning, noteId) => tuning.angles[noteId]
+)
+
 export const selectNoteLabel = createSelector(
   [
     selectTuningState,

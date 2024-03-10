@@ -1,4 +1,5 @@
-export * from './app-view.js'
+export * from './app-view/app-view.js'
+export * from './app-view/app-background.js'
 export * from './app-link.js'
 export * from './game-view/game-view-toolbar.js'
 export * from './game-view/game-view.js'
