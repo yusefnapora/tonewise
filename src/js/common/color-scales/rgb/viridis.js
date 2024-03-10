@@ -1,3 +1,6 @@
+/**
+ * @type {[number, number, number][]} 
+ */
 export const viridisRGB = [
   [0.267004, 0.004874, 0.329415],
   [0.268510, 0.009605, 0.335427],

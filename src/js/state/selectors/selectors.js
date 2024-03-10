@@ -14,6 +14,16 @@ const selectGameState = (state) => state.game
  */
 const selectInstrumentState = (state) => state.instrument
 
+/**
+ * @param {RootState} state 
+ */
+const selectTuningState = (state) => state.tuning
+
+/**
+ * @param {RootState} state 
+ */
+const selectPreferencesState = (state) => state.preferences
+
 export const isGameStarted = createSelector([selectGameState], (game) => {
   return game.currentRound != null
 })
@@ -54,4 +64,53 @@ export const selectActiveNoteIds = createSelector(
 
     return allActive
   },
+)
+
+export const selectColorScale = createSelector(
+  [selectPreferencesState],
+  (prefs) => prefs.colorScale
+)
+
+export const selectTuningNoteIds = createSelector(
+  [selectTuningState],
+  (tuning) => tuning.noteIds
+)
+
+export const selectMidiNote = createSelector(
+  [
+    selectTuningState, 
+    /**
+     * @param {RootState} _state 
+     * @param {string} noteId 
+     */
+    (_state, noteId) => noteId
+  ],
+
+  (tuning, noteId) => {
+    return tuning.midiNotes[noteId]
+  }
+)
+
+export const selectNoteLabel = createSelector(
+  [
+    selectTuningState,
+    selectPreferencesState,
+    /**
+     * @param {RootState} _state 
+     * @param {string} noteId 
+     */
+    (_state, noteId) => noteId
+  ],
+  (tuning, preferences, noteId) => {
+    const display = tuning.display[noteId]
+    if (!display) {
+      return undefined
+    }
+
+    if (!display.enharmonicLabels) {
+      return display.label
+    }
+
+    return display.enharmonicLabels[preferences.enharmonicPresentation]
+  }
 )

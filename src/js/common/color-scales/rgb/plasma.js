@@ -1,3 +1,6 @@
+/**
+ * @type {[number, number, number][]} 
+ */
 export const plasmaRGB = [
   [0.050383, 0.029803, 0.527975],
   [0.063536, 0.028426, 0.533124],

@@ -58,9 +58,12 @@ export type TuningState = {
   noteIds: string[]
   midiNotes: Record<string, number>
   display: Record<string, NoteDisplay>
+  angles: Record<string, number>
 }
 
-export type ColorState = {
-  /** A map of note ids to css color strings */
-  noteColors: Record<string, string>
+
+import type { ColorScaleName } from "../../common/types.d.ts"
+export type PreferencesState = {
+  colorScale: ColorScaleName
+  enharmonicPresentation: EnharmonicPresentation
 }

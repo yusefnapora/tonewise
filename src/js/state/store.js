@@ -2,12 +2,16 @@ import { configureStore } from '@reduxjs/toolkit'
 import gameReducer from './slices/game-slice.js'
 import instrumentReducer from './slices/instrument-slice.js'
 import audioReducer from './slices/audio-slice.js'
+import tuningReducer from './slices/tuning-slice.js'
+import preferencesReducer from './slices/preferences-slice.js'
 
 export const store = configureStore({
   reducer: {
     audio: audioReducer,
     game: gameReducer,
     instrument: instrumentReducer,
+    preferences: preferencesReducer,
+    tuning: tuningReducer,
   },
 })
 

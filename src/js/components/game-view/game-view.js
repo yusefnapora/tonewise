@@ -13,7 +13,7 @@ import {
   triggerNoteStop,
 } from '../../state/slices/audio-slice.js'
 import { NoteIdMidiMap, NoteIds } from '../../audio/notes.js'
-import { selectActiveNoteIds } from '../../state/selectors/selectors.js'
+import { selectActiveNoteIds, selectColorScale, selectMidiNote, selectNoteLabel, selectTuningNoteIds } from '../../state/selectors/selectors.js'
 import { cardStyleBase } from '../../styles.js'
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -114,13 +114,6 @@ export class GameViewElement extends LitElement {
     return this.renderRoot.querySelector('tone-wheel')
   }
 
-  /** @param {string} id  */
-  #pitchClass(id) {
-    return /** @type {PitchClassElement | undefined} */ (
-      this.renderRoot.querySelector(`pitch-class#${id}`)
-    )
-  }
-
   /**
    * @param {import('../tone-wheel/events.js').NoteHoldBeganEvent} e
    */
@@ -129,8 +122,7 @@ export class GameViewElement extends LitElement {
     resumeAudio()
     this.#stateController.dispatch(startPlayerNote(note))
 
-    const pc = this.#pitchClass(note.id)
-    this.#triggerNote(pc)
+    this.#triggerNote(note.id)
     this.#stateController.dispatch(guess(note))
   }
 
@@ -140,23 +132,25 @@ export class GameViewElement extends LitElement {
   #pitchDeselected(e) {
     const note = e.detail
     this.#stateController.dispatch(endPlayerNote(note))
-    this.#endNotePlayback(this.#pitchClass(note.id))
+    this.#endNotePlayback(note.id)
   }
 
   /**
-   *
-   * @param {PitchClassElement} pitchClass
+   * @param {string} noteId
    */
-  #triggerNote(pitchClass) {
-    const midiNote = pitchClass.midiNote
+  #triggerNote(noteId) {
+    const midiNote = selectMidiNote(this.#stateController.state, noteId)
     if (!midiNote) {
       return
     }
     this.#stateController.dispatch(triggerNoteStart({ midiNote }))
   }
 
-  #endNotePlayback(pitchClass) {
-    const midiNote = pitchClass.midiNote
+  /**
+    * @param {string} noteId  
+    */ 
+  #endNotePlayback(noteId) {
+    const midiNote = selectMidiNote(this.#stateController.state, noteId)
     if (!midiNote) {
       return
     }
@@ -166,13 +160,16 @@ export class GameViewElement extends LitElement {
   render() {
     const { state } = this.#stateController
     const allActive = selectActiveNoteIds(state)
+    const noteIds = selectTuningNoteIds(state)
+    const colorScale = selectColorScale(state)
 
-    const pitchClasses = NoteIds.map((id) => {
-      const midiNote = NoteIdMidiMap[id]
+    const pitchClasses = noteIds.map((id) => {
+      const midiNote = selectMidiNote(state, id)
+      const label = selectNoteLabel(state, id) 
       const active = allActive.has(id)
       return html`
         <pitch-class id=${id} midi-note=${midiNote} active=${active || nothing}>
-          ${id}
+          ${label}
         </pitch-class>
       `
     })
@@ -187,6 +184,7 @@ export class GameViewElement extends LitElement {
         </sl-card>
         <sl-card class="wheel">
           <tone-wheel
+            color-scale=${colorScale}
             @note:holdBegan=${this.#pitchSelected}
             @note:holdEnded=${this.#pitchDeselected}
           >

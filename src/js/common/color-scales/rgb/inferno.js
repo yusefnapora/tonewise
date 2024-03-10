@@ -1,3 +1,6 @@
+/**
+ * @type {[number, number, number][]} 
+ */
 export const infernoRGB = [
   [0.001462, 0.000466, 0.013866],
   [0.002267, 0.001270, 0.018570],

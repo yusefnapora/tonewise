@@ -8,7 +8,7 @@ import {
 import { NoteHoldBeganEvent, NoteHoldEndedEvent } from './events.js'
 import { PitchClassElement } from './pitch-class.js'
 
-import { colorForAngle } from '../../common/color.js'
+import { DEFAULT_COLOR_SCALE, colorForAngle } from '../../common/color.js'
 import { registerElement } from '../../common/dom.js'
 /**
  * @typedef {import('../../common/types.d.ts').Point} Point
@@ -138,6 +138,7 @@ export class ToneWheel extends LitElement {
     radius: { type: Number },
     rotationOffset: { type: Number },
     fontSize: { type: Number },
+    colorScale: { type: String, attribute: 'color-scale' }
   }
 
   constructor() {
@@ -145,6 +146,7 @@ export class ToneWheel extends LitElement {
     this.radius = DEFAULT_RADIUS
     this.rotationOffset = DEFAULT_ROTATION_OFFSET
     this.fontSize = DEFAULT_FONT_SIZE
+    this.colorScale = DEFAULT_COLOR_SCALE
   }
 
   get pitchClasses() {
@@ -244,7 +246,7 @@ export class ToneWheel extends LitElement {
         )
       }
 
-      const color = colorForAngle(intervalAngle)
+      const color = colorForAngle(intervalAngle, this.colorScale)
       colors.push(color)
       styleContent += `
         .${className} { 

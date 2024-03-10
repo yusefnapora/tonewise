@@ -1,3 +1,6 @@
+/**
+ * @type {[number, number, number][]} 
+ */
 export const magmaRGB = [
   [0.001462, 0.000466, 0.013866],
   [0.002258, 0.001295, 0.018331],

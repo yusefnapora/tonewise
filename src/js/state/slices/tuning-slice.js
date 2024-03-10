@@ -70,11 +70,19 @@ const DefaultDisplay = {
   B: { label: 'B' },
 }
 
+/**
+ * @param {string[]} noteIds
+ */
+const EDOAngles = (noteIds) => Object.fromEntries(
+  noteIds.map((n, i) => [n, (360 / noteIds.length) * i]),
+)
+
 /** @type {TuningState} */
 const initialState = {
   noteIds: [...DefaultNoteIds],
   midiNotes: { ...NoteIdMidiMap },
   display: { ...DefaultDisplay },
+  angles: EDOAngles(DefaultNoteIds),
 }
 
 const tuningSlice = createSlice({
