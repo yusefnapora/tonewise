@@ -10,7 +10,7 @@ export class AppBackgroundElement extends LitElement {
       width: 100%;
       height: 100%;
       min-width: 100vw;
-      min-height: 100vh;
+      min-height: min(100vh, 100dvh);
       display: grid;
       place-content: center;
       grid-template-columns: 1fr;
@@ -24,7 +24,7 @@ export class AppBackgroundElement extends LitElement {
 
     .app-background {
       min-width: 100vw;
-      min-height: 100vh;
+      min-height: min(100vh, 100dvh);
 
       --color-primary-lightness: var(--bgcolor-lightness);
       --color-primary-chroma: var(--bgcolor-chroma);
