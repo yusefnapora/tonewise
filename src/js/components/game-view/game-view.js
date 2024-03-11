@@ -30,7 +30,7 @@ export class GameViewElement extends LitElement {
       row-gap: 10px;
       padding: 20px;
 
-      grid-template-rows: minmax(72px, 1fr) max-content minmax(72px, 1fr);
+      /* grid-template-rows: minmax(72px, 1fr) max-content minmax(72px, 1fr); */
 
       grid-template-areas:
         'toolbar'
