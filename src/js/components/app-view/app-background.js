@@ -29,18 +29,6 @@ export class AppBackgroundElement extends LitElement {
       --color-primary-lightness: var(--bgcolor-lightness);
       --color-primary-chroma: var(--bgcolor-chroma);
     }
-
-    .app-background-filter {
-      min-width: 100vw;
-      min-height: 100vh;
-      backdrop-filter: blur(5px) brightness(60%) saturate(60%);
-    }
-
-    @media (prefers-color-scheme: light) {
-      .app-background-filter {
-        backdrop-filter: blur(5px) brightness(80%) saturate(80%);
-      }
-    }
   `
 
   #stateController = new StateController(this)
@@ -50,15 +38,14 @@ export class AppBackgroundElement extends LitElement {
     const noteIds = selectTuningNoteIds(state)
     const colorScale = selectColorScale(state)
 
-    const colors = [...noteIds, noteIds[0]].map(noteId => {
-      const angle = selectNoteAngle(state, noteId)
-      return colorForAngle(angle, colorScale)
-    })
-
-    const background = `conic-gradient(${colors.join(', ')})`
-
-    const showFilter = !colorScale.startsWith('oklch')
-    const filter = showFilter ? html `<div class="app-background-filter"></div>` : undefined
+    let background = 'var(--color-background)'
+    if (colorScale.startsWith('oklch')) {
+      const colors = [...noteIds, noteIds[0]].map(noteId => {
+        const angle = selectNoteAngle(state, noteId)
+        return colorForAngle(angle, colorScale)
+      })
+      background = `conic-gradient(${colors.join(', ')})`
+    }
 
     return html`
       <style>
@@ -67,7 +54,6 @@ export class AppBackgroundElement extends LitElement {
         }
       </style>
       <div class="app-background"></div>
-      ${filter}
     `
   }
 }
