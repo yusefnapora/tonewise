@@ -6,8 +6,28 @@ import { inferno, magma, plasma, viridis } from './color-scales/color-scales.js'
  * @typedef {import('./types.js').ColorScaleName} ColorScaleName
  */
 
-export const COLOR_SCALE_CSS_PROPERTY = '--color-scale'
-export const VALID_COLOR_SCALES = new Set(['oklch', 'oklch_clockwise', 'inferno', 'magma', 'plasma', 'viridis'])
+/** @type {Record<ColorScaleName, string>} */
+export const COLOR_SCALE_NAMES = {
+  oklch: 'Prism',
+  oklch_clockwise: 'Prism (reversed)',
+  magma: 'Magma',
+  inferno: 'Inferno',
+  plasma: 'Plasma',
+  viridis: 'Viridis',
+}
+
+/**
+ * @param {string|undefined} s 
+ * @returns {ColorScaleName | undefined}
+ */
+export function asColorScaleName(s) {
+  const names = new Set(Object.keys(COLOR_SCALE_NAMES))
+  if (names.has(s)) {
+    return /** @type {ColorScaleName} */ (s)
+  }
+  return undefined
+}
+
 export const DEFAULT_COLOR_SCALE = 'oklch'
 
 /**

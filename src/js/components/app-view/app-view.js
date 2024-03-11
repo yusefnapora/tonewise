@@ -21,9 +21,16 @@ export class AppViewElement extends LitElement {
       grid-column: 1;
     }
 
-    game-view {
+    app-background {
+      z-index: -1;
+    }
+
+    .content {
       min-width: 100vw;
-      /* backdrop-filter: blur(50px); */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* z-index: 10; */
     }
   `
 
@@ -37,7 +44,9 @@ export class AppViewElement extends LitElement {
   render() {
     return html`
       <app-background></app-background>
-      ${this.#routeController.content}
+      <div class="content">
+        ${this.#routeController.content}
+      </div>
     `
   }
 }

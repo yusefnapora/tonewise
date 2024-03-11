@@ -1,7 +1,7 @@
 import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { isGameStarted } from '../../state/selectors/selectors.js'
+import { isGameStarted, selectNoteLabel } from '../../state/selectors/selectors.js'
 
 export class ProgressViewElement extends LitElement {
   static styles = css`
@@ -57,18 +57,21 @@ export class ProgressViewElement extends LitElement {
       const reveal = currentRound?.progress.guesses.some(
         (guess) => guess.isCorrect && guess.note.id === note.id,
       )
+      const label = selectNoteLabel(state, note.id)
       return html`
         <note-badge
           note-id=${note.id}
+          label=${label}
           reveal=${reveal ? 'true' : nothing}
         ></note-badge>
       `
     })
 
+    const tonicLabel = selectNoteLabel(state, tonic?.id)
     const statusView = started
       ? html` <div>
           <div class="badges">
-            <note-badge note-id=${tonic?.id} reveal></note-badge>
+            <note-badge note-id=${tonic?.id} label=${tonicLabel} reveal></note-badge>
             ${targetNoteBadges}
           </div>
         </div>`

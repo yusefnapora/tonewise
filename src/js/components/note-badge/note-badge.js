@@ -1,29 +1,13 @@
 import { LitElement, css, html, svg } from 'lit'
-import { colorForAngle } from '../../common/color.js'
+import { DEFAULT_COLOR_SCALE, colorForAngle } from '../../common/color.js'
 import { registerElement } from '../../common/dom.js'
 import {
   calculateSegmentAngles,
   degreesBetween,
   rimSegmentSVGPath,
 } from '../../common/geometry.js'
-
-// TODO: make tuning a part of redux state
-const DEFAULT_TUNING = {
-  pitchClasses: [
-    { id: 'C', angle: 0 },
-    { id: 'C♯', angle: 30 },
-    { id: 'D', angle: 60 },
-    { id: 'D♯', angle: 90 },
-    { id: 'E', angle: 120 },
-    { id: 'F', angle: 150 },
-    { id: 'F♯', angle: 180 },
-    { id: 'G', angle: 210 },
-    { id: 'G♯', angle: 240 },
-    { id: 'A', angle: 270 },
-    { id: 'A♯', angle: 300 },
-    { id: 'B', angle: 330 },
-  ],
-}
+import { StateController } from '../../state/controller.js'
+import { selectColorScale, selectNoteAngle } from '../../state/selectors/selectors.js'
 
 export class NoteBadgeElement extends LitElement {
   static styles = css`
@@ -58,15 +42,19 @@ export class NoteBadgeElement extends LitElement {
     noteId: { type: String, attribute: 'note-id' },
     reveal: { type: Boolean },
     highlight: { type: Boolean },
+    colorScale: { type: String, attribute: 'color-scale' },
+    label: { type: String }
   }
+
+  #stateController = new StateController(this)
 
   constructor() {
     super()
-    this.tuning = DEFAULT_TUNING
     this.rotationOffset = -90
     this.noteId = undefined
     this.reveal = false
     this.highlight = false
+    this.label = undefined
   }
 
   render() {
@@ -74,10 +62,20 @@ export class NoteBadgeElement extends LitElement {
   }
 
   #svgContent() {
+    const { state } = this.#stateController
+    const colorScale = selectColorScale(state)
+
+    /** @type {Array<{id: string, angle: number}>} */
+    const notes = []
+    for (const id of state.tuning.noteIds) {
+      const angle = selectNoteAngle(state, id)
+      notes.push({id, angle})
+    }
+
     let activeNote =
       this.noteId == null
         ? null
-        : this.tuning.pitchClasses.find((n) => n.id === this.noteId)
+        : notes.find((n) => n.id === this.noteId)
 
     const gapDegrees = 10
 
@@ -90,14 +88,13 @@ export class NoteBadgeElement extends LitElement {
     const content = [backgroundCircle]
     const colors = []
     const segmentStyles = []
-    const elements = calculateSegmentAngles(this.tuning.pitchClasses, {
+    const elements = calculateSegmentAngles(notes, {
       gapDegrees,
     })
 
     for (let i = 0; i < elements.length; i++) {
       const note = elements[i].input
       const { startAngle, endAngle } = elements[i]
-      colors[i] = colorForAngle(note.angle)
 
       const className = `badge-segment-${i}`
       let fullClass = className
@@ -115,7 +112,8 @@ export class NoteBadgeElement extends LitElement {
       })
       content.push(segment)
 
-      const color = colorForAngle(note.angle)
+      const color = colorForAngle(note.angle, colorScale)
+      colors.push(color)
       segmentStyles.push(`
         .${className}.active-note {
           stroke: ${color};
@@ -124,8 +122,8 @@ export class NoteBadgeElement extends LitElement {
       `)
     }
 
-    const activeNoteColor = activeNote ? colorForAngle(activeNote.angle) : null
-    const label = activeNote?.id
+    const activeNoteColor = activeNote ? colorForAngle(activeNote.angle, colorScale) : null
+    const label = this.label ?? activeNote?.id
 
     const fontSize = 400
     const yOffset = fontSize * 0.25
