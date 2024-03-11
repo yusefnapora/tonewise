@@ -48,6 +48,8 @@ export class ToneWheel extends LitElement {
       grid-template-rows: 1fr;
       place-content: center;
       place-items: center;
+
+      font-family: var(--note-font-family);
     }
 
     svg {

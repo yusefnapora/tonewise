@@ -13,6 +13,7 @@ export class NoteBadgeElement extends LitElement {
   static styles = css`
     :host {
       display: block;
+      font-family: var(--note-font-family);
     }
 
     .background {
