@@ -44,9 +44,7 @@ export class AppViewElement extends LitElement {
   render() {
     return html`
       <app-background></app-background>
-      <div class="content">
-        ${this.#routeController.content}
-      </div>
+      <div class="content">${this.#routeController.content}</div>
     `
   }
 }

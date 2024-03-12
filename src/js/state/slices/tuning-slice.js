@@ -73,9 +73,8 @@ const DefaultDisplay = {
 /**
  * @param {string[]} noteIds
  */
-const EDOAngles = (noteIds) => Object.fromEntries(
-  noteIds.map((n, i) => [n, (360 / noteIds.length) * i]),
-)
+const EDOAngles = (noteIds) =>
+  Object.fromEntries(noteIds.map((n, i) => [n, (360 / noteIds.length) * i]))
 
 /** @type {TuningState} */
 const initialState = {

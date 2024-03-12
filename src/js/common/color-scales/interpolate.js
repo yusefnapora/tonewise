@@ -25,7 +25,7 @@ import { rgb2hex } from './rgb-to-hex.js'
 
 /**
  * Given two colors `a` and `b`, returns a function that will interpolate between them.
- * @param {RGBArray} a 
+ * @param {RGBArray} a
  * @param {RGBArray} b
  * @returns {InterpolationFn} an interpolation function that accepts a value `t` between [0, 1] and returns a hex-encoded color that's `t` distance between `a` and `b`
  */
@@ -35,11 +35,7 @@ function interpolate(a, b) {
   const bg = b[1] - ag
   const bb = b[2] - ab
 
-  return (t) => rgb2hex([
-    ar + br * t,
-    ag + bg * t,
-    ab + bb * t,
-  ])
+  return (t) => rgb2hex([ar + br * t, ag + bg * t, ab + bb * t])
 }
 
 /**

@@ -1,10 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer,   FLUSH,
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
   REHYDRATE,
   PAUSE,
   PERSIST,
   PURGE,
-  REGISTER, } from 'redux-persist'
+  REGISTER,
+} from 'redux-persist'
 import storage from 'redux-persist/es/storage'
 import gameReducer from './slices/game-slice.js'
 import instrumentReducer from './slices/instrument-slice.js'
@@ -12,10 +16,13 @@ import audioReducer from './slices/audio-slice.js'
 import tuningReducer from './slices/tuning-slice.js'
 import preferencesReducer from './slices/preferences-slice.js'
 
-const persistedPreferencesReducer = persistReducer({
-  key: 'preferences',
-  storage,
-}, preferencesReducer)
+const persistedPreferencesReducer = persistReducer(
+  {
+    key: 'preferences',
+    storage,
+  },
+  preferencesReducer,
+)
 
 export const store = configureStore({
   reducer: {
@@ -25,11 +32,12 @@ export const store = configureStore({
     preferences: persistedPreferencesReducer,
     tuning: tuningReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
-  }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 })
 
 export const persister = persistStore(store)

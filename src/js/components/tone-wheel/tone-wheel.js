@@ -140,7 +140,7 @@ export class ToneWheel extends LitElement {
     radius: { type: Number },
     rotationOffset: { type: Number },
     fontSize: { type: Number },
-    colorScale: { type: String, attribute: 'color-scale' }
+    colorScale: { type: String, attribute: 'color-scale' },
   }
 
   constructor() {

@@ -5,7 +5,7 @@
  *
  * @typedef {object} StateListener
  * @property {(RootState) => void} [stateChanged]
- * 
+ *
  * @typedef {(state: RootState, args: any) => any & { lastResult: () => any }} SelectorFn
  */
 
@@ -34,8 +34,8 @@ export class StateController {
   /**
    * @template ResultT
    * @template ArgsT
-   * 
-   * @param {((state: RootState, args: any) => ResultT) & {lastResult: () => ResultT}} selector 
+   *
+   * @param {((state: RootState, args: any) => ResultT) & {lastResult: () => ResultT}} selector
    * @param  {ArgsT} [args]
    */
   select(selector, args) {
@@ -65,7 +65,7 @@ export class StateController {
           break
         }
       }
-      if (needsUpdate) { 
+      if (needsUpdate) {
         this.host.requestUpdate()
       }
     })

@@ -1,8 +1,12 @@
-import { LitElement, css, html } from "lit"
-import { registerElement } from "../../common/dom.js"
-import { StateController } from "../../state/controller.js"
-import { selectColorScale, selectNoteAngle, selectTuningNoteIds } from "../../state/selectors/selectors.js"
-import { colorForAngle } from "../../common/color.js"
+import { LitElement, css, html } from 'lit'
+import { registerElement } from '../../common/dom.js'
+import { StateController } from '../../state/controller.js'
+import {
+  selectColorScale,
+  selectNoteAngle,
+  selectTuningNoteIds,
+} from '../../state/selectors/selectors.js'
+import { colorForAngle } from '../../common/color.js'
 
 export class AppBackgroundElement extends LitElement {
   static styles = css`
@@ -39,7 +43,7 @@ export class AppBackgroundElement extends LitElement {
 
     let background = 'var(--color-background)'
     if (colorScale.startsWith('oklch')) {
-      const colors = [...noteIds, noteIds[0]].map(noteId => {
+      const colors = [...noteIds, noteIds[0]].map((noteId) => {
         const angle = this.#stateController.select(selectNoteAngle, noteId)
         return colorForAngle(angle, colorScale)
       })

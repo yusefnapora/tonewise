@@ -17,7 +17,7 @@ export const COLOR_SCALE_NAMES = {
 }
 
 /**
- * @param {string|undefined} s 
+ * @param {string|undefined} s
  * @returns {ColorScaleName | undefined}
  */
 export function asColorScaleName(s) {
@@ -32,14 +32,14 @@ export const DEFAULT_COLOR_SCALE = 'oklch'
 
 /**
  * Given an `angle` in degrees, returns a CSS color string.
- * 
+ *
  * The "color scale" / palette is determined by resolving the CSS variable `--color-scale`
  * using the computed styles of the given `elementScope`. If `elementScope` is not provided,
  * uses `document.body`, so will only pick up changes from the `:root` variable namespace.
- * 
- * The default 'oklch' color scale uses the angle to set the hue in the 
+ *
+ * The default 'oklch' color scale uses the angle to set the hue in the
  * [oklch color space](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch).
- * 
+ *
  * The 'inferno', 'magma', 'plasma', and 'viridis' scales are the perceptual scales used
  * by matplotlib, and may be more accessible to people with different color sensitivities.
  *
@@ -69,14 +69,13 @@ export function colorForAngle(angle, colorScale = DEFAULT_COLOR_SCALE) {
   }
 }
 
-
 /**
  * Returns a color in the oklch color space.
- * 
+ *
  * The CSS variables `--color-primary-lightness` and `--color-primary-chroma`
  * can be used to override the default lightness and chroma components.
- * 
- * @param {number} angle angle in degrees 
+ *
+ * @param {number} angle angle in degrees
  * @param {object} [opts]
  * @param {boolean} [opts.clockwise] set to `true` to wind colors around the wheel clockwise. default: false
  * @returns {string} CSS color string

@@ -7,7 +7,11 @@ import {
   rimSegmentSVGPath,
 } from '../../common/geometry.js'
 import { StateController } from '../../state/controller.js'
-import { selectColorScale, selectNoteAngle, selectTuningNoteIds } from '../../state/selectors/selectors.js'
+import {
+  selectColorScale,
+  selectNoteAngle,
+  selectTuningNoteIds,
+} from '../../state/selectors/selectors.js'
 
 export class NoteBadgeElement extends LitElement {
   static styles = css`
@@ -45,7 +49,7 @@ export class NoteBadgeElement extends LitElement {
     reveal: { type: Boolean },
     highlight: { type: Boolean },
     colorScale: { type: String, attribute: 'color-scale' },
-    label: { type: String }
+    label: { type: String },
   }
 
   #stateController = new StateController(this)
@@ -71,13 +75,11 @@ export class NoteBadgeElement extends LitElement {
     const notes = []
     for (const id of noteIds) {
       const angle = this.#stateController.select(selectNoteAngle, id)
-      notes.push({id, angle})
+      notes.push({ id, angle })
     }
 
     let activeNote =
-      this.noteId == null
-        ? null
-        : notes.find((n) => n.id === this.noteId)
+      this.noteId == null ? null : notes.find((n) => n.id === this.noteId)
 
     const gapDegrees = 10
 
@@ -124,7 +126,9 @@ export class NoteBadgeElement extends LitElement {
       `)
     }
 
-    const activeNoteColor = activeNote ? colorForAngle(activeNote.angle, colorScale) : null
+    const activeNoteColor = activeNote
+      ? colorForAngle(activeNote.angle, colorScale)
+      : null
     const label = this.label ?? activeNote?.id
 
     const fontSize = 400

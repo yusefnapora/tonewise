@@ -61,8 +61,7 @@ export type TuningState = {
   angles: Record<string, number>
 }
 
-
-import type { ColorScaleName } from "../../common/types.d.ts"
+import type { ColorScaleName } from '../../common/types.d.ts'
 export type PreferencesState = {
   colorScale: ColorScaleName
   enharmonicPresentation: EnharmonicPresentation

@@ -16,33 +16,42 @@ export const selectGameState = (state) => state.game
 export const selectInstrumentState = (state) => state.instrument
 
 /**
- * @param {RootState} state 
+ * @param {RootState} state
  */
 export const selectTuningState = (state) => state.tuning
 
 /**
- * @param {RootState} state 
+ * @param {RootState} state
  */
 export const selectPreferencesState = (state) => state.preferences
 
-export const selectCurrentRound = createSelector([selectGameState], (game) => game.currentRound)
+export const selectCurrentRound = createSelector(
+  [selectGameState],
+  (game) => game.currentRound,
+)
 
-export const isGameStarted = createSelector([selectCurrentRound], (currentRound) => {
-  return currentRound != null
-})
+export const isGameStarted = createSelector(
+  [selectCurrentRound],
+  (currentRound) => {
+    return currentRound != null
+  },
+)
 
-export const isGameCompleted = createSelector([selectCurrentRound], (currentRound) => {
-  if (currentRound == null) {
-    return false
-  }
+export const isGameCompleted = createSelector(
+  [selectCurrentRound],
+  (currentRound) => {
+    if (currentRound == null) {
+      return false
+    }
 
-  const { rules, progress } = currentRound
-  return rules.targets.every((note) =>
-    progress.guesses.find(
-      (guess) => guess.isCorrect && guess.note.id === note.id,
-    ),
-  )
-})
+    const { rules, progress } = currentRound
+    return rules.targets.every((note) =>
+      progress.guesses.find(
+        (guess) => guess.isCorrect && guess.note.id === note.id,
+      ),
+    )
+  },
+)
 
 export const selectActiveNoteIds = createSelector(
   [selectGameState, selectInstrumentState],
@@ -71,39 +80,39 @@ export const selectActiveNoteIds = createSelector(
 
 export const selectColorScale = createSelector(
   [selectPreferencesState],
-  (prefs) => prefs.colorScale
+  (prefs) => prefs.colorScale,
 )
 
 export const selectTuningNoteIds = createSelector(
   [selectTuningState],
-  (tuning) => tuning.noteIds
+  (tuning) => tuning.noteIds,
 )
 
 export const selectMidiNote = createSelector(
   [
-    selectTuningState, 
+    selectTuningState,
     /**
-     * @param {RootState} _state 
-     * @param {string} noteId 
+     * @param {RootState} _state
+     * @param {string} noteId
      */
-    (_state, noteId) => noteId
+    (_state, noteId) => noteId,
   ],
 
   (tuning, noteId) => {
     return tuning.midiNotes[noteId]
-  }
+  },
 )
 
 export const selectNoteAngle = createSelector(
   [
     selectTuningState,
     /**
-     * @param {RootState} _state 
-     * @param {string} noteId 
+     * @param {RootState} _state
+     * @param {string} noteId
      */
-    (_state, noteId) => noteId
+    (_state, noteId) => noteId,
   ],
-  (tuning, noteId) => tuning.angles[noteId]
+  (tuning, noteId) => tuning.angles[noteId],
 )
 
 export const selectNoteLabel = createSelector(
@@ -111,10 +120,10 @@ export const selectNoteLabel = createSelector(
     selectTuningState,
     selectPreferencesState,
     /**
-     * @param {RootState} _state 
-     * @param {string} noteId 
+     * @param {RootState} _state
+     * @param {string} noteId
      */
-    (_state, noteId) => noteId
+    (_state, noteId) => noteId,
   ],
   (tuning, preferences, noteId) => {
     const display = tuning.display[noteId]
@@ -127,12 +136,12 @@ export const selectNoteLabel = createSelector(
     }
 
     return display.enharmonicLabels[preferences.enharmonicPresentation]
-  }
+  },
 )
 
 export const selectEnharmonicPresentation = createSelector(
   [selectPreferencesState],
-  (prefs) => prefs.enharmonicPresentation
+  (prefs) => prefs.enharmonicPresentation,
 )
 
 export const selectWheelNotes = createSelector(
@@ -145,5 +154,5 @@ export const selectWheelNotes = createSelector(
 
       return { noteId: id, midiNote, label, active }
     })
-  }
+  },
 )
