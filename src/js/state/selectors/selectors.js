@@ -7,22 +7,22 @@ import { createSelector } from '@reduxjs/toolkit'
 /**
  * @param {RootState} state
  */
-const selectGameState = (state) => state.game
+export const selectGameState = (state) => state.game
 
 /**
  * @param {RootState} state
  */
-const selectInstrumentState = (state) => state.instrument
+export const selectInstrumentState = (state) => state.instrument
 
 /**
  * @param {RootState} state 
  */
-const selectTuningState = (state) => state.tuning
+export const selectTuningState = (state) => state.tuning
 
 /**
  * @param {RootState} state 
  */
-const selectPreferencesState = (state) => state.preferences
+export const selectPreferencesState = (state) => state.preferences
 
 export const selectCurrentRound = createSelector([selectGameState], (game) => game.currentRound)
 
@@ -127,4 +127,9 @@ export const selectNoteLabel = createSelector(
 
     return display.enharmonicLabels[preferences.enharmonicPresentation]
   }
+)
+
+export const selectEnharmonicPresentation = createSelector(
+  [selectPreferencesState],
+  (prefs) => prefs.enharmonicPresentation
 )
