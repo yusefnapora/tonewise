@@ -8,3 +8,8 @@
   font-family: 'Timeburner';
   src: url('/assets/fonts/Timeburner.woff2') format('woff2');
 }
+
+@font-face {
+  font-family: 'Ubuntu Mono';
+  src: url('/assets/fonts/UbuntuMono-Regular.woff2') format('woff2');
+}
