@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit'
+import { html, nothing } from 'lit'
 /**
  * @typedef {import('../store.js').RootState} RootState
  * @typedef {import('../store.js').AppDispatch} AppDispatch
@@ -132,4 +133,17 @@ export const selectNoteLabel = createSelector(
 export const selectEnharmonicPresentation = createSelector(
   [selectPreferencesState],
   (prefs) => prefs.enharmonicPresentation
+)
+
+export const selectWheelNotes = createSelector(
+  [selectTuningState, selectPreferencesState, selectActiveNoteIds],
+  (tuning, preferences, activeNoteIds) => {
+    return tuning.noteIds.map((id) => {
+      const midiNote = tuning.midiNotes[id]
+      const label = selectNoteLabel.resultFunc(tuning, preferences, id)
+      const active = activeNoteIds.has(id)
+
+      return { noteId: id, midiNote, label, active }
+    })
+  }
 )

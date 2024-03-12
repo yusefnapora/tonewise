@@ -3,7 +3,7 @@ import { registerElement } from '../../common/dom.js'
 
 import { COLOR_SCALE_NAMES, asColorScaleName } from '../../common/color.js'
 import { StateController } from '../../state/controller.js'
-import { selectColorScale, selectEnharmonicPresentation } from '../../state/selectors/selectors.js'
+import { selectColorScale, selectEnharmonicPresentation, selectWheelNotes } from '../../state/selectors/selectors.js'
 import { setColorScale, setEnharmonicPresentation } from '../../state/slices/preferences-slice.js'
 import { cardStyleBase } from '../../styles.js'
 import { navigate } from '../../route-controller.js'
@@ -23,6 +23,11 @@ export class SettingsViewElement extends LitElement {
       font-size: 1.5rem;
     }
 
+    tone-wheel {
+      max-width: 150px;
+      margin: auto;
+    }
+
     ${cardStyleBase}
   `
 
@@ -31,6 +36,13 @@ export class SettingsViewElement extends LitElement {
   render() {
     const enharmonicPresentation = this.#stateController.select(selectEnharmonicPresentation)
     const colorScale = this.#stateController.select(selectColorScale)
+    const wheelNotes = this.#stateController.select(selectWheelNotes)
+
+    const pitchClasses = wheelNotes.map(({ noteId, label }) => html`
+    <pitch-class id=${noteId}>
+      ${label}
+    </pitch-class>
+  `)
 
     const colorOptions = Object.entries(COLOR_SCALE_NAMES).map(([value, name]) => html`
       <sl-option value=${value}>${name}</sl-option>
@@ -56,12 +68,19 @@ export class SettingsViewElement extends LitElement {
       }
     }
 
+    //@ts-expect-error
+    this.renderRoot.querySelector('tone-wheel')?.requestUpdate()
+
     return html`
       <sl-card class="card-header">
         <div slot="header">
           <sl-icon-button name="arrow-left" @click=${() => navigate('/')}></sl-icon-button>
           <span class="card-title">settings</span>
         </div>
+
+        <tone-wheel color-scale=${colorScale}>
+          ${pitchClasses}
+        </tone-wheel>
 
         <div class="control">
           <sl-select label="Color palette" value=${colorScale} @sl-change=${colorChanged}>

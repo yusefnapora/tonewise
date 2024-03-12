@@ -11,7 +11,7 @@ import {
   triggerNoteStart,
   triggerNoteStop,
 } from '../../state/slices/audio-slice.js'
-import { selectActiveNoteIds, selectColorScale, selectMidiNote, selectNoteLabel, selectTuningNoteIds } from '../../state/selectors/selectors.js'
+import { selectActiveNoteIds, selectColorScale, selectMidiNote, selectNoteLabel, selectWheelNotes, selectTuningNoteIds } from '../../state/selectors/selectors.js'
 import { cardStyleBase } from '../../styles.js'
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -154,20 +154,14 @@ export class GameViewElement extends LitElement {
   }
 
   render() {
-    const allActive = this.#stateController.select(selectActiveNoteIds)
-    const noteIds = this.#stateController.select(selectTuningNoteIds)
     const colorScale = this.#stateController.select(selectColorScale)
+    const wheelNotes = this.#stateController.select(selectWheelNotes)
 
-    const pitchClasses = noteIds.map((id) => {
-      const midiNote = this.#stateController.select(selectMidiNote, id)
-      const label = this.#stateController.select(selectNoteLabel, id) 
-      const active = allActive.has(id)
-      return html`
-        <pitch-class id=${id} midi-note=${midiNote} active=${active || nothing}>
-          ${label}
-        </pitch-class>
-      `
-    })
+    const pitchClasses = wheelNotes.map(({ noteId, midiNote, label, active }) => html`
+      <pitch-class id=${noteId} midi-note=${midiNote} active=${active || nothing}>
+        ${label}
+      </pitch-class>
+    `)
 
     // TODO: make tone-wheel update itself when active pitch classes change
     this.#wheel?.requestUpdate()
