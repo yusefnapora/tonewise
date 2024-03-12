@@ -2,7 +2,6 @@ import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import { guess } from '../../state/slices/game-slice.js'
-import { PitchClassElement } from '../tone-wheel/pitch-class.js'
 import {
   endPlayerNote,
   startPlayerNote,
@@ -12,7 +11,6 @@ import {
   triggerNoteStart,
   triggerNoteStop,
 } from '../../state/slices/audio-slice.js'
-import { NoteIdMidiMap, NoteIds } from '../../audio/notes.js'
 import { selectActiveNoteIds, selectColorScale, selectMidiNote, selectNoteLabel, selectTuningNoteIds } from '../../state/selectors/selectors.js'
 import { cardStyleBase } from '../../styles.js'
 export class GameViewElement extends LitElement {
@@ -29,8 +27,6 @@ export class GameViewElement extends LitElement {
       column-gap: 10px;
       row-gap: 10px;
       padding: 20px;
-
-      /* grid-template-rows: minmax(72px, 1fr) max-content minmax(72px, 1fr); */
 
       grid-template-areas:
         'toolbar'
@@ -105,9 +101,9 @@ export class GameViewElement extends LitElement {
     super.connectedCallback()
   }
 
-  stateChanged() {
-    this.requestUpdate()
-  }
+  // stateChanged() {
+  //   this.requestUpdate()
+  // }
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
   get #wheel() {
@@ -139,7 +135,7 @@ export class GameViewElement extends LitElement {
    * @param {string} noteId
    */
   #triggerNote(noteId) {
-    const midiNote = selectMidiNote(this.#stateController.state, noteId)
+    const midiNote = this.#stateController.select(selectMidiNote, noteId)
     if (!midiNote) {
       return
     }
@@ -150,7 +146,7 @@ export class GameViewElement extends LitElement {
     * @param {string} noteId  
     */ 
   #endNotePlayback(noteId) {
-    const midiNote = selectMidiNote(this.#stateController.state, noteId)
+    const midiNote = this.#stateController.select(selectMidiNote, noteId)
     if (!midiNote) {
       return
     }
@@ -158,14 +154,13 @@ export class GameViewElement extends LitElement {
   }
 
   render() {
-    const { state } = this.#stateController
-    const allActive = selectActiveNoteIds(state)
-    const noteIds = selectTuningNoteIds(state)
-    const colorScale = selectColorScale(state)
+    const allActive = this.#stateController.select(selectActiveNoteIds)
+    const noteIds = this.#stateController.select(selectTuningNoteIds)
+    const colorScale = this.#stateController.select(selectColorScale)
 
     const pitchClasses = noteIds.map((id) => {
-      const midiNote = selectMidiNote(state, id)
-      const label = selectNoteLabel(state, id) 
+      const midiNote = this.#stateController.select(selectMidiNote, id)
+      const label = this.#stateController.select(selectNoteLabel, id) 
       const active = allActive.has(id)
       return html`
         <pitch-class id=${id} midi-note=${midiNote} active=${active || nothing}>

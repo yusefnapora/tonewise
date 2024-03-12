@@ -7,13 +7,14 @@ import {
   rimSegmentSVGPath,
 } from '../../common/geometry.js'
 import { StateController } from '../../state/controller.js'
-import { selectColorScale, selectNoteAngle } from '../../state/selectors/selectors.js'
+import { selectColorScale, selectNoteAngle, selectTuningNoteIds } from '../../state/selectors/selectors.js'
 
 export class NoteBadgeElement extends LitElement {
   static styles = css`
     :host {
       display: block;
       font-family: var(--note-font-family);
+      letter-spacing: var(--note-letter-spacing);
     }
 
     .background {
@@ -63,13 +64,13 @@ export class NoteBadgeElement extends LitElement {
   }
 
   #svgContent() {
-    const { state } = this.#stateController
-    const colorScale = selectColorScale(state)
+    const noteIds = this.#stateController.select(selectTuningNoteIds)
+    const colorScale = this.#stateController.select(selectColorScale)
 
     /** @type {Array<{id: string, angle: number}>} */
     const notes = []
-    for (const id of state.tuning.noteIds) {
-      const angle = selectNoteAngle(state, id)
+    for (const id of noteIds) {
+      const angle = this.#stateController.select(selectNoteAngle, id)
       notes.push({id, angle})
     }
 
@@ -138,6 +139,8 @@ export class NoteBadgeElement extends LitElement {
         text-anchor="middle"
         font-size=${fontSize}
         transform=${transform}
+        textLength="550"
+        lengthAdjust="spacing"
       >
         ${label}
       </text>

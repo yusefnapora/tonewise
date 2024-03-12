@@ -5,6 +5,8 @@
  *
  * @typedef {object} StateListener
  * @property {(RootState) => void} [stateChanged]
+ * 
+ * @typedef {(state: RootState, args: any) => any & { lastResult: () => any }} SelectorFn
  */
 
 import { store } from './store.js'
@@ -19,11 +21,26 @@ export class StateController {
     this.store = store
     this.dispatch = store.dispatch
 
+    /** @type {[SelectorFn, any][]} */
+    this.selectors = []
+
     host.addController(this)
   }
 
   get state() {
     return this.store.getState()
+  }
+
+  /**
+   * @template ResultT
+   * @template ArgsT
+   * 
+   * @param {((state: RootState, args: any) => ResultT) & {lastResult: () => ResultT}} selector 
+   * @param  {ArgsT} [args]
+   */
+  select(selector, args) {
+    this.selectors.push([selector, args])
+    return selector(this.store.getState(), args)
   }
 
   /**
@@ -35,7 +52,20 @@ export class StateController {
     this.store.subscribe(() => {
       if (this.host.stateChanged) {
         this.host.stateChanged(this.store.getState())
-      } else {
+        return
+      }
+
+      let needsUpdate = false
+      for (const [selector, args] of this.selectors) {
+        //@ts-expect-error
+        const lastResult = selector.lastResult()
+        const nextResult = selector(this.state, args)
+        if (lastResult !== nextResult) {
+          needsUpdate = true
+          break
+        }
+      }
+      if (needsUpdate) { 
         this.host.requestUpdate()
       }
     })

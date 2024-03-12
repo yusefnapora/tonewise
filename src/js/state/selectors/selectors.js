@@ -24,16 +24,18 @@ const selectTuningState = (state) => state.tuning
  */
 const selectPreferencesState = (state) => state.preferences
 
-export const isGameStarted = createSelector([selectGameState], (game) => {
-  return game.currentRound != null
+export const selectCurrentRound = createSelector([selectGameState], (game) => game.currentRound)
+
+export const isGameStarted = createSelector([selectCurrentRound], (currentRound) => {
+  return currentRound != null
 })
 
-export const isGameCompleted = createSelector([selectGameState], (game) => {
-  if (game.currentRound == null) {
+export const isGameCompleted = createSelector([selectCurrentRound], (currentRound) => {
+  if (currentRound == null) {
     return false
   }
 
-  const { rules, progress } = game.currentRound
+  const { rules, progress } = currentRound
   return rules.targets.every((note) =>
     progress.guesses.find(
       (guess) => guess.isCorrect && guess.note.id === note.id,

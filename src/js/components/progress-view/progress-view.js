@@ -1,7 +1,7 @@
 import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { isGameStarted, selectNoteLabel } from '../../state/selectors/selectors.js'
+import { isGameStarted, selectCurrentRound, selectNoteLabel } from '../../state/selectors/selectors.js'
 
 export class ProgressViewElement extends LitElement {
   static styles = css`
@@ -48,16 +48,15 @@ export class ProgressViewElement extends LitElement {
   #stateController = new StateController(this)
 
   render() {
-    const { state } = this.#stateController
-    const { currentRound } = state.game
+    const currentRound = this.#stateController.select(selectCurrentRound)
     const tonic = currentRound?.rules?.tonic
-    const started = isGameStarted(state)
+    const started = this.#stateController.select(isGameStarted)
 
     const targetNoteBadges = currentRound?.rules.targets.map((note) => {
       const reveal = currentRound?.progress.guesses.some(
         (guess) => guess.isCorrect && guess.note.id === note.id,
       )
-      const label = selectNoteLabel(state, note.id)
+      const label = this.#stateController.select(selectNoteLabel, note.id)
       return html`
         <note-badge
           note-id=${note.id}
@@ -67,7 +66,7 @@ export class ProgressViewElement extends LitElement {
       `
     })
 
-    const tonicLabel = selectNoteLabel(state, tonic?.id)
+    const tonicLabel = this.#stateController.select(selectNoteLabel, tonic?.id)
     const statusView = started
       ? html` <div>
           <div class="badges">

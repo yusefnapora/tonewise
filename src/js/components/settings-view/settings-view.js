@@ -20,8 +20,7 @@ export class SettingsViewElement extends LitElement {
   #stateController = new StateController(this)
 
   render() {
-    const { state } = this.#stateController
-    const colorScale = selectColorScale(state)
+    const colorScale = this.#stateController.select(selectColorScale)
 
     const colorOptions = Object.entries(COLOR_SCALE_NAMES).map(([value, name]) => html`
       <sl-option value=${value}>${name}</sl-option>

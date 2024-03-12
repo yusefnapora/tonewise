@@ -4,6 +4,7 @@ import { StateController } from '../../state/controller.js'
 import {
   isGameCompleted,
   isGameStarted,
+  selectCurrentRound,
 } from '../../state/selectors/selectors.js'
 import { NoteIds } from '../../audio/notes.js'
 import {
@@ -66,11 +67,9 @@ export class GameViewToolbarElement extends LitElement {
   }
 
   render() {
-    const { state } = this.#stateController
-    const { currentRound } = state.game
-    const tonic = currentRound?.rules?.tonic
-    const started = isGameStarted(state)
-    const completed = isGameCompleted(state)
+    const currentRound = this.#stateController.select(selectCurrentRound)
+    const started = this.#stateController.select(isGameStarted)
+    const completed = this.#stateController.select(isGameCompleted)
     const actionButton =
       started && !completed
         ? html`
