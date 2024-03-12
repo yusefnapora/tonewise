@@ -139,8 +139,6 @@ export class NoteBadgeElement extends LitElement {
         text-anchor="middle"
         font-size=${fontSize}
         transform=${transform}
-        textLength="550"
-        lengthAdjust="spacing"
       >
         ${label}
       </text>
