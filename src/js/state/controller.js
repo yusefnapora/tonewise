@@ -24,6 +24,9 @@ export class StateController {
     /** @type {[SelectorFn, any][]} */
     this.selectors = []
 
+    /** @type {Function[]} */
+    this.unsubscribeFns = []
+
     host.addController(this)
   }
 
@@ -49,7 +52,7 @@ export class StateController {
    * which is only called when the component is connected to the document.
    */
   hostConnected() {
-    this.store.subscribe(() => {
+    const unsubscribe = this.store.subscribe(() => {
       if (this.host.stateChanged) {
         this.host.stateChanged(this.store.getState())
         return
@@ -69,6 +72,7 @@ export class StateController {
         this.host.requestUpdate()
       }
     })
+    this.unsubscribeFns.push(unsubscribe)
   }
   /**
    * Called when the host is disconnected from the component tree. For custom
@@ -76,7 +80,10 @@ export class StateController {
    * which is called the host or an ancestor component is disconnected from the
    * document.
    */
-  hostDisconnected() {}
+  hostDisconnected() {
+    this.unsubscribeFns.forEach(unsubscribe => unsubscribe())
+    this.unsubscribeFns = []
+  }
   /**
    * Called during the client-side host update, just before the host calls
    * its own update.
