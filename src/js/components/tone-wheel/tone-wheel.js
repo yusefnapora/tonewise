@@ -33,8 +33,6 @@ const DEFAULT_PITCH_LINE_WIDTH = 200
 export class ToneWheel extends LitElement {
   static styles = css`
     :host {
-      display: block;
-
       /* prevent browser from eating touch events for scrolling, etc */
       touch-action: none;
 

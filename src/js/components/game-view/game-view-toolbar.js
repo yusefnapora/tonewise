@@ -4,27 +4,19 @@ import { StateController } from '../../state/controller.js'
 import {
   isGameCompleted,
   isGameStarted,
-  selectCurrentRound,
 } from '../../state/selectors/selectors.js'
-import { NoteIds } from '../../audio/notes.js'
-import {
-  playChallengeSequence,
-  reset,
-  start,
-} from '../../state/slices/game-slice.js'
-import { resetInstrumentState } from '../../state/slices/instrument-slice.js'
 import { endGame, startNewGame } from '../../state/sequences/game-sequences.js'
 
 export class GameViewToolbarElement extends LitElement {
   static styles = css`
     :host {
-      font-size: 2rem;
+      font-size: 48px;
     }
 
     .buttons {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
     }
     @media (orientation: landscape) {
       :host {
@@ -45,7 +37,7 @@ export class GameViewToolbarElement extends LitElement {
       started && !completed
         ? html`
             <sl-icon-button
-              name="x-octagon-fill"
+              name="x-circle"
               label="Leave game"
               @click=${() => endGame(this.#stateController.dispatch)}
             >
@@ -53,7 +45,7 @@ export class GameViewToolbarElement extends LitElement {
           `
         : html`
             <sl-icon-button
-              name="play-fill"
+              name="play-circle"
               label="New game"
               @click=${() => startNewGame(this.#stateController.state, this.#stateController.dispatch)}
             >

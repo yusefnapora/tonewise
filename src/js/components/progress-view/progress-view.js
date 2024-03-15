@@ -14,6 +14,7 @@ export class ProgressViewElement extends LitElement {
   static styles = css`
     :host {
       width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -22,6 +23,11 @@ export class ProgressViewElement extends LitElement {
 
     sl-card {
       width: 100%;
+      height: 100%;
+    }
+
+    sl-card::part(body) {
+      height: 100%;
     }
 
     .content {
@@ -30,9 +36,12 @@ export class ProgressViewElement extends LitElement {
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      height: 100%;
     }
 
     .content.not-playing {
+      /* todo: remove instead of hiding, once we're done playing around */
+      display: none; 
       justify-content: center;
       font-size: 48px; 
     }
@@ -58,6 +67,10 @@ export class ProgressViewElement extends LitElement {
     }
 
     @media (orientation: landscape) {
+      .content {
+        flex-direction: column;
+        
+      }
       .badges {
         flex-direction: column;
       }

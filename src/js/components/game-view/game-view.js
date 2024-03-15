@@ -64,11 +64,11 @@ export class GameViewElement extends LitElement {
 
         grid-template-columns: 
          /* info     */
-          1fr
-          /* toolbar  */ minmax(72px, 1fr)
+          0
+          /* toolbar  */ minmax(128px, 1fr)
           /* wheel    */ min(800px, calc(100vw - 40px), 90vh, 90dvh)
-          /* progress */ minmax(72px, 1fr)
-          /* .        */ 1fr;
+          /* progress */ minmax(128px, 1fr)
+          /* .        */ 0;
         grid-template-areas:
           'info toolbar wheel progress . '
           'info toolbar wheel progress . '
