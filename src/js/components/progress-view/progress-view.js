@@ -8,6 +8,7 @@ import {
 } from '../../state/selectors/selectors.js'
 import { playChallengeSequence, start } from '../../state/slices/game-slice.js'
 import { resetInstrumentState } from '../../state/slices/instrument-slice.js'
+import { restartGame, startNewGame } from '../../state/sequences/game-sequences.js'
 
 export class ProgressViewElement extends LitElement {
   static styles = css`
@@ -22,12 +23,18 @@ export class ProgressViewElement extends LitElement {
     sl-card {
       width: 100%;
     }
+
     .content {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       width: 100%;
+    }
+
+    .content.not-playing {
+      justify-content: center;
+      font-size: 48px; 
     }
 
     .badges {
@@ -59,21 +66,30 @@ export class ProgressViewElement extends LitElement {
 
   #stateController = new StateController(this)
 
-  #restartGame(rules) {
-    const progress = { guesses: [ ] }
-    this.#stateController.dispatch(start({ rules, progress }))
-    this.#stateController.dispatch(resetInstrumentState())
-    this.#stateController.dispatch(playChallengeSequence())
+  stateChanged() {
+    // TODO: figure out why selector update logic in state controller
+    // isn't working for this component
+    this.requestUpdate()
   }
 
   render() {
     const currentRound = this.#stateController.select(selectCurrentRound)
-    const tonic = currentRound?.rules?.tonic
-    const started = this.#stateController.select(isGameStarted)
-    const { challengePlaying } = currentRound
+    if (!currentRound) {
+      return html`
+        <div class="content not-playing">
+            <sl-icon-button
+              name="play-fill"
+              label="New game"
+              @click=${() => startNewGame(this.#stateController.state, this.#stateController.dispatch)}
+            >
+            </sl-icon-button>
+        </div>`
+    }
+    const tonic = currentRound.rules.tonic
+    const challengePlaying = currentRound.challengePlaying ?? false
 
-    const targetNoteBadges = currentRound?.rules.targets.map((note) => {
-      const reveal = currentRound?.progress.guesses.some(
+    const targetNoteBadges = currentRound.rules.targets.map((note) => {
+      const reveal = currentRound.progress.guesses.some(
         (guess) => guess.isCorrect && guess.note.id === note.id,
       )
       const label = this.#stateController.select(selectNoteLabel, note.id)
@@ -86,28 +102,27 @@ export class ProgressViewElement extends LitElement {
       `
     })
 
-    const tonicLabel = this.#stateController.select(selectNoteLabel, tonic?.id)
-    const statusView = started
-      ? html`
-          <div class="badges">
-            <note-badge
-              note-id=${tonic?.id}
-              label=${tonicLabel}
-              reveal
-            ></note-badge>
-            ${targetNoteBadges}
-          </div>
-        `
-      : undefined
+    const tonicLabel = this.#stateController.select(selectNoteLabel, tonic.id)
+    const statusView = html`
+      <div class="badges">
+        <note-badge
+          note-id=${tonic.id}
+          label=${tonicLabel}
+          reveal
+        ></note-badge>
+        ${targetNoteBadges}
+      </div>
+    `
 
-    const replayButton = challengePlaying 
-      ? undefined 
-      : html`
+
+    const replayButton = !challengePlaying
+      ? html`
         <sl-icon-button 
           name="arrow-counterclockwise" 
-          @click=${() => this.#restartGame(currentRound?.rules)}>
+          @click=${() => restartGame(this.#stateController.state, this.#stateController.dispatch)}>
         </sl-icon-button>
         `
+      : undefined
 
     const buttons = html`
       <div class="buttons">

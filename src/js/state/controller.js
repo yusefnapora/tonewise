@@ -53,7 +53,7 @@ export class StateController {
    */
   hostConnected() {
     const unsubscribe = this.store.subscribe(() => {
-      if (this.host.stateChanged) {
+      if (typeof this.host.stateChanged === 'function') {
         this.host.stateChanged(this.store.getState())
         return
       }

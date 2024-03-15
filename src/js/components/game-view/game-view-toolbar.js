@@ -13,6 +13,7 @@ import {
   start,
 } from '../../state/slices/game-slice.js'
 import { resetInstrumentState } from '../../state/slices/instrument-slice.js'
+import { endGame, startNewGame } from '../../state/sequences/game-sequences.js'
 
 export class GameViewToolbarElement extends LitElement {
   static styles = css`
@@ -36,38 +37,8 @@ export class GameViewToolbarElement extends LitElement {
   `
   #stateController = new StateController(this)
 
-  /**
-   *
-   * @param {import('../../state/slices/types.js').GameRules|undefined} [rules]
-   */
-  #startGame(rules) {
-    if (!rules) {
-      const tonic = this.#getRandomNote()
-      let target = this.#getRandomNote()
-      while (target.id === tonic.id) {
-        target = this.#getRandomNote()
-      }
-      rules = { tonic, targets: [target] }
-    }
-    const progress = { guesses: [] }
-
-    this.#stateController.dispatch(start({ rules, progress }))
-    this.#stateController.dispatch(resetInstrumentState())
-    this.#stateController.dispatch(playChallengeSequence())
-  }
-
-  #leaveGame() {
-    this.#stateController.dispatch(reset())
-    this.#stateController.dispatch(resetInstrumentState())
-  }
-
-  #getRandomNote() {
-    const id = NoteIds[Math.floor(Math.random() * NoteIds.length)]
-    return { id }
-  }
 
   render() {
-    const currentRound = this.#stateController.select(selectCurrentRound)
     const started = this.#stateController.select(isGameStarted)
     const completed = this.#stateController.select(isGameCompleted)
     const actionButton =
@@ -76,7 +47,7 @@ export class GameViewToolbarElement extends LitElement {
             <sl-icon-button
               name="x-octagon-fill"
               label="Leave game"
-              @click=${() => this.#leaveGame()}
+              @click=${() => endGame(this.#stateController.dispatch)}
             >
             </sl-icon-button>
           `
@@ -84,22 +55,12 @@ export class GameViewToolbarElement extends LitElement {
             <sl-icon-button
               name="play-fill"
               label="New game"
-              @click=${() => this.#startGame()}
+              @click=${() => startNewGame(this.#stateController.state, this.#stateController.dispatch)}
             >
             </sl-icon-button>
           `
 
-    const replayButton = currentRound?.rules
-      ? html`
-          <sl-icon-button
-            name="arrow-counterclockwise"
-            @click=${() => this.#startGame(currentRound.rules)}
-          >
-          </sl-icon-button>
-        `
-      : undefined
-
-    return html` <div class="buttons">${actionButton} ${replayButton}</div> `
+    return html` <div class="buttons">${actionButton}</div> `
   }
 }
 

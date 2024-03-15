@@ -64,15 +64,17 @@ export const selectActiveNoteIds = createSelector(
 
     // highlight correct guesses
     const { currentRound } = game
-    currentRound?.rules.targets.forEach((targetNote) => {
-      if (
-        currentRound?.progress.guesses.some(
-          (guess) => guess.isCorrect && guess.note.id === targetNote.id,
-        )
-      ) {
-        allActive.add(targetNote.id)
-      }
-    })
+    if (currentRound) {
+      currentRound.rules.targets.forEach((targetNote) => {
+        if (
+          currentRound.progress.guesses.some(
+            (guess) => guess.isCorrect && guess.note.id === targetNote.id,
+          )
+        ) {
+          allActive.add(targetNote.id)
+        }
+      })
+  }
 
     return allActive
   },

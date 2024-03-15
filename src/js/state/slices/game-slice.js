@@ -6,6 +6,7 @@
  * @typedef {import('./types.js').GameProgress} GameProgress
  * @typedef {import('./types.js').GameRound} GameRound
  * @typedef {import('./types.js').GameState} GameState
+ * @typedef {import('./types.js').TuningState} TuningState
  *
  */
 
@@ -17,7 +18,6 @@
 
 import { createSlice, current, createAsyncThunk } from '@reduxjs/toolkit'
 import { triggerNoteStart, triggerNoteStop } from './audio-slice.js'
-import { NoteIdMidiMap } from '../../audio/notes.js'
 import { clearNoteHighlight, highlightNote } from './instrument-slice.js'
 
 /** @type {GameState} */
@@ -60,16 +60,16 @@ function isCorrectGuess(rules, note) {
   return rules.targets.some((t) => t.id === note.id)
 }
 
-/** @type {import('@reduxjs/toolkit').AsyncThunk<unknown, unknown, { state: { game: GameState }}>} */
+/** @type {import('@reduxjs/toolkit').AsyncThunk<unknown, unknown, { state: { game: GameState, tuning: TuningState }}>} */
 export const playChallengeSequence = createAsyncThunk(
   'game/playChallengeSequence',
   /**
    *
    * @param {unknown} _
-   * @param {{ getState: () => { game: GameState }, dispatch: Function }} thunkAPI
+   * @param {{ getState: () => { game: GameState, tuning: TuningState }, dispatch: Function }} thunkAPI
    */
   async (_, { getState, dispatch }) => {
-    const { game } = getState()
+    const { game, tuning } = getState()
     if (!game.currentRound) {
       return
     }
@@ -81,7 +81,7 @@ export const playChallengeSequence = createAsyncThunk(
     for (let i = 0; i < notes.length; i++) {
       const note = notes[i]
       const highlight = i === 0 || i === notes.length - 1
-      const midiNote = NoteIdMidiMap[note.id]
+      const midiNote = tuning.midiNotes[note.id]
       // play and highlight tonic note
       dispatch(triggerNoteStart({ midiNote }))
       highlight && dispatch(highlightNote(note))
