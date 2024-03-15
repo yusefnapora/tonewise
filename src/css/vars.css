@@ -8,7 +8,7 @@
   --theme-dark-color-text-muted: #aaa;
 
   --theme-light-color-background: hsl(30, 67%, 98%);
-  --theme-light-color-glass-background: rgba(255, 255, 255, 0.6);
+  --theme-light-color-glass-background: rgba(255, 255, 255, 0.75);
   --theme-light-color-glass-border: rgba(220, 220, 220, 0.23);
   /* --theme-light-color-muted: hsl(208, 31.9%, 81.6%); */
   /* --theme-light-color-muted: hsl(207.1, 31.3%, 80.6%); */
