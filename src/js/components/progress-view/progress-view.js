@@ -40,8 +40,6 @@ export class ProgressViewElement extends LitElement {
     }
 
     .content.not-playing {
-      /* todo: remove instead of hiding, once we're done playing around */
-      display: none; 
       justify-content: center;
       font-size: 48px; 
     }
@@ -128,18 +126,27 @@ export class ProgressViewElement extends LitElement {
     `
 
 
-    const replayButton = !challengePlaying
-      ? html`
+    const replayButton = html`
         <sl-icon-button 
           name="arrow-counterclockwise" 
           @click=${() => restartGame(this.#stateController.state, this.#stateController.dispatch)}>
         </sl-icon-button>
         `
-      : undefined
+    
+    const nextRoundButton = html`
+    <sl-icon-button 
+      name="chevron-double-right" 
+      @click=${() => startNewGame(this.#stateController.state, this.#stateController.dispatch)}>
+    </sl-icon-button>
+    `
+
+    const showReplayButton = !challengePlaying && !currentRound.progress.isCompleted 
+    const showNextRound = currentRound.progress.isCompleted === true
 
     const buttons = html`
       <div class="buttons">
-        ${replayButton}
+        ${showReplayButton ? replayButton : undefined}
+        ${showNextRound ? nextRoundButton : undefined}
       </div>
     `
 

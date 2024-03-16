@@ -17,10 +17,11 @@ import {
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
 import { cardStyleBase } from '../../styles.js'
+import { startNewGame } from '../../state/sequences/game-sequences.js'
 
 const PANEL_SIZE = css`minmax(128px, 1fr)`
-const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 80dvw)`
-const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(80dvw - 200px), 85dvh)`
+const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 85dvw)`
+const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(85dvw - 200px), 85dvh)`
 
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -31,7 +32,6 @@ export class GameViewElement extends LitElement {
 
       column-gap: 10px;
       row-gap: 10px;
-      padding: 20px;
 
       grid-template-rows: 0 ${PANEL_SIZE} ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
       grid-template-columns: ${WHEEL_SIZE_PORTRAIT};
@@ -45,8 +45,9 @@ export class GameViewElement extends LitElement {
       place-items: center;
     }
 
-    sl-card.toolbar {
+    .toolbar {
       grid-area: toolbar;
+      width: 100%;
     }
 
     sl-card.wheel {
@@ -77,12 +78,13 @@ export class GameViewElement extends LitElement {
           'info toolbar wheel progress . ';
       }
 
-      sl-card.toolbar {
+      .toolbar {
         place-self: stretch;
-      }
-      sl-card.toolbar::part(base) {
         height: 100%;
       }
+      /* sl-card.toolbar::part(base) {
+        height: 100%;
+      } */
       sl-card.progress {
         place-self: stretch;
       }
@@ -106,6 +108,8 @@ export class GameViewElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback()
+    // const { state, dispatch } = this.#stateController
+    // startNewGame(state, dispatch)
   }
 
   // stateChanged() {
@@ -181,9 +185,9 @@ export class GameViewElement extends LitElement {
 
     return html`
       <div class="contents">
-        <sl-card class="toolbar">
+        <div class="toolbar">
           <game-view-toolbar></game-view-toolbar>
-        </sl-card>
+        </div>
         <sl-card class="wheel">
           <tone-wheel
             color-scale=${colorScale}

@@ -85,7 +85,7 @@ export class SettingsViewElement extends LitElement {
         <div slot="header">
           <sl-icon-button
             name="arrow-left"
-            @click=${() => navigate('/')}
+            @click=${() => window.history.back()}
           ></sl-icon-button>
           <span class="card-title">settings</span>
         </div>
