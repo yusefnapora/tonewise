@@ -12,20 +12,18 @@ import {
   triggerNoteStop,
 } from '../../state/slices/audio-slice.js'
 import {
-  selectActiveNoteIds,
   selectColorScale,
   selectMidiNote,
-  selectNoteLabel,
   selectWheelNotes,
-  selectTuningNoteIds,
 } from '../../state/selectors/selectors.js'
 import { cardStyleBase } from '../../styles.js'
+
+const PANEL_SIZE = css`minmax(128px, 1fr)`
+const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 80dvw)`
+const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(80dvw - 200px), 85dvh)`
+
 export class GameViewElement extends LitElement {
   static styles = css`
-    :root {
-      --panel-size: 72px;
-      --grid-panel-gap: 10px;
-    }
 
     .contents {
       display: grid;
@@ -35,10 +33,15 @@ export class GameViewElement extends LitElement {
       row-gap: 10px;
       padding: 20px;
 
+      grid-template-rows: 0 ${PANEL_SIZE} ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
+      grid-template-columns: ${WHEEL_SIZE_PORTRAIT};
+
       grid-template-areas:
+        '.'
         'toolbar'
         'wheel'
-        'progress';
+        'progress'
+        '.';
       place-items: center;
     }
 
@@ -62,16 +65,15 @@ export class GameViewElement extends LitElement {
         display: grid;
         flex: 1;
 
+        grid-template-rows: ${WHEEL_SIZE_LANDSCAPE};
         grid-template-columns: 
          /* info     */
           0
-          /* toolbar  */ minmax(128px, 1fr)
-          /* wheel    */ min(800px, calc(100vw - 40px), 90vh, 90dvh)
-          /* progress */ minmax(128px, 1fr)
+          /* toolbar  */ ${PANEL_SIZE}
+          /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
+          /* progress */ ${PANEL_SIZE}
           /* .        */ 0;
         grid-template-areas:
-          'info toolbar wheel progress . '
-          'info toolbar wheel progress . '
           'info toolbar wheel progress . ';
       }
 
@@ -80,14 +82,12 @@ export class GameViewElement extends LitElement {
       }
       sl-card.toolbar::part(base) {
         height: 100%;
-        /* width: 100%; */
       }
       sl-card.progress {
         place-self: stretch;
       }
       sl-card.progress::part(base) {
         height: 100%;
-        /* width: 100%; */
       }
     }
 

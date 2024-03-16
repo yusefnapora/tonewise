@@ -8,6 +8,7 @@ export class AppViewElement extends LitElement {
     :host {
       max-width: 100vw;
       width: 100%;
+      height: 100%;
       min-height: min(100vh, 100dvh);
 
       display: grid;
@@ -27,6 +28,8 @@ export class AppViewElement extends LitElement {
 
     .content {
       min-width: 100vw;
+      height: 100%;
+      min-height: min(100vh, 100dvh);
       display: flex;
       align-items: center;
       justify-content: center;
