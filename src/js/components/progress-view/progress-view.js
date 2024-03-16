@@ -2,12 +2,9 @@ import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
-  isGameStarted,
   selectCurrentRound,
   selectNoteLabel,
 } from '../../state/selectors/selectors.js'
-import { playChallengeSequence, start } from '../../state/slices/game-slice.js'
-import { resetInstrumentState } from '../../state/slices/instrument-slice.js'
 import { restartGame, startNewGame } from '../../state/sequences/game-sequences.js'
 
 export class ProgressViewElement extends LitElement {
@@ -19,15 +16,7 @@ export class ProgressViewElement extends LitElement {
       align-items: center;
       justify-content: center;
       min-height: 80px;
-    }
-
-    sl-card {
-      width: 100%;
-      height: 100%;
-    }
-
-    sl-card::part(body) {
-      height: 100%;
+      /* margin: 10px; */
     }
 
     .content {
@@ -47,6 +36,7 @@ export class ProgressViewElement extends LitElement {
     .badges {
       display: flex;
       flex-direction: row;
+      align-items: center;
       justify-content: flex-start;
       width: 100%;
     }
@@ -62,6 +52,7 @@ export class ProgressViewElement extends LitElement {
       align-items: center;
       justify-self: flex-end;
       font-size: 48px;
+      margin-right: 10px;
     }
 
     @media (orientation: landscape) {
@@ -74,6 +65,10 @@ export class ProgressViewElement extends LitElement {
       }
       .badges {
         flex-direction: column;
+      }
+      .buttons {
+        margin-right: 0;
+        margin-bottom: 10px;
       }
     }
   `

@@ -57,12 +57,13 @@ export class GameViewElement extends LitElement {
       width: 100%;
     }
 
-    sl-card.wheel {
+    .wheel {
       grid-area: wheel;
     }
 
-    sl-card.progress {
+    .progress {
       grid-area: progress;
+      width: 100%;
     }
 
     @media (orientation: landscape) {
@@ -93,14 +94,8 @@ export class GameViewElement extends LitElement {
         height: 100%;
         max-width: ${PANEL_SIZE_PX};
       }
-      /* sl-card.toolbar::part(base) {
-        height: 100%;
-      } */
-      sl-card.progress {
+      .progress {
         place-self: stretch;
-      }
-      sl-card.progress::part(base) {
-        height: 100%;
       }
     }
 
@@ -211,9 +206,9 @@ export class GameViewElement extends LitElement {
             ${pitchClasses}
           </tone-wheel>
         </sl-card>
-        <sl-card class="progress">
+        <glass-panel class="progress">
           <progress-view></progress-view>
-        </sl-card>
+        </glass-panel>
       </div>
     `
   }
