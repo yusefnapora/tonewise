@@ -1,11 +1,7 @@
 import { LitElement, html, css } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import {
-  isGameCompleted,
-  isGameStarted,
-} from '../../state/selectors/selectors.js'
-import { endGame, startNewGame } from '../../state/sequences/game-sequences.js'
+import { endGame } from '../../state/sequences/game-sequences.js'
 import { navigate } from '../../route-controller.js'
 
 export class GameViewToolbarElement extends LitElement {
@@ -45,23 +41,14 @@ export class GameViewToolbarElement extends LitElement {
 
 
   render() {
-    const started = this.#stateController.select(isGameStarted)
-    const completed = this.#stateController.select(isGameCompleted)
-
-    let message = 'Press play'
-    if (started) {
-      message = 'Find the hidden note'
-    }
-    if (completed) {
-      // todo: show interval name
-      message = 'Great job!'
-    }
-
     const backButton = html`
         <sl-icon-button
           name="arrow-left-circle"
           label="Leave game"
-          @click=${() => endGame(this.#stateController.dispatch)}
+          @click=${() => {
+            endGame(this.#stateController.dispatch)
+            window.history.back()
+          }}
         >
         </sl-icon-button>
     ` 
@@ -76,7 +63,6 @@ export class GameViewToolbarElement extends LitElement {
 
     return html`
       <div class="buttons">${backButton} ${settingsButton}</div>
-      <div class="message">${message}</div>
     `
   }
 }

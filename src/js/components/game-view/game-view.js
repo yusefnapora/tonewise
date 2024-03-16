@@ -20,8 +20,9 @@ import { cardStyleBase } from '../../styles.js'
 import { startNewGame } from '../../state/sequences/game-sequences.js'
 
 const PANEL_SIZE = css`minmax(128px, 1fr)`
+const STATUS_MSG_SIZE = css`min-content`
 const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 85dvw)`
-const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(85dvw - 200px), 85dvh)`
+const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(85dvw - 248px), 85dvh)`
 
 export class GameViewElement extends LitElement {
   static styles = css`
@@ -33,12 +34,12 @@ export class GameViewElement extends LitElement {
       column-gap: 10px;
       row-gap: 10px;
 
-      grid-template-rows: 0 ${PANEL_SIZE} ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
+      grid-template-rows: 48px ${STATUS_MSG_SIZE} ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
       grid-template-columns: ${WHEEL_SIZE_PORTRAIT};
 
       grid-template-areas:
-        '.'
         'toolbar'
+        'status'
         'wheel'
         'progress'
         '.';
@@ -47,6 +48,11 @@ export class GameViewElement extends LitElement {
 
     .toolbar {
       grid-area: toolbar;
+      width: 100%;
+    }
+
+    .status {
+      grid-area: status;
       width: 100%;
     }
 
@@ -75,10 +81,14 @@ export class GameViewElement extends LitElement {
           /* progress */ ${PANEL_SIZE}
           /* .        */ 0;
         grid-template-areas:
-          'info toolbar wheel progress . ';
+          'toolbar status wheel progress . ';
       }
 
       .toolbar {
+        place-self: stretch;
+        height: 100%;
+      }
+      .status {
         place-self: stretch;
         height: 100%;
       }
@@ -187,6 +197,9 @@ export class GameViewElement extends LitElement {
       <div class="contents">
         <div class="toolbar">
           <game-view-toolbar></game-view-toolbar>
+        </div>
+        <div class="status">
+          <game-status-message></game-status-message>
         </div>
         <sl-card class="wheel">
           <tone-wheel
