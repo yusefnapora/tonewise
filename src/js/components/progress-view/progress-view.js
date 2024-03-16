@@ -67,7 +67,10 @@ export class ProgressViewElement extends LitElement {
     @media (orientation: landscape) {
       .content {
         flex-direction: column;
-        
+        height: 100%;
+      }
+      .content.not-playing {
+        height: 100%;
       }
       .badges {
         flex-direction: column;

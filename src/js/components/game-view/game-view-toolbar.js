@@ -34,6 +34,7 @@ export class GameViewToolbarElement extends LitElement {
       }
       .buttons {
         flex-direction: column;
+        height: 100%;
       }
     }
   `

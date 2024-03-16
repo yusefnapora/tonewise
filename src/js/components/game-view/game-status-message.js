@@ -23,14 +23,11 @@ export class GameStatusMessageElement extends LitElement {
       text-align: center;
       font-size: 1.6rem;
     }
-    @media (orientation: landscape) {
+    /* @media (orientation: landscape) {
       :host {
-        flex-direction: column;
+        justify-content: center;
       }
-      .buttons {
-        flex-direction: column;
-      }
-    }
+    } */
   `
   #stateController = new StateController(this)
 

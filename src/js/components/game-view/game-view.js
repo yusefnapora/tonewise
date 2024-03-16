@@ -17,9 +17,10 @@ import {
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
 import { cardStyleBase } from '../../styles.js'
-import { startNewGame } from '../../state/sequences/game-sequences.js'
 
-const PANEL_SIZE = css`minmax(128px, 1fr)`
+const TOOLBAR_SIZE = css`48px`
+const PANEL_SIZE_PX = css`128px`
+const PANEL_SIZE = css`minmax(${PANEL_SIZE_PX}, 1fr)`
 const STATUS_MSG_SIZE = css`min-content`
 const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 85dvw)`
 const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(85dvw - 248px), 85dvh)`
@@ -34,7 +35,7 @@ export class GameViewElement extends LitElement {
       column-gap: 10px;
       row-gap: 10px;
 
-      grid-template-rows: 48px ${STATUS_MSG_SIZE} ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
+      grid-template-rows: ${TOOLBAR_SIZE} ${STATUS_MSG_SIZE} ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
       grid-template-columns: ${WHEEL_SIZE_PORTRAIT};
 
       grid-template-areas:
@@ -74,9 +75,8 @@ export class GameViewElement extends LitElement {
 
         grid-template-rows: ${WHEEL_SIZE_LANDSCAPE};
         grid-template-columns: 
-         /* info     */
-          0
-          /* toolbar  */ ${PANEL_SIZE}
+          /* toolbar  */ ${TOOLBAR_SIZE}
+          /* status   */ ${PANEL_SIZE}
           /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
           /* progress */ ${PANEL_SIZE}
           /* .        */ 0;
@@ -91,6 +91,7 @@ export class GameViewElement extends LitElement {
       .status {
         place-self: stretch;
         height: 100%;
+        max-width: ${PANEL_SIZE_PX};
       }
       /* sl-card.toolbar::part(base) {
         height: 100%;
