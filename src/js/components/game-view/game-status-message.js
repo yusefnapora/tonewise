@@ -12,7 +12,7 @@ export class GameStatusMessageElement extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      justify-content: space-between;
+      justify-content: center;
 
       width: 100%;
       height: 100%;

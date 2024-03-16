@@ -28,7 +28,7 @@ export class GameViewToolbarElement extends LitElement {
       text-align: center;
       font-size: 1.6rem;
     }
-    @media (orientation: landscape) {
+    /* @media (orientation: landscape) {
       :host {
         flex-direction: column;
       }
@@ -36,7 +36,7 @@ export class GameViewToolbarElement extends LitElement {
         flex-direction: column;
         height: 100%;
       }
-    }
+    } */
   `
   #stateController = new StateController(this)
 
