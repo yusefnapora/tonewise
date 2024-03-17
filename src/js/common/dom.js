@@ -22,8 +22,6 @@ export function setMetaThemeColors(dark, light) {
   const lightMeta = document.querySelector('meta[name="theme-color"]:not([media])') 
   const darkMeta = document.querySelector('meta[name="theme-color"][media="(prefers-color-scheme: dark)"]')
 
-  console.log('setting theme-color', { lightMeta, darkMeta, light, dark })
-
   lightMeta?.setAttribute('content', light)
   darkMeta?.setAttribute('content', dark)
 }

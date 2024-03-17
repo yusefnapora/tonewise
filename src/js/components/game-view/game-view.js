@@ -190,7 +190,7 @@ export class GameViewElement extends LitElement {
 
     return html`
       <div class="toolbar">
-        <game-view-toolbar></game-view-toolbar>
+        <nav-icon-bar></nav-icon-bar>
       </div>
       <div class="contents">
         <div class="status">

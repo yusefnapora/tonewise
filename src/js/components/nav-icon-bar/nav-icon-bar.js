@@ -2,9 +2,9 @@ import { LitElement, html, css } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import { endGame } from '../../state/sequences/game-sequences.js'
-import { navigate } from '../../route-controller.js'
+import { navigate, sharedRouter } from '../../route-controller.js'
 
-export class GameViewToolbarElement extends LitElement {
+export class NavIconBarElement extends LitElement {
   static styles = css`
     :host {
       display: flex;
@@ -54,10 +54,16 @@ export class GameViewToolbarElement extends LitElement {
       ></sl-icon-button>
     `
 
+    const showSettings = sharedRouter.getCurrentLocation().route.name !== 'settings'
+    console.log({ showSettings, currentRouteName: sharedRouter.getCurrentLocation().route.name})
+
     return html`
-      <div class="buttons">${backButton} ${settingsButton}</div>
+      <div class="buttons">
+        ${backButton}
+        ${showSettings ? settingsButton : undefined}
+      </div>
     `
   }
 }
 
-registerElement('game-view-toolbar', GameViewToolbarElement)
+registerElement('nav-icon-bar', NavIconBarElement)

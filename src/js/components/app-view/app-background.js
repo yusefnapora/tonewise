@@ -55,7 +55,6 @@ export class AppBackgroundElement extends LitElement {
 
     themeColor = resolveCSSVariables(themeColor, this)
     const c = new Color(themeColor).to('srgb').toString({ format: 'hex' })
-    console.log({themeColor, c})
     setMetaThemeColors(c)
 
     return html`

@@ -12,13 +12,38 @@ import {
   setColorScale,
   setEnharmonicPresentation,
 } from '../../state/slices/preferences-slice.js'
-import { cardStyleBase } from '../../styles.js'
-import { navigate } from '../../route-controller.js'
+import { landscapeMediaQuery } from '../../styles.js'
 
 export class SettingsViewElement extends LitElement {
   static styles = css`
+    :host {
+      --glass-panel-padding: 20px;
+    }
+
+    nav-icon-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    .appearance {
+      display: grid;
+
+      grid-template-areas:
+        'wheel'
+        'controls'
+        ;
+    }
+
     .card-title {
       font-size: 2rem;
+      font-family: var(--heading-font-family);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
     }
 
     .control {
@@ -33,9 +58,20 @@ export class SettingsViewElement extends LitElement {
     tone-wheel {
       max-width: 150px;
       margin: auto;
+
+      grid-area: 'wheel';
     }
 
-    ${cardStyleBase}
+    .appearance-controls {
+      grid-area: 'controls';
+    }
+
+    ${landscapeMediaQuery} {
+      .appearance {
+        grid-template-areas: 'wheel controls';
+        column-gap: 40px;
+      }
+    }
   `
 
   #stateController = new StateController(this)
@@ -81,45 +117,46 @@ export class SettingsViewElement extends LitElement {
     this.renderRoot.querySelector('tone-wheel')?.requestUpdate()
 
     return html`
-      <sl-card class="card-header">
-        <div slot="header">
-          <sl-icon-button
-            name="arrow-left"
-            @click=${() => window.history.back()}
-          ></sl-icon-button>
-          <span class="card-title">settings</span>
+      <nav-icon-bar></nav-icon-bar>
+      <glass-panel>
+        <div class="card-title">
+          settings
         </div>
+        
+        <div class="appearance">
+          <tone-wheel color-scale=${colorScale}> ${pitchClasses} </tone-wheel>
 
-        <tone-wheel color-scale=${colorScale}> ${pitchClasses} </tone-wheel>
+          <div class="appearance-controls">
+            <div class="control">
+              <sl-select
+                label="Color palette"
+                value=${colorScale}
+                @sl-change=${colorChanged}
+              >
+                ${colorOptions}
+              </sl-select>
+            </div>
 
-        <div class="control">
-          <sl-select
-            label="Color palette"
-            value=${colorScale}
-            @sl-change=${colorChanged}
-          >
-            ${colorOptions}
-          </sl-select>
-        </div>
-
-        <div class="control">
-          <sl-radio-group
-            label="Display sharps or flats?"
-            name="enharmonics"
-            value="${enharmonicPresentation}"
-            @sl-change=${enharmonicsChanged}
-          >
-            <sl-radio-button value="sharp"
-              ><span class="enharmonic" slot="prefix">♯</span
-              >Sharps</sl-radio-button
-            >
-            <sl-radio-button value="flat"
-              ><span class="enharmonic" slot="prefix">♭</span
-              >Flats</sl-radio-button
-            >
-          </sl-radio-group>
-        </div>
-      </sl-card>
+            <div class="control">
+              <sl-radio-group
+                label="Display sharps or flats?"
+                name="enharmonics"
+                value="${enharmonicPresentation}"
+                @sl-change=${enharmonicsChanged}
+              >
+                <sl-radio-button value="sharp"
+                  ><span class="enharmonic" slot="prefix">♯</span
+                  >Sharps</sl-radio-button
+                >
+                <sl-radio-button value="flat"
+                  ><span class="enharmonic" slot="prefix">♭</span
+                  >Flats</sl-radio-button
+                >
+              </sl-radio-group>
+            </div>
+          </div>
+      </div>
+      </glass-panel>
     `
   }
 }
