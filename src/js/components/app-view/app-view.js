@@ -23,7 +23,7 @@ export class AppViewElement extends LitElement {
     }
 
     app-background {
-      z-index: -1;
+      z-index: 0;
     }
 
     .content {
@@ -33,7 +33,7 @@ export class AppViewElement extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      /* z-index: 10; */
+      z-index: 2;
     }
   `
 

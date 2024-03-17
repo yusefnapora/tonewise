@@ -16,7 +16,6 @@ import {
   selectMidiNote,
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
-import { cardStyleBase } from '../../styles.js'
 
 const TOOLBAR_ICON_SIZE = css`calc(48px + var(--toolbar-padding))`
 const PANEL_SIZE_PX = css`128px`
@@ -103,16 +102,6 @@ export class GameViewElement extends LitElement {
         height: ${WHEEL_SIZE_LANDSCAPE};
       }
     }
-
-    sl-card {
-      width: 100%;
-      /* max-width: min(500px, calc(100vw - 40px), 90vh, 90dvh); */
-      /* max-height: min(500px, calc(100vw - 40px), 90vh, 90dvh); */
-      /* margin: 5px auto; */
-      margin: 0;
-    }
-
-    ${cardStyleBase}
   `
 
   #stateController = new StateController(this)
@@ -202,7 +191,7 @@ export class GameViewElement extends LitElement {
         <div class="status">
           <game-status-message></game-status-message>
         </div>
-        <sl-card class="wheel">
+        <glass-panel class="wheel">
           <tone-wheel
             color-scale=${colorScale}
             @note:holdBegan=${this.#pitchSelected}
@@ -210,7 +199,7 @@ export class GameViewElement extends LitElement {
           >
             ${pitchClasses}
           </tone-wheel>
-        </sl-card>
+        </glass-panel>
         <glass-panel class="progress">
           <progress-view></progress-view>
         </glass-panel>

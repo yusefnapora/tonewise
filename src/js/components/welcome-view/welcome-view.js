@@ -21,6 +21,10 @@ export class WelcomeViewElement extends LitElement {
       grid-template-columns: 1fr;
     }
 
+    .content glass-panel {
+      padding: 20px;
+    }
+
     .app-title {
       font-size: 2.25rem;
       font-family: var(--heading-font-family);
@@ -66,8 +70,8 @@ export class WelcomeViewElement extends LitElement {
 
   render() {
     return html`
-      <sl-card>
         <div class="content">
+          <glass-panel>
           <h1 class="app-title">${appName}</h1>
           <p class="welcome-text">${welcomeText}</p>
           <nav>
@@ -80,8 +84,8 @@ export class WelcomeViewElement extends LitElement {
               <li><app-link href="settings">Settings</app-link></li>
             </ul>
           </nav>
+          </glass-panel>
         </div>
-      </sl-card>
     `
   }
 }

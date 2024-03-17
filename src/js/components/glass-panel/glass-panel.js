@@ -11,12 +11,20 @@ export class GlassPanelElement extends LitElement {
       border: 1px solid var(--color-glass-border);
 
       border-radius: 5px;
+      display: grid;
+      place-content: stretch;
+    }
+
+    .contents {
+      padding: var(--glass-panel-padding);
     }
   `
 
   render() {
     return html`
-    <slot></slot>
+    <div class="contents">
+      <slot></slot>
+    </div>
     `
   }
 }

@@ -15,7 +15,7 @@ export class ProgressViewElement extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 128px;
+      min-height: 96px;
       /* margin: 10px; */
     }
 
@@ -26,7 +26,7 @@ export class ProgressViewElement extends LitElement {
       justify-content: space-between;
       width: 100%;
       height: 100%;
-      margin: 10px;
+      /* margin: 10px; */
     }
 
     .content.not-playing {
@@ -40,7 +40,7 @@ export class ProgressViewElement extends LitElement {
       align-items: center;
       justify-content: flex-start;
       width: 100%;
-      margin-left: 5px;
+      /* margin-left: 5px; */
     }
 
     .badges note-badge {
@@ -54,7 +54,7 @@ export class ProgressViewElement extends LitElement {
       align-items: center;
       justify-self: flex-end;
       font-size: 48px;
-      margin-right: 5px;
+      /* margin-right: 5px; */
     }
 
     @media (orientation: landscape) {
@@ -67,13 +67,13 @@ export class ProgressViewElement extends LitElement {
       }
       .badges {
         flex-direction: column;
-        margin-left: 0px;
-        margin-top: 10px;
+        /* margin-left: 0px;
+        margin-top: 10px; */
       }
-      .buttons {
+      /* .buttons {
         margin-right: 0px;
         margin-bottom: 10px;
-      }
+      } */
     }
   `
 
