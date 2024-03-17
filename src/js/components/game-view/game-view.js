@@ -21,7 +21,7 @@ import { cardStyleBase } from '../../styles.js'
 const TOOLBAR_ICON_SIZE = css`calc(48px + var(--toolbar-padding))`
 const PANEL_SIZE_PX = css`128px`
 const PANEL_SIZE = css`minmax(${PANEL_SIZE_PX}, 1fr)`
-const STATUS_MSG_SIZE = css`min-content`
+const STATUS_MSG_SIZE = css`1fr`
 const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 85dvw)`
 const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(85dvw - 248px), 85dvh)`
 
@@ -40,10 +40,10 @@ export class GameViewElement extends LitElement {
       width: 100%;
       height: 100%;
 
-      column-gap: 10px;
+      /* column-gap: 10px; */
       row-gap: 10px;
 
-      grid-template-rows: 1fr ${STATUS_MSG_SIZE} ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 1fr;
+      grid-template-rows: calc(1fr - ${TOOLBAR_ICON_SIZE}) 1fr ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
       grid-template-columns: 1fr ${WHEEL_SIZE_PORTRAIT} 1fr;
 
       grid-template-areas:
@@ -82,6 +82,7 @@ export class GameViewElement extends LitElement {
       .contents {
         display: grid;
         flex: 1;
+        column-gap: 10px;
         row-gap: 0px;
 
         grid-template-rows: 1fr; 
