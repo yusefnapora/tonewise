@@ -15,7 +15,6 @@
           pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
               nodejs_20
-              rnix-lsp
             ];
           };
       };
