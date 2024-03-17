@@ -20,15 +20,16 @@ export class GameStatusMessageElement extends LitElement {
 
     .message {
       width: 100%;
+      height: 100%;
       text-align: center;
       font-family: var(--status-message-font-family);
       font-size: 1.6rem;
     }
-    /* @media (orientation: landscape) {
+    @media (orientation: landscape) {
       :host {
-        justify-content: center;
+        justify-content: flex-start;
       }
-    } */
+    }
   `
   #stateController = new StateController(this)
 

@@ -98,8 +98,12 @@ export class GameViewElement extends LitElement {
           '. status wheel progress . '
           ;
       }
+      .status {
+        height: ${WHEEL_SIZE_LANDSCAPE};
+      }
       .progress {
         height: ${WHEEL_SIZE_LANDSCAPE};
+        max-width: ${PANEL_SIZE_PX};
       }
     }
   `
