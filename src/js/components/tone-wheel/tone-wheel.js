@@ -112,7 +112,12 @@ export class ToneWheel extends LitElement {
     }
 
     .base-background-layer {
+      clip-path: url(#gradient-clip);
       background-color: var(--color-wheel-bottom-layer-background);
+      width: 100%;
+      height: 100%;
+      grid-row: 1;
+      grid-column: 1;
     }
 
     .gradient-background {

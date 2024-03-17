@@ -41,7 +41,7 @@ export class GameViewElement extends LitElement {
       /* column-gap: 10px; */
       row-gap: 10px;
 
-      grid-template-rows: calc(1fr - ${TOOLBAR_ICON_SIZE}) 1fr ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
+      grid-template-rows: 0 1fr ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
       grid-template-columns: 1fr ${WHEEL_SIZE_PORTRAIT} 1fr;
 
       grid-template-areas:

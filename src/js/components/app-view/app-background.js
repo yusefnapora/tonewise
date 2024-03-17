@@ -1,5 +1,5 @@
 import { LitElement, css, html } from 'lit'
-import { registerElement } from '../../common/dom.js'
+import { registerElement, resolveCSSVariables, setMetaThemeColors } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
   selectColorScale,
@@ -7,6 +7,7 @@ import {
   selectTuningNoteIds,
 } from '../../state/selectors/selectors.js'
 import { colorForAngle } from '../../common/color.js'
+import Color from 'colorjs.io'
 
 export class AppBackgroundElement extends LitElement {
   static styles = css`
@@ -42,13 +43,20 @@ export class AppBackgroundElement extends LitElement {
     const colorScale = this.#stateController.select(selectColorScale)
 
     let background = 'var(--color-background)'
+    let themeColor = background
     if (colorScale.startsWith('oklch')) {
       const colors = [...noteIds, noteIds[0]].map((noteId) => {
         const angle = this.#stateController.select(selectNoteAngle, noteId)
         return colorForAngle(angle, colorScale)
       })
       background = `conic-gradient(${colors.join(', ')})`
+      themeColor = colorForAngle(345, colorScale)
     }
+
+    themeColor = resolveCSSVariables(themeColor, this)
+    const c = new Color(themeColor).to('srgb').toString({ format: 'hex' })
+    console.log({themeColor, c})
+    setMetaThemeColors(c)
 
     return html`
       <style>

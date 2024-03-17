@@ -92,7 +92,7 @@ function oklchColor(angle, opts) {
 export function getContrastingTextColor(backgroundColor) {
   if (!backgroundColor.startsWith('#')) {
     // HACK to avoid resolving css variables for the oklch-based color schemes
-    return 'var(--oklch-scale-text-color, white)'
+    return 'var(--color-text, white)'
   }
   const bg = new Color(backgroundColor)
   const bgLightness  = bg.oklch[0]
