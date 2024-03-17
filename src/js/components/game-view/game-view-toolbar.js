@@ -22,6 +22,7 @@ export class GameViewToolbarElement extends LitElement {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: var(--toolbar-padding);
     }
     .message {
       width: 100%;

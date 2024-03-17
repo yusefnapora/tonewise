@@ -18,9 +18,9 @@ import {
 } from '../../state/selectors/selectors.js'
 import { cardStyleBase } from '../../styles.js'
 
-const TOOLBAR_SIZE = css`48px`
+const TOOLBAR_ICON_SIZE = css`calc(48px + var(--toolbar-padding))`
 const PANEL_SIZE_PX = css`128px`
-const PANEL_SIZE = PANEL_SIZE_PX // css`minmax(${PANEL_SIZE_PX}, 1fr)`
+const PANEL_SIZE = css`minmax(${PANEL_SIZE_PX}, 1fr)`
 const STATUS_MSG_SIZE = css`min-content`
 const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 85dvw)`
 const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(85dvw - 248px), 85dvh)`
@@ -43,11 +43,10 @@ export class GameViewElement extends LitElement {
       column-gap: 10px;
       row-gap: 10px;
 
-      grid-template-rows: ${TOOLBAR_SIZE} 1fr ${STATUS_MSG_SIZE} ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 1fr;
+      grid-template-rows: 1fr ${STATUS_MSG_SIZE} ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 1fr;
       grid-template-columns: 1fr ${WHEEL_SIZE_PORTRAIT} 1fr;
 
       grid-template-areas:
-        'toolbar toolbar toolbar'
         '. . .'
         '. status .'
         '. wheel .'
@@ -57,8 +56,11 @@ export class GameViewElement extends LitElement {
     }
 
     .toolbar {
-      grid-area: toolbar;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
+      min-height: ${TOOLBAR_ICON_SIZE};
     }
 
     .status {
@@ -77,36 +79,25 @@ export class GameViewElement extends LitElement {
     }
 
     @media (orientation: landscape) {
-      /* :host {
-        flex-direction: row;
-      } */
       .contents {
         display: grid;
         flex: 1;
         row-gap: 0px;
 
-        grid-template-rows: ${TOOLBAR_SIZE} 1fr; 
+        grid-template-rows: 1fr; 
         grid-template-columns: 
-          /* .        */ 1fr
+          /* .        */ ${TOOLBAR_ICON_SIZE}
           /* status   */ ${PANEL_SIZE}
           /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
           /* progress */ ${PANEL_SIZE}
-          /* .        */ 1fr;
+          /* .        */ max(${TOOLBAR_ICON_SIZE}, 0px);
+
+          /* note: useless max() above is to trick the vscode lit plugin's invalid syntax checker,
+          which breaks if the last element before a ';' char is a template string interpolation */
         grid-template-areas:
-          'toolbar toolbar toolbar toolbar toolbar'
-          'status status wheel progress . '
+          '. status wheel progress . '
           ;
       }
-/* 
-      .toolbar {
-        place-self: start;
-        height: 100%;
-      } */
-      /* .status {
-        place-self: stretch;
-        height: 100%;
-        max-width: ${PANEL_SIZE_PX};
-      } */
       .progress {
         height: ${WHEEL_SIZE_LANDSCAPE};
       }
@@ -203,10 +194,10 @@ export class GameViewElement extends LitElement {
     this.#wheel?.requestUpdate()
 
     return html`
+      <div class="toolbar">
+        <game-view-toolbar></game-view-toolbar>
+      </div>
       <div class="contents">
-        <div class="toolbar">
-          <game-view-toolbar></game-view-toolbar>
-        </div>
         <div class="status">
           <game-status-message></game-status-message>
         </div>

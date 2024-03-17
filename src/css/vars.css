@@ -25,6 +25,8 @@
   --wheel-gradient-background-vibrant-opacity: 1;
   --wheel-gradient-background-blur: 30px;
 
+  --toolbar-padding: 5px;
+
   --heading-font-family: 'Timeburner';
   /* --note-font-family: 'Seravek', 'Gill Sans Nova', 'Ubuntu', 'Calibri', 'DejaVu Sans', 'source-sans-pro', sans-serif;  */
   --note-font-family: 'Ubuntu Mono', monospace;
