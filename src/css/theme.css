@@ -39,23 +39,6 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-@media (prefers-color-scheme: light) {
-  html {
-    color-scheme: light;
-    --color-background: var(--theme-light-color-background);
-    --color-muted: var(--theme-light-color-muted);
-    --color-primary: var(--theme-light-color-primary);
-    --color-text: var(--theme-light-color-text);
-    --color-text-muted: var(--theme-light-color-text-muted);
-    --color-glass-background: var(--theme-light-color-glass-background);
-    --color-glass-border: var(--theme-light-color-glass-border);
-    --color-wheel-bottom-layer-background: var(--theme-light-color-wheel-bottom-layer-background);
-
-    --bgcolor-lightness: 60%;
-    --bgcolor-chroma: 0.15;
-  }
-}
-
 html.light-theme {
   --color-background: var(--theme-light-color-background);
   --color-muted: var(--theme-light-color-muted);
@@ -65,4 +48,7 @@ html.light-theme {
   --color-glass-background: var(--theme-light-color-glass-background);
   --color-glass-border: var(--theme-light-color-glass-border);
   --color-wheel-bottom-layer-background: var(--theme-light-color-wheel-bottom-layer-background);
+
+  --bgcolor-lightness: 60%;
+  --bgcolor-chroma: 0.15;
 }
