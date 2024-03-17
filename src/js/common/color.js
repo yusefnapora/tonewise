@@ -1,5 +1,5 @@
 // @ts-check
-
+import Color from 'colorjs.io'
 import { inferno, magma, plasma, viridis } from './color-scales/color-scales.js'
 
 /**
@@ -32,10 +32,6 @@ export const DEFAULT_COLOR_SCALE = 'oklch'
 
 /**
  * Given an `angle` in degrees, returns a CSS color string.
- *
- * The "color scale" / palette is determined by resolving the CSS variable `--color-scale`
- * using the computed styles of the given `elementScope`. If `elementScope` is not provided,
- * uses `document.body`, so will only pick up changes from the `:root` variable namespace.
  *
  * The default 'oklch' color scale uses the angle to set the hue in the
  * [oklch color space](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch).
@@ -87,4 +83,22 @@ function oklchColor(angle, opts) {
   const chroma = 'var(--color-primary-chroma, 0.26)'
   const hue = clockwise ? `${angle}deg` : `-${angle}deg`
   return `oklch(${lightness} ${chroma} ${hue})`
+}
+
+/**
+ * @param {string} backgroundColor
+ * @returns {string}
+ */
+export function getContrastingTextColor(backgroundColor) {
+  if (!backgroundColor.startsWith('#')) {
+    // HACK to avoid resolving css variables for the oklch-based color schemes
+    return 'var(--oklch-scale-text-color, white)'
+  }
+  const bg = new Color(backgroundColor)
+  const bgLightness  = bg.oklch[0]
+
+  if (bgLightness >= 0.7) {
+    return 'black'
+  }
+  return 'white'
 }

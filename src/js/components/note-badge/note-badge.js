@@ -125,10 +125,10 @@ export class NoteBadgeElement extends LitElement {
         }
       `)
     }
-
-    const activeNoteColor = activeNote
-      ? colorForAngle(activeNote.angle, colorScale)
-      : null
+    let activeNoteColor = 'var(--color-text)'
+    if (activeNote && colorScale.startsWith('oklch')) {
+      activeNoteColor = colorForAngle(activeNote.angle, colorScale)
+    }
     const label = this.label ?? activeNote?.id
 
     const fontSize = 400

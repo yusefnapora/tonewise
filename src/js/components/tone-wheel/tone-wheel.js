@@ -8,7 +8,7 @@ import {
 import { NoteHoldBeganEvent, NoteHoldEndedEvent } from './events.js'
 import { PitchClassElement } from './pitch-class.js'
 
-import { DEFAULT_COLOR_SCALE, colorForAngle } from '../../common/color.js'
+import { DEFAULT_COLOR_SCALE, colorForAngle, getContrastingTextColor } from '../../common/color.js'
 import { registerElement } from '../../common/dom.js'
 /**
  * @typedef {import('../../common/types.d.ts').Point} Point
@@ -247,11 +247,16 @@ export class ToneWheel extends LitElement {
       }
 
       const color = colorForAngle(intervalAngle, this.colorScale)
+      const textColor = getContrastingTextColor(color)
       colors.push(color)
       styleContent += `
         .${className} { 
           stroke: ${color};
           fill: ${color};
+        }
+        .${className} .tone-label {
+          stroke: ${textColor};
+          fill: ${textColor};
         }
 			`
 
