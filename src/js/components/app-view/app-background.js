@@ -19,6 +19,9 @@ export class AppBackgroundElement extends LitElement {
       place-content: center;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr;
+
+      --color-primary-lightness: var(--bgcolor-lightness);
+      --color-primary-chroma: var(--bgcolor-chroma);
     }
 
     :host > * {
@@ -29,9 +32,6 @@ export class AppBackgroundElement extends LitElement {
     .app-background {
       min-width: 100vw;
       min-height: min(100vh, 100dvh);
-
-      --color-primary-lightness: var(--bgcolor-lightness);
-      --color-primary-chroma: var(--bgcolor-chroma);
     }
   `
 

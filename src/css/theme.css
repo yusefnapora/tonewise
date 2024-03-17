@@ -4,6 +4,7 @@
   --theme-dark-color-primary: hsl(342, 71.1%, 53.9%);
   --theme-dark-color-text: white;
   --theme-dark-color-text-muted: #aaa;
+  --theme-dark-color-wheel-bottom-layer-background: black;
 
   --theme-light-color-background: hsl(30, 67%, 98%);
   /* --theme-light-color-muted: hsl(208, 31.9%, 81.6%); */
@@ -13,6 +14,7 @@
   --theme-light-color-primary: hsl(342.3, 84.9%, 46.9%);
   --theme-light-color-text: black;
   --theme-light-color-text-muted: #666;
+  --theme-light-color-wheel-bottom-layer-background: white;
 
   --wheel-gradient-background-opacity: 0.5;
   --wheel-gradient-background-vibrant-opacity: 1;
@@ -27,6 +29,7 @@ html {
   --color-text-muted: var(--theme-dark-color-text-muted);
   --color-glass-background: var(--theme-dark-color-glass-background);
   --color-glass-border: var(--theme-dark-color-glass-border);
+  --color-wheel-bottom-layer-background: var(--theme-dark-wheel-bottom-layer-background);
 
   --bgcolor-lightness: 40%;
   --bgcolor-chroma: 0.075;
@@ -46,6 +49,7 @@ html {
     --color-text-muted: var(--theme-light-color-text-muted);
     --color-glass-background: var(--theme-light-color-glass-background);
     --color-glass-border: var(--theme-light-color-glass-border);
+    --color-wheel-bottom-layer-background: var(--theme-light-wheel-bottom-layer-background);
 
     --bgcolor-lightness: 60%;
     --bgcolor-chroma: 0.15;
@@ -60,4 +64,5 @@ html.light-theme {
   --color-text-muted: var(--theme-light-color-text-muted);
   --color-glass-background: var(--theme-light-color-glass-background);
   --color-glass-border: var(--theme-light-color-glass-border);
+  --color-wheel-bottom-layer-background: var(--theme-light-wheel-bottom-layer-background);
 }

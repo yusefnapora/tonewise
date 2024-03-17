@@ -111,7 +111,10 @@ export class ToneWheel extends LitElement {
       opacity: 1;
     }
 
-    /** todo: generate while building the wheel */
+    .base-background-layer {
+      background-color: var(--color-wheel-bottom-layer-background);
+    }
+
     .gradient-background {
       clip-path: url(#gradient-clip);
       width: 100%;
@@ -161,6 +164,7 @@ export class ToneWheel extends LitElement {
       <style>
         ${styleContent}
       </style>
+      <div class="base-background-layer"></div>
       <div class="gradient-background gradient-colors">
         <div class="gradient-blur"></div>
       </div>

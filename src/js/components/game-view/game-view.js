@@ -20,7 +20,6 @@ import {
 const TOOLBAR_ICON_SIZE = css`calc(48px + var(--toolbar-padding))`
 const PANEL_SIZE_PX = css`128px`
 const PANEL_SIZE = css`minmax(${PANEL_SIZE_PX}, 1fr)`
-const STATUS_MSG_SIZE = css`1fr`
 const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 85dvw)`
 const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(85dvw - 248px), 85dvh)`
 
@@ -69,6 +68,7 @@ export class GameViewElement extends LitElement {
 
     .wheel {
       grid-area: wheel;
+      width: 100%;
     }
 
     .progress {
@@ -191,7 +191,7 @@ export class GameViewElement extends LitElement {
         <div class="status">
           <game-status-message></game-status-message>
         </div>
-        <glass-panel class="wheel">
+        <div class="wheel">
           <tone-wheel
             color-scale=${colorScale}
             @note:holdBegan=${this.#pitchSelected}
@@ -199,7 +199,7 @@ export class GameViewElement extends LitElement {
           >
             ${pitchClasses}
           </tone-wheel>
-        </glass-panel>
+        </div>
         <glass-panel class="progress">
           <progress-view></progress-view>
         </glass-panel>

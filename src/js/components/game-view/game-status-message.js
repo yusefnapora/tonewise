@@ -21,6 +21,7 @@ export class GameStatusMessageElement extends LitElement {
     .message {
       width: 100%;
       text-align: center;
+      font-family: var(--status-message-font-family);
       font-size: 1.6rem;
     }
     /* @media (orientation: landscape) {
@@ -38,7 +39,7 @@ export class GameStatusMessageElement extends LitElement {
 
     let message = 'Press play'
     if (started) {
-      message = 'Find the hidden note'
+      message = 'Tap the hidden note'
     }
     if (completed) {
       // todo: show interval name

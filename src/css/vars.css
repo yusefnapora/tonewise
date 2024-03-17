@@ -29,6 +29,7 @@
   --glass-panel-padding: 10px;
 
   --heading-font-family: 'Timeburner', sans-serif;
+  --status-message-font-family: var(--heading-font-family);
   /* --note-font-family: 'Seravek', 'Gill Sans Nova', 'Ubuntu', 'Calibri', 'DejaVu Sans', 'source-sans-pro', sans-serif;  */
   --note-font-family: 'Ubuntu Mono', monospace;
 }
