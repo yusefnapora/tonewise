@@ -16,6 +16,7 @@ import {
   selectMidiNote,
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
+import { landscapeMediaQuery } from '../../styles.js'
 
 const TOOLBAR_ICON_SIZE = css`calc(48px + var(--toolbar-padding))`
 const PANEL_SIZE_PX = css`128px`
@@ -77,7 +78,7 @@ export class GameViewElement extends LitElement {
       /* height: 100%; */
     }
 
-    @media (orientation: landscape) {
+    ${landscapeMediaQuery} {
       .contents {
         display: grid;
         flex: 1;

@@ -6,6 +6,7 @@ import {
   selectNoteLabel,
 } from '../../state/selectors/selectors.js'
 import { restartGame, startNewGame } from '../../state/sequences/game-sequences.js'
+import { landscapeMediaQuery } from '../../styles.js'
 
 export class ProgressViewElement extends LitElement {
   static styles = css`
@@ -57,7 +58,7 @@ export class ProgressViewElement extends LitElement {
       /* margin-right: 5px; */
     }
 
-    @media (orientation: landscape) {
+    ${landscapeMediaQuery} {
       .content {
         flex-direction: column;
         height: 100%;

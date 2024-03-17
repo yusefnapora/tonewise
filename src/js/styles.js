@@ -9,3 +9,7 @@ export const cardStyleBase = css`
     border: 1px solid var(--color-glass-border);
   }
 `
+
+export const landscapeMediaQuery = css`
+  @media (orientation: landscape) and (max-height: 500px)
+`

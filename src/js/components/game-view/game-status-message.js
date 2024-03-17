@@ -5,6 +5,7 @@ import {
   isGameCompleted,
   isGameStarted,
 } from '../../state/selectors/selectors.js'
+import { landscapeMediaQuery } from '../../styles.js'
 
 export class GameStatusMessageElement extends LitElement {
   static styles = css`
@@ -25,7 +26,7 @@ export class GameStatusMessageElement extends LitElement {
       font-family: var(--status-message-font-family);
       font-size: 1.6rem;
     }
-    @media (orientation: landscape) {
+    ${landscapeMediaQuery} {
       :host {
         justify-content: flex-start;
       }

@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit'
 import { registerElement } from '../../common/dom.js'
-import { cardStyleBase } from '../../styles.js'
+import { cardStyleBase, landscapeMediaQuery } from '../../styles.js'
 import { resumeAudio } from '../../state/slices/audio-slice.js'
 
 const appName = `Training Wheels`
@@ -41,7 +41,7 @@ export class WelcomeViewElement extends LitElement {
       grid-column: 1;
     }
 
-    @media (orientation: landscape) {
+    ${landscapeMediaQuery} {
       /* :host {
         max-width: min(800px, calc(100vw - 64px));
       } */
