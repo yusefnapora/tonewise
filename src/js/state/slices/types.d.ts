@@ -62,7 +62,9 @@ export type TuningState = {
 }
 
 import type { ColorScaleName } from '../../common/types.d.ts'
+export type SystemColorTheme = 'dark' | 'light' | 'auto'
 export type PreferencesState = {
+  theme: SystemColorTheme
   colorScale: ColorScaleName
   enharmonicPresentation: EnharmonicPresentation
 }

@@ -84,6 +84,11 @@ export const selectColorScale = createSelector(
   (prefs) => prefs.colorScale,
 )
 
+export const selectColorTheme = createSelector(
+  [selectPreferencesState],
+  (prefs) => prefs.theme
+)
+
 export const selectTuningNoteIds = createSelector(
   [selectTuningState],
   (tuning) => tuning.noteIds,

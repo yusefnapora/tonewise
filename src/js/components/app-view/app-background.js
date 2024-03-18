@@ -41,10 +41,12 @@ export class AppBackgroundElement extends LitElement {
   render() {
     const noteIds = this.#stateController.select(selectTuningNoteIds)
     const colorScale = this.#stateController.select(selectColorScale)
-
+    
     let background = 'var(--color-background)'
     let themeColor = background
     if (colorScale.startsWith('oklch')) {
+      // todo: pull this into a helper that builds the conic-gradient(...)
+      // for the current tuning & color scale
       const colors = [...noteIds, noteIds[0]].map((noteId) => {
         const angle = this.#stateController.select(selectNoteAngle, noteId)
         return colorForAngle(angle, colorScale)

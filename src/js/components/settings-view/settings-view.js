@@ -5,12 +5,14 @@ import { COLOR_SCALE_NAMES, asColorScaleName } from '../../common/color.js'
 import { StateController } from '../../state/controller.js'
 import {
   selectColorScale,
+  selectColorTheme,
   selectEnharmonicPresentation,
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
 import {
   setColorScale,
   setEnharmonicPresentation,
+  setSystemColorTheme,
 } from '../../state/slices/preferences-slice.js'
 import { landscapeMediaQuery } from '../../styles.js'
 
@@ -82,6 +84,7 @@ export class SettingsViewElement extends LitElement {
     )
     const colorScale = this.#stateController.select(selectColorScale)
     const wheelNotes = this.#stateController.select(selectWheelNotes)
+    const theme = this.#stateController.select(selectColorTheme)
 
     const pitchClasses = wheelNotes.map(
       ({ noteId, label }) => html`
@@ -113,6 +116,14 @@ export class SettingsViewElement extends LitElement {
       }
     }
 
+    /** @param {CustomEvent} e */
+    const themeChanged = (e) => {
+      const val = e.target['value']
+      if (val === 'dark' || val === 'light' || val === 'auto') {
+        this.#stateController.dispatch(setSystemColorTheme(val))
+      }
+    }
+
     //@ts-expect-error
     this.renderRoot.querySelector('tone-wheel')?.requestUpdate()
 
@@ -127,6 +138,27 @@ export class SettingsViewElement extends LitElement {
           <tone-wheel color-scale=${colorScale}> ${pitchClasses} </tone-wheel>
 
           <div class="appearance-controls">
+            <div class="control">
+              <sl-radio-group
+                label="Theme"
+                name="theme"
+                value="${theme}"
+                @sl-change=${themeChanged}
+              >
+                <sl-radio-button value="dark">
+                  <sl-icon name="moon" slot="prefix"></sl-icon>
+                  Dark
+                </sl-radio-button>
+                <sl-radio-button value="light">
+                  <sl-icon name="sun" slot="prefix"></sl-icon>
+                  Light
+                </sl-radio-button>
+                <sl-radio-button value="auto">
+                  <sl-icon name="brilliance" slot="prefix"></sl-icon>
+                  Auto
+                </sl-radio-button>
+              </sl-radio-group>
+            </div>
             <div class="control">
               <sl-select
                 label="Color palette"
