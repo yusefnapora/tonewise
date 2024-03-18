@@ -1,5 +1,8 @@
 export * from './components/index.js'
 
+import { unmuteIosAudio } from './audio/unmute-ios.js'
+unmuteIosAudio()
+
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import '@shoelace-style/shoelace/dist/components/card/card.js'
 import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js'
@@ -17,6 +20,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   setBasePath('/node_modules/@shoelace-style/shoelace/dist')
 }
+
 
 /**
  * @param {'dark'|'light'} scheme
