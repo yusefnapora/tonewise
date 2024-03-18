@@ -11,7 +11,7 @@ A game for learning musical intervals
 export class WelcomeViewElement extends LitElement {
   static styles = css`
     :host {
-      padding: 16px;
+      /* padding: 16px; */
       max-width: min(600px, calc(100vw - 32px));
     }
 
@@ -22,7 +22,7 @@ export class WelcomeViewElement extends LitElement {
     }
 
     glass-panel {
-      padding: 20px;
+      --glass-panel-padding: 20px;
     }
 
     .app-title {
