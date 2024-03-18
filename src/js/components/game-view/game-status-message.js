@@ -3,12 +3,10 @@ import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
   isGameCompleted,
-  isGameStarted,
   selectStatusMessage,
   selectTargetName,
 } from '../../state/selectors/selectors.js'
 import { landscapeMediaQuery } from '../../styles.js'
-import { intervalDisplayName, midiNoteInterval } from '../../common/intervals.js'
 
 export class GameStatusMessageElement extends LitElement {
   static styles = css`

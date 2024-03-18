@@ -25,6 +25,14 @@ export const selectTuningState = (state) => state.tuning
  */
 export const selectPreferencesState = (state) => state.preferences
 
+/** @param {RootState} state */
+export const selectAudioState = (state) => state.audio
+
+export const selectAudioLoadingState = createSelector(
+  [selectAudioState],
+  (audio) => audio.samplerLoading
+)
+
 export const selectCurrentRound = createSelector(
   [selectGameState],
   (game) => game.currentRound,
@@ -81,8 +89,11 @@ export const selectActiveNoteIds = createSelector(
 )
 
 export const selectStatusMessage = createSelector(
-  [selectCurrentRound],
-  (currentRound) => {
+  [selectCurrentRound, selectAudioLoadingState],
+  (currentRound, loading) => {
+    if (loading === 'loading') {
+      return 'Loading...'
+    }
     if (!currentRound) {
       return 'Press play'
     }

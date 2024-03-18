@@ -2,6 +2,7 @@ import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
+  selectAudioLoadingState,
   selectCurrentRound,
   selectNoteLabel,
 } from '../../state/selectors/selectors.js'
@@ -87,6 +88,13 @@ export class ProgressViewElement extends LitElement {
   }
 
   render() {
+    const audioLoadingState = this.#stateController.select(selectAudioLoadingState)
+    if (audioLoadingState === 'loading') {
+      return html`
+      <div class="content not-playing">
+        <sl-spinner></sl-spinner> 
+      </div>` 
+    }
     const currentRound = this.#stateController.select(selectCurrentRound)
     if (!currentRound) {
       return html`
