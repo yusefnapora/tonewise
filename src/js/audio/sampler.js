@@ -23,6 +23,7 @@ export class Sampler {
 
     this.#instrument = new SplendidGrandPiano(this.#audioContext, {
       storage,
+      baseUrl: '/assets/audio/splendid-grand-piano',
       notesToLoad: {
         notes: NOTES_TO_LOAD,
         velocityRange: [VELOCITY, VELOCITY],
