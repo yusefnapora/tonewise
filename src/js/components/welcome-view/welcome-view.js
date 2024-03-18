@@ -21,7 +21,7 @@ export class WelcomeViewElement extends LitElement {
       grid-template-columns: 1fr;
     }
 
-    .content glass-panel {
+    glass-panel {
       padding: 20px;
     }
 
@@ -70,9 +70,9 @@ export class WelcomeViewElement extends LitElement {
 
   render() {
     return html`
+      <glass-panel>
         <div class="content">
-          <glass-panel>
-          <h1 class="app-title">${appName}</h1>
+           <h1 class="app-title">${appName}</h1>
           <p class="welcome-text">${welcomeText}</p>
           <nav>
             <ul>
@@ -84,8 +84,8 @@ export class WelcomeViewElement extends LitElement {
               <li><app-link href="settings">Settings</app-link></li>
             </ul>
           </nav>
-          </glass-panel>
         </div>
+      </glass-panel>
     `
   }
 }
