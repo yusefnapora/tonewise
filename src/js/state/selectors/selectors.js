@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit'
+import { intervalDisplayName, midiNoteInterval } from '../../common/intervals.js'
 /**
  * @typedef {import('../store.js').RootState} RootState
  * @typedef {import('../store.js').AppDispatch} AppDispatch
@@ -77,6 +78,38 @@ export const selectActiveNoteIds = createSelector(
 
     return allActive
   },
+)
+
+export const selectStatusMessage = createSelector(
+  [selectCurrentRound],
+  (currentRound) => {
+    if (!currentRound) {
+      return 'Press play'
+    }
+    if (isGameCompleted.resultFunc(currentRound)) {
+      return 'Great job!'
+    }
+    return 'Tap the hidden note'
+  }
+)
+
+export const selectTargetName = createSelector(
+  [selectTuningState, selectCurrentRound],
+  (tuning, currentRound) => {
+    if (!currentRound) {
+      return undefined
+    }
+
+    const { tonic, targets } = currentRound.rules
+    const tonicMidi = tuning.midiNotes[tonic.id]
+    if (targets.length !== 1) {
+      console.warn('more than one target not yet implemented')
+      return undefined
+    }
+    const targetMidi = tuning.midiNotes[targets[0].id]
+    const interval = midiNoteInterval(tonicMidi, targetMidi)
+    return intervalDisplayName(interval)
+  }
 )
 
 export const selectColorScale = createSelector(

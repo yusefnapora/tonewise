@@ -4,6 +4,8 @@ import { StateController } from '../../state/controller.js'
 import {
   isGameCompleted,
   isGameStarted,
+  selectStatusMessage,
+  selectTargetName,
 } from '../../state/selectors/selectors.js'
 import { landscapeMediaQuery } from '../../styles.js'
 import { intervalDisplayName, midiNoteInterval } from '../../common/intervals.js'
@@ -40,29 +42,13 @@ export class GameStatusMessageElement extends LitElement {
 
 
   render() {
-    const started = this.#stateController.select(isGameStarted)
-    const completed = this.#stateController.select(isGameCompleted)
+    const isCompleted = this.#stateController.select(isGameCompleted)
+    const message = this.#stateController.select(selectStatusMessage)
+    const intervalName = this.#stateController.select(selectTargetName)
 
-    let message = 'Press play'
-    let intervalName = ''
-    if (started) {
-      message = 'Tap the hidden note'
-    }
-    if (completed) {
-      // todo: show interval name
-      message = 'Great job!'
-
-      const { tuning, game } = this.#stateController.state
-      const { tonic, targets } = game.currentRound.rules
-      const tonicMidi = tuning.midiNotes[tonic.id]
-      if (targets.length === 1) {
-        const targetMidi = tuning.midiNotes[targets[0].id]
-        const interval = midiNoteInterval(tonicMidi, targetMidi)
-        intervalName = intervalDisplayName(interval)
-      }
-    }
-
-    const intervalDisplay = intervalName === '' ? undefined : html`<p>${intervalName}</p>`
+    const intervalDisplay = isCompleted
+      ? html`<p>${intervalName}</p>`
+      : undefined
 
     console.log('status message', message)
     return html`
