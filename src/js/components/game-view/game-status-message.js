@@ -6,6 +6,7 @@ import {
   isGameStarted,
 } from '../../state/selectors/selectors.js'
 import { landscapeMediaQuery } from '../../styles.js'
+import { intervalDisplayName, midiNoteInterval } from '../../common/intervals.js'
 
 export class GameStatusMessageElement extends LitElement {
   static styles = css`
@@ -22,6 +23,9 @@ export class GameStatusMessageElement extends LitElement {
     .message {
       width: 100%;
       height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       text-align: center;
       font-family: var(--status-message-font-family);
       font-size: 1.6rem;
@@ -40,17 +44,32 @@ export class GameStatusMessageElement extends LitElement {
     const completed = this.#stateController.select(isGameCompleted)
 
     let message = 'Press play'
+    let intervalName = ''
     if (started) {
       message = 'Tap the hidden note'
     }
     if (completed) {
       // todo: show interval name
       message = 'Great job!'
+
+      const { tuning, game } = this.#stateController.state
+      const { tonic, targets } = game.currentRound.rules
+      const tonicMidi = tuning.midiNotes[tonic.id]
+      if (targets.length === 1) {
+        const targetMidi = tuning.midiNotes[targets[0].id]
+        const interval = midiNoteInterval(tonicMidi, targetMidi)
+        intervalName = intervalDisplayName(interval)
+      }
     }
+
+    const intervalDisplay = intervalName === '' ? undefined : html`<p>${intervalName}</p>`
 
     console.log('status message', message)
     return html`
-      <div class="message">${message}</div>
+      <div class="message">
+        ${message}
+        ${intervalDisplay}
+      </div>
     `
   }
 }

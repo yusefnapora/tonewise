@@ -1,5 +1,4 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { html, nothing } from 'lit'
 /**
  * @typedef {import('../store.js').RootState} RootState
  * @typedef {import('../store.js').AppDispatch} AppDispatch
