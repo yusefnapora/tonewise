@@ -26,7 +26,7 @@ export class ProgressViewElement extends LitElement {
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-evenly;
       width: 100%;
       height: 100%;
       /* margin: 10px; */
@@ -50,6 +50,7 @@ export class ProgressViewElement extends LitElement {
       width: 64px;
       height: 64px;
       margin: 8px;
+      margin-right: 16px;
     }
 
     note-badge.hidden {
