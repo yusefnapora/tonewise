@@ -96,16 +96,8 @@ export class ToneWheel extends LitElement {
       transition: opacity 0.2s ease-in-out;
     }
 
-    @media (prefers-color-scheme: light) {
-      .pitch-line .outline {
-        stroke: black;
-      }
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .pitch-line .outline {
-        stroke: white;
-      }
+    .pitch-line .outline {
+        stroke: var(--color-text);
     }
 
     .tone-group.active > .pitch-line {
