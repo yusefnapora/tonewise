@@ -93,6 +93,7 @@ export class ToneWheel extends LitElement {
 
     .pitch-line {
       opacity: 0;
+      transition: opacity 0.2s ease-in-out;
     }
 
     @media (prefers-color-scheme: light) {
