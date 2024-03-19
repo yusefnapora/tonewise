@@ -1,9 +1,8 @@
 import { LitElement, css, html, svg } from 'lit'
-import { DEFAULT_COLOR_SCALE, colorForAngle } from '../../common/color.js'
+import { colorForAngle } from '../../common/color.js'
 import { registerElement } from '../../common/dom.js'
 import {
   calculateSegmentAngles,
-  degreesBetween,
   rimSegmentSVGPath,
 } from '../../common/geometry.js'
 import { StateController } from '../../state/controller.js'
