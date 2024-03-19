@@ -93,7 +93,7 @@ export class ToneWheel extends LitElement {
 
     .pitch-line {
       opacity: 0;
-      transition: opacity 0.2s ease-in-out;
+      transition: opacity 0.2s ease-out;
     }
 
     .pitch-line .outline {
@@ -101,6 +101,7 @@ export class ToneWheel extends LitElement {
     }
 
     .tone-group.active > .pitch-line {
+      transition: opacity 0s;
       opacity: 1;
     }
 
@@ -125,6 +126,11 @@ export class ToneWheel extends LitElement {
     .vibrant {
       clip-path: url(#vibrant-gradient-reveal);
       opacity: var(--wheel-gradient-background-vibrant-opacity, 1);
+    }
+
+    .vibrant.hidden {
+      opacity: 0;
+      transition: opacity 0.2s ease-out;
     }
 
     .gradient-blur {
@@ -353,8 +359,11 @@ export class ToneWheel extends LitElement {
       .filter(({ pitchClass }) => pitchClass.active)
       .map(({ angle }) => angle)
 
-    let revealMaskPath = ''
+    const revealClipPath = this.renderRoot.querySelector('#vibrant-gradient-reveal > path')
+    let revealMaskPath = revealClipPath?.getAttribute('d') ?? ''
+    let showVibrantBackground = false
     if (activeIntervalAngles.length >= 2) {
+      showVibrantBackground = true
       const startAngle = activeIntervalAngles[0] + this.rotationOffset
       const endAngle =
         activeIntervalAngles[activeIntervalAngles.length - 1] +
@@ -367,7 +376,9 @@ export class ToneWheel extends LitElement {
         endAngle,
       })
     }
-
+    const vibrantBackgroundElement = this.renderRoot.querySelector('.vibrant')
+    vibrantBackgroundElement?.classList.toggle('hidden', !showVibrantBackground)
+    
     const content = svg`
     <defs>
       <clipPath id="gradient-clip" clipPathUnits="objectBoundingBox">

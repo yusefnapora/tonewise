@@ -122,7 +122,6 @@ export class ProgressViewElement extends LitElement {
     const challengePlaying = currentRound.challengePlaying ?? false
 
     const noteInfo = this.#stateController.select(selectProgressNoteBadgeInfo)
-    console.log({ noteInfo })
 
     const noteBadges = noteInfo.map((info) => {
       const { noteId, noteRevealed, highlighted, hidden } = info
