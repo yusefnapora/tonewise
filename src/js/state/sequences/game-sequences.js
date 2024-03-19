@@ -25,13 +25,24 @@ export function newRound(rules) {
  * @param {AppDispatch} dispatch
  */
 export function startNewGame(state, dispatch) {
-  const tonic = getRandomNoteId(state)
-  let target = getRandomNoteId(state)
+  const tonic = getRandomNote(state)
+  let target = getRandomNote(state)
   while (target.id === tonic.id) {
-    target = getRandomNoteId(state)
+    target = getRandomNote(state)
   }
   const rules = { tonic, targets: [target] }
   const round = newRound(rules)
+  
+  // prevent having the same round twice in a row
+  const { currentRound } = state.game
+  if (currentRound){
+    const current = [currentRound.rules.tonic, ...currentRound.rules.targets]
+    const next = [tonic, ...rules.targets]
+    if (current.every((note, i) => next[i]?.id === note.id)) {
+      startNewGame(state, dispatch)
+      return
+    }
+  }
 
   dispatch(start(round))
   dispatch(resetInstrumentState())
@@ -65,7 +76,7 @@ export function endGame(dispatch) {
  * @param {RootState} state
  * @returns {{ id: string }}
  */
-export function getRandomNoteId(state) {
+export function getRandomNote(state) {
   const { noteIds } = state.tuning
   const id = noteIds[Math.floor(Math.random() * noteIds.length)]
   return { id }
