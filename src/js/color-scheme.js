@@ -20,7 +20,9 @@ function applyColorScheme(scheme) {
  * @param {'dark'|'light'} scheme
  */
 function applyPreferredColorScheme(scheme) {
-  const { preferences: { theme } } = store.getState()
+  const {
+    preferences: { theme },
+  } = store.getState()
   if (theme !== 'auto') {
     return
   }
@@ -53,7 +55,9 @@ export function setupColorScheme() {
     })
 
   store.subscribe(() => {
-    const { preferences: { theme } } = store.getState()
+    const {
+      preferences: { theme },
+    } = store.getState()
     if (theme === currentColorScheme) {
       return
     }

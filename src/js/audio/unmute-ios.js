@@ -11,23 +11,24 @@ const USER_ACTIVATION_EVENTS = [
   'keyup',
   'mousedown',
   'mouseup',
-  'touchend'
+  'touchend',
 ]
 
-export function unmuteIosAudio () {
+export function unmuteIosAudio() {
   const AudioContext = window.AudioContext
 
   const platform = navigator.userAgentData?.platform ?? navigator.platform
-  const isIOS = [
+  const isIOS =
+    [
       'iPad Simulator',
       'iPhone Simulator',
       'iPod Simulator',
       'iPad',
       'iPhone',
-      'iPod'
-    ].includes(platform)
+      'iPod',
+    ].includes(platform) ||
     // iPad on iOS 13 detection
-    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
 
   if (!isIOS) {
     console.log('not ios', { AudioContext })
@@ -42,17 +43,18 @@ export function unmuteIosAudio () {
   let context
   let source
 
-  const sampleRate = (new AudioContext()).sampleRate
+  const sampleRate = new AudioContext().sampleRate
   const silentAudioFile = createSilentAudioFile(sampleRate)
 
-  USER_ACTIVATION_EVENTS.forEach(eventName => {
-    window.addEventListener(
-      eventName, handleUserActivation, { capture: true, passive: true }
-    )
+  USER_ACTIVATION_EVENTS.forEach((eventName) => {
+    window.addEventListener(eventName, handleUserActivation, {
+      capture: true,
+      passive: true,
+    })
   })
 
   // Return a seven samples long 8 bit mono WAVE file
-  function createSilentAudioFile (sampleRate) {
+  function createSilentAudioFile(sampleRate) {
     const arrayBuffer = new ArrayBuffer(10)
     const dataView = new DataView(arrayBuffer)
 
@@ -60,14 +62,14 @@ export function unmuteIosAudio () {
     dataView.setUint32(4, sampleRate, true)
     dataView.setUint16(8, 1, true)
 
-    const missingCharacters =
-      window.btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
-        .slice(0, 13)
+    const missingCharacters = window
+      .btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
+      .slice(0, 13)
 
     return `data:audio/wav;base64,UklGRisAAABXQVZFZm10IBAAAAABAAEA${missingCharacters}AgAZGF0YQcAAACAgICAgICAAAA=`
   }
 
-  function handleUserActivation (e) {
+  function handleUserActivation(e) {
     if (htmlAudioState === 'blocked') {
       htmlAudioState = 'pending'
       createHtmlAudio()
@@ -78,7 +80,7 @@ export function unmuteIosAudio () {
     // }
   }
 
-  function createHtmlAudio () {
+  function createHtmlAudio() {
     console.log('createHtmlAudio')
     audio = document.createElement('audio')
 
@@ -100,11 +102,11 @@ export function unmuteIosAudio () {
         audio.removeAttribute('src')
         audio.load()
         audio = null
-      }
+      },
     )
   }
 
-  function createWebAudio () {
+  function createWebAudio() {
     context = new AudioContext()
 
     source = context.createBufferSource()
@@ -126,13 +128,14 @@ export function unmuteIosAudio () {
     }
   }
 
-  function maybeCleanup () {
+  function maybeCleanup() {
     if (htmlAudioState !== 'allowed' || webAudioState !== 'allowed') return
 
-    USER_ACTIVATION_EVENTS.forEach(eventName => {
-      window.removeEventListener(
-        eventName, handleUserActivation, { capture: true, passive: true }
-      )
+    USER_ACTIVATION_EVENTS.forEach((eventName) => {
+      window.removeEventListener(eventName, handleUserActivation, {
+        capture: true,
+        passive: true,
+      })
     })
   }
 }

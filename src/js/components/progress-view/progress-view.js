@@ -7,7 +7,10 @@ import {
   selectNoteLabel,
   selectProgressNoteBadgeInfo,
 } from '../../state/selectors/selectors.js'
-import { restartGame, startNewGame } from '../../state/sequences/game-sequences.js'
+import {
+  restartGame,
+  startNewGame,
+} from '../../state/sequences/game-sequences.js'
 import { landscapeMediaQuery } from '../../styles.js'
 
 export class ProgressViewElement extends LitElement {
@@ -34,7 +37,7 @@ export class ProgressViewElement extends LitElement {
 
     .content.not-playing {
       justify-content: center;
-      font-size: 48px; 
+      font-size: 48px;
     }
 
     .badges {
@@ -101,24 +104,27 @@ export class ProgressViewElement extends LitElement {
   }
 
   render() {
-    const audioLoadingState = this.#stateController.select(selectAudioLoadingState)
+    const audioLoadingState = this.#stateController.select(
+      selectAudioLoadingState,
+    )
     if (audioLoadingState === 'loading') {
-      return html`
-      <div class="content not-playing">
-        <sl-spinner></sl-spinner> 
-      </div>` 
+      return html` <div class="content not-playing">
+        <sl-spinner></sl-spinner>
+      </div>`
     }
     const currentRound = this.#stateController.select(selectCurrentRound)
     if (!currentRound) {
-      return html`
-        <div class="content not-playing">
-            <sl-icon-button
-              name="play-fill"
-              label="New game"
-              @click=${() => startNewGame(this.#stateController.state, this.#stateController.dispatch)}
-            >
-            </sl-icon-button>
-        </div>`
+      return html` <div class="content not-playing">
+        <sl-icon-button
+          name="play-fill"
+          label="New game"
+          @click=${() =>
+            startNewGame(
+              this.#stateController.state,
+              this.#stateController.dispatch,
+            )}>
+        </sl-icon-button>
+      </div>`
     }
     const challengePlaying = currentRound.challengePlaying ?? false
 
@@ -133,32 +139,36 @@ export class ProgressViewElement extends LitElement {
           note-id=${noteId}
           label=${label}
           reveal=${noteRevealed ? 'true' : nothing}
-          highlight=${highlighted ? 'true' : nothing}
-        ></note-badge>
-      ` 
+          highlight=${highlighted ? 'true' : nothing}></note-badge>
+      `
     })
 
-    const statusView = html`
-    <div class="badges">
-      ${noteBadges}
-    </div>
-  `
+    const statusView = html` <div class="badges">${noteBadges}</div> `
 
     const replayButton = html`
-        <sl-icon-button 
-          name="arrow-counterclockwise" 
-          @click=${() => restartGame(this.#stateController.state, this.#stateController.dispatch)}>
-        </sl-icon-button>
-        `
-    
-    const nextRoundButton = html`
-    <sl-icon-button 
-      name="chevron-double-right" 
-      @click=${() => startNewGame(this.#stateController.state, this.#stateController.dispatch)}>
-    </sl-icon-button>
+      <sl-icon-button
+        name="arrow-counterclockwise"
+        @click=${() =>
+          restartGame(
+            this.#stateController.state,
+            this.#stateController.dispatch,
+          )}>
+      </sl-icon-button>
     `
 
-    const showReplayButton = !challengePlaying && !currentRound.progress.isCompleted 
+    const nextRoundButton = html`
+      <sl-icon-button
+        name="chevron-double-right"
+        @click=${() =>
+          startNewGame(
+            this.#stateController.state,
+            this.#stateController.dispatch,
+          )}>
+      </sl-icon-button>
+    `
+
+    const showReplayButton =
+      !challengePlaying && !currentRound.progress.isCompleted
     const showNextRound = currentRound.progress.isCompleted === true
 
     const buttons = html`
@@ -168,12 +178,7 @@ export class ProgressViewElement extends LitElement {
       </div>
     `
 
-    return html`
-      <div class="content">
-        ${statusView}
-        ${buttons}
-      </div>
-    `
+    return html` <div class="content">${statusView} ${buttons}</div> `
   }
 }
 

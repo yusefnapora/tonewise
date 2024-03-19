@@ -1,15 +1,14 @@
 import { Interval } from 'tonal'
 
 /**
- * 
- * @param {number} a 
- * @param {number} b 
+ *
+ * @param {number} a
+ * @param {number} b
  */
 export function midiNoteInterval(a, b) {
   const semitones = Math.abs(a - b)
   return Interval.fromSemitones(semitones)
 }
-
 
 const QUALITY_NAMES = {
   dd: 'Double diminished',
@@ -17,7 +16,7 @@ const QUALITY_NAMES = {
   m: 'Minor',
   P: 'Perfect',
   M: 'Major',
-  A: 'Augmented'
+  A: 'Augmented',
 }
 
 const NUMBER_NAMES = {
@@ -32,7 +31,7 @@ const NUMBER_NAMES = {
 }
 
 /**
- * @param {string} interval 
+ * @param {string} interval
  */
 export function intervalDisplayName(interval) {
   const quality = Interval.quality(interval)

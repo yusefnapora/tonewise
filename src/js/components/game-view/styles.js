@@ -67,19 +67,18 @@ const styles = css`
       column-gap: 10px;
       row-gap: 0px;
 
-      grid-template-rows: 1fr; 
+      grid-template-rows: 1fr;
       grid-template-columns: 
-        /* .        */ ${TOOLBAR_ICON_SIZE}
+        /* .        */
+        ${TOOLBAR_ICON_SIZE}
         /* status   */ ${PANEL_SIZE}
         /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
         /* progress */ ${PANEL_SIZE}
         /* .        */ max(${TOOLBAR_ICON_SIZE}, 0px);
 
-        /* note: useless max() above is to trick the vscode lit plugin's invalid syntax checker,
+      /* note: useless max() above is to trick the vscode lit plugin's invalid syntax checker,
         which breaks if the last element before a ';' char is a template string interpolation */
-      grid-template-areas:
-        '. status wheel progress . '
-        ;
+      grid-template-areas: '. status wheel progress . ';
     }
     .status {
       height: ${WHEEL_SIZE_LANDSCAPE};
@@ -89,6 +88,6 @@ const styles = css`
       max-width: ${PANEL_SIZE_PX};
     }
   }
-  `
+`
 
 export default styles

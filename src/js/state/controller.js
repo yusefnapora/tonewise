@@ -81,7 +81,7 @@ export class StateController {
    * document.
    */
   hostDisconnected() {
-    this.unsubscribeFns.forEach(unsubscribe => unsubscribe())
+    this.unsubscribeFns.forEach((unsubscribe) => unsubscribe())
     this.unsubscribeFns = []
   }
   /**

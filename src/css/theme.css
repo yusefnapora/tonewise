@@ -29,7 +29,9 @@ html {
   --color-text-muted: var(--theme-dark-color-text-muted);
   --color-glass-background: var(--theme-dark-color-glass-background);
   --color-glass-border: var(--theme-dark-color-glass-border);
-  --color-wheel-bottom-layer-background: var(--theme-dark-color-wheel-bottom-layer-background);
+  --color-wheel-bottom-layer-background: var(
+    --theme-dark-color-wheel-bottom-layer-background
+  );
 
   --bgcolor-lightness: 40%;
   --bgcolor-chroma: 0.075;
@@ -47,7 +49,9 @@ html.light-theme {
   --color-text-muted: var(--theme-light-color-text-muted);
   --color-glass-background: var(--theme-light-color-glass-background);
   --color-glass-border: var(--theme-light-color-glass-border);
-  --color-wheel-bottom-layer-background: var(--theme-light-color-wheel-bottom-layer-background);
+  --color-wheel-bottom-layer-background: var(
+    --theme-light-color-wheel-bottom-layer-background
+  );
 
   --bgcolor-lightness: 60%;
   --bgcolor-chroma: 0.15;

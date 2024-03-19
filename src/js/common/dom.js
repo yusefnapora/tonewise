@@ -13,21 +13,25 @@ export function registerElement(tagName, elementClass) {
 }
 
 /**
- * @param {string} dark 
- * @param {string} [light] 
+ * @param {string} dark
+ * @param {string} [light]
  */
 export function setMetaThemeColors(dark, light) {
   light = light ?? dark
 
-  const lightMeta = document.querySelector('meta[name="theme-color"]:not([media])') 
-  const darkMeta = document.querySelector('meta[name="theme-color"][media="(prefers-color-scheme: dark)"]')
+  const lightMeta = document.querySelector(
+    'meta[name="theme-color"]:not([media])',
+  )
+  const darkMeta = document.querySelector(
+    'meta[name="theme-color"][media="(prefers-color-scheme: dark)"]',
+  )
 
   lightMeta?.setAttribute('content', light)
   darkMeta?.setAttribute('content', dark)
 }
 
 /**
- * @param {string} str 
+ * @param {string} str
  * @param {Element} [scope]
  */
 export function resolveCSSVariables(str, scope) {

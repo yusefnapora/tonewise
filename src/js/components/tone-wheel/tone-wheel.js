@@ -8,7 +8,11 @@ import {
 import { NoteHoldBeganEvent, NoteHoldEndedEvent } from './events.js'
 import { PitchClassElement } from './pitch-class.js'
 
-import { DEFAULT_COLOR_SCALE, colorForAngle, getContrastingTextColor } from '../../common/color.js'
+import {
+  DEFAULT_COLOR_SCALE,
+  colorForAngle,
+  getContrastingTextColor,
+} from '../../common/color.js'
 import { registerElement } from '../../common/dom.js'
 /**
  * @typedef {import('../../common/types.d.ts').Point} Point
@@ -97,7 +101,7 @@ export class ToneWheel extends LitElement {
     }
 
     .pitch-line .outline {
-        stroke: var(--color-text);
+      stroke: var(--color-text);
     }
 
     .tone-group.active > .pitch-line {
@@ -359,7 +363,9 @@ export class ToneWheel extends LitElement {
       .filter(({ pitchClass }) => pitchClass.active)
       .map(({ angle }) => angle)
 
-    const revealClipPath = this.renderRoot.querySelector('#vibrant-gradient-reveal > path')
+    const revealClipPath = this.renderRoot.querySelector(
+      '#vibrant-gradient-reveal > path',
+    )
     let revealMaskPath = revealClipPath?.getAttribute('d') ?? ''
     let showVibrantBackground = false
     if (activeIntervalAngles.length >= 2) {
@@ -378,7 +384,7 @@ export class ToneWheel extends LitElement {
     }
     const vibrantBackgroundElement = this.renderRoot.querySelector('.vibrant')
     vibrantBackgroundElement?.classList.toggle('hidden', !showVibrantBackground)
-    
+
     const content = svg`
     <defs>
       <clipPath id="gradient-clip" clipPathUnits="objectBoundingBox">

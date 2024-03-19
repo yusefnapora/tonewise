@@ -34,8 +34,7 @@ export class SettingsViewElement extends LitElement {
 
       grid-template-areas:
         'wheel'
-        'controls'
-        ;
+        'controls';
     }
 
     .card-title {
@@ -130,10 +129,8 @@ export class SettingsViewElement extends LitElement {
     return html`
       <nav-icon-bar></nav-icon-bar>
       <glass-panel>
-        <div class="card-title">
-          settings
-        </div>
-        
+        <div class="card-title">settings</div>
+
         <div class="appearance">
           <tone-wheel color-scale=${colorScale}> ${pitchClasses} </tone-wheel>
 
@@ -143,8 +140,7 @@ export class SettingsViewElement extends LitElement {
                 label="Theme"
                 name="theme"
                 value="${theme}"
-                @sl-change=${themeChanged}
-              >
+                @sl-change=${themeChanged}>
                 <sl-radio-button value="dark">
                   <sl-icon name="moon" slot="prefix"></sl-icon>
                   Dark
@@ -163,8 +159,7 @@ export class SettingsViewElement extends LitElement {
               <sl-select
                 label="Color palette"
                 value=${colorScale}
-                @sl-change=${colorChanged}
-              >
+                @sl-change=${colorChanged}>
                 ${colorOptions}
               </sl-select>
             </div>
@@ -174,8 +169,7 @@ export class SettingsViewElement extends LitElement {
                 label="Display sharps or flats?"
                 name="enharmonics"
                 value="${enharmonicPresentation}"
-                @sl-change=${enharmonicsChanged}
-              >
+                @sl-change=${enharmonicsChanged}>
                 <sl-radio-button value="sharp"
                   ><span class="enharmonic" slot="prefix">♯</span
                   >Sharps</sl-radio-button
@@ -187,7 +181,7 @@ export class SettingsViewElement extends LitElement {
               </sl-radio-group>
             </div>
           </div>
-      </div>
+        </div>
       </glass-panel>
     `
   }

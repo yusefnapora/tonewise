@@ -1,4 +1,4 @@
-import { LitElement,  html, nothing } from 'lit'
+import { LitElement, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import { guess } from '../../state/slices/game-slice.js'
@@ -58,7 +58,7 @@ export class GameViewElement extends LitElement {
     if (!midiNumber) {
       return
     }
-    this.#stateController.dispatch(triggerNoteStart({ id: noteId,  midiNumber }))
+    this.#stateController.dispatch(triggerNoteStart({ id: noteId, midiNumber }))
   }
 
   /**
@@ -81,8 +81,7 @@ export class GameViewElement extends LitElement {
         <pitch-class
           id=${noteId}
           midi-note=${midiNote}
-          active=${active || nothing}
-        >
+          active=${active || nothing}>
           ${label}
         </pitch-class>
       `,
@@ -103,8 +102,7 @@ export class GameViewElement extends LitElement {
           <tone-wheel
             color-scale=${colorScale}
             @note:holdBegan=${this.#pitchSelected}
-            @note:holdEnded=${this.#pitchDeselected}
-          >
+            @note:holdEnded=${this.#pitchDeselected}>
             ${pitchClasses}
           </tone-wheel>
         </div>

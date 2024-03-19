@@ -72,7 +72,7 @@ export class WelcomeViewElement extends LitElement {
     return html`
       <glass-panel>
         <div class="content">
-           <h1 class="app-title">${appName}</h1>
+          <h1 class="app-title">${appName}</h1>
           <p class="welcome-text">${welcomeText}</p>
           <nav>
             <ul>

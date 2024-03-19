@@ -11,5 +11,6 @@ export const cardStyleBase = css`
 `
 
 export const landscapeMediaQuery = css`
+  /* prettier-ignore */
   @media (orientation: landscape) and (max-height: 500px)
 `

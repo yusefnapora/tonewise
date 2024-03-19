@@ -95,7 +95,7 @@ export function getContrastingTextColor(backgroundColor) {
     return 'var(--color-text, white)'
   }
   const bg = new Color(backgroundColor)
-  const bgLightness  = bg.oklch[0]
+  const bgLightness = bg.oklch[0]
 
   if (bgLightness >= 0.7) {
     return 'black'

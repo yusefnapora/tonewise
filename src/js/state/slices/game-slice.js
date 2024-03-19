@@ -155,20 +155,29 @@ const gameSlice = createSlice({
           return
         }
         const noteId = action.payload.id
-        const challengeNoteIds = [currentRound.rules.tonic.id, ...currentRound.rules.targets.map(n => n.id)]
+        const challengeNoteIds = [
+          currentRound.rules.tonic.id,
+          ...currentRound.rules.targets.map((n) => n.id),
+        ]
 
         if (challengeNoteIds.includes(noteId)) {
           state.currentRound.challengeNotesSounding.push({ id: noteId })
-          state.currentRound.challengeNotesPlayed.push({id: noteId })
+          state.currentRound.challengeNotesPlayed.push({ id: noteId })
         }
       })
       .addCase(triggerNoteStop.pending, (state, action) => {
         const { currentRound } = state
-        if (!currentRound || !currentRound.challengePlaying || !currentRound.challengeNotesSounding) {
+        if (
+          !currentRound ||
+          !currentRound.challengePlaying ||
+          !currentRound.challengeNotesSounding
+        ) {
           return
         }
-        currentRound.challengeNotesSounding = currentRound.challengeNotesSounding
-          .filter(n => n.id !== action.meta.arg.id)
+        currentRound.challengeNotesSounding =
+          currentRound.challengeNotesSounding.filter(
+            (n) => n.id !== action.meta.arg.id,
+          )
       })
   },
 })

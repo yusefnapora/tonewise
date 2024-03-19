@@ -22,9 +22,9 @@ export class GlassPanelElement extends LitElement {
 
   render() {
     return html`
-    <div class="contents">
-      <slot></slot>
-    </div>
+      <div class="contents">
+        <slot></slot>
+      </div>
     `
   }
 }

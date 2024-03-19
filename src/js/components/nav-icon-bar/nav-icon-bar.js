@@ -16,7 +16,6 @@ export class NavIconBarElement extends LitElement {
       height: 100%;
     }
 
-
     .buttons {
       font-size: 36px;
       display: flex;
@@ -32,35 +31,35 @@ export class NavIconBarElement extends LitElement {
   `
   #stateController = new StateController(this)
 
-
   render() {
     const backButton = html`
-        <sl-icon-button
-          name="arrow-left-circle"
-          label="Leave game"
-          @click=${() => {
-            endGame(this.#stateController.dispatch)
-            window.history.back()
-          }}
-        >
-        </sl-icon-button>
-    ` 
+      <sl-icon-button
+        name="arrow-left-circle"
+        label="Leave game"
+        @click=${() => {
+          endGame(this.#stateController.dispatch)
+          window.history.back()
+        }}>
+      </sl-icon-button>
+    `
 
     const settingsButton = html`
       <sl-icon-button
         name="gear-wide"
         label="settings"
-        @click=${() => navigate('/settings')}
-      ></sl-icon-button>
+        @click=${() => navigate('/settings')}></sl-icon-button>
     `
 
-    const showSettings = sharedRouter.getCurrentLocation().route.name !== 'settings'
-    console.log({ showSettings, currentRouteName: sharedRouter.getCurrentLocation().route.name})
+    const showSettings =
+      sharedRouter.getCurrentLocation().route.name !== 'settings'
+    console.log({
+      showSettings,
+      currentRouteName: sharedRouter.getCurrentLocation().route.name,
+    })
 
     return html`
       <div class="buttons">
-        ${backButton}
-        ${showSettings ? settingsButton : undefined}
+        ${backButton} ${showSettings ? settingsButton : undefined}
       </div>
     `
   }

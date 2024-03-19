@@ -1,5 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { intervalDisplayName, midiNoteInterval } from '../../common/intervals.js'
+import {
+  intervalDisplayName,
+  midiNoteInterval,
+} from '../../common/intervals.js'
 /**
  * @typedef {import('../store.js').RootState} RootState
  * @typedef {import('../store.js').AppDispatch} AppDispatch
@@ -30,7 +33,7 @@ export const selectAudioState = (state) => state.audio
 
 export const selectAudioLoadingState = createSelector(
   [selectAudioState],
-  (audio) => audio.samplerLoading
+  (audio) => audio.samplerLoading,
 )
 
 export const selectCurrentRound = createSelector(
@@ -75,16 +78,23 @@ export const selectProgressNoteBadgeInfo = createSelector(
 
     for (const note of notes) {
       const noteId = note.id
-      const played = currentRound.challengeNotesPlayed.some(n => n.id === noteId)
+      const played = currentRound.challengeNotesPlayed.some(
+        (n) => n.id === noteId,
+      )
       const hidden = !played
-      const noteRevealed = noteId === tonic.id 
-        || currentRound.progress.guesses.some(g => g.isCorrect && g.note.id === noteId)
-      const highlighted = currentRound.challengeNotesSounding.some(n => n.id === noteId)
+      const noteRevealed =
+        noteId === tonic.id ||
+        currentRound.progress.guesses.some(
+          (g) => g.isCorrect && g.note.id === noteId,
+        )
+      const highlighted = currentRound.challengeNotesSounding.some(
+        (n) => n.id === noteId,
+      )
       badges.push({ noteId, noteRevealed, hidden, highlighted })
     }
 
     return badges
-  }
+  },
 )
 
 export const selectActiveNoteIds = createSelector(
@@ -108,7 +118,7 @@ export const selectActiveNoteIds = createSelector(
           allActive.add(targetNote.id)
         }
       })
-  }
+    }
 
     return allActive
   },
@@ -127,7 +137,7 @@ export const selectStatusMessage = createSelector(
       return 'Great job!'
     }
     return 'Tap the hidden note'
-  }
+  },
 )
 
 export const selectTargetName = createSelector(
@@ -146,7 +156,7 @@ export const selectTargetName = createSelector(
     const targetMidi = tuning.midiNotes[targets[0].id]
     const interval = midiNoteInterval(tonicMidi, targetMidi)
     return intervalDisplayName(interval)
-  }
+  },
 )
 
 export const selectColorScale = createSelector(
@@ -156,7 +166,7 @@ export const selectColorScale = createSelector(
 
 export const selectColorTheme = createSelector(
   [selectPreferencesState],
-  (prefs) => prefs.theme
+  (prefs) => prefs.theme,
 )
 
 export const selectTuningNoteIds = createSelector(

@@ -38,7 +38,6 @@ export class GameStatusMessageElement extends LitElement {
   `
   #stateController = new StateController(this)
 
-
   render() {
     const isCompleted = this.#stateController.select(isGameCompleted)
     const message = this.#stateController.select(selectStatusMessage)
@@ -49,12 +48,7 @@ export class GameStatusMessageElement extends LitElement {
       : undefined
 
     console.log('status message', message)
-    return html`
-      <div class="message">
-        ${message}
-        ${intervalDisplay}
-      </div>
-    `
+    return html` <div class="message">${message} ${intervalDisplay}</div> `
   }
 }
 

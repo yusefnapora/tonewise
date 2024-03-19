@@ -29,13 +29,13 @@ const preferencesSlice = createSlice({
     },
 
     /**
-     * 
-     * @param {PreferencesState} state 
+     *
+     * @param {PreferencesState} state
      * @param {import('@reduxjs/toolkit').PayloadAction<SystemColorTheme>} action
      */
-     setSystemColorTheme(state, action) {
-       state.theme = action.payload
-     },
+    setSystemColorTheme(state, action) {
+      state.theme = action.payload
+    },
 
     /**
      * @param {PreferencesState} state
@@ -48,5 +48,6 @@ const preferencesSlice = createSlice({
 })
 
 const { actions, reducer } = preferencesSlice
-export const { setColorScale, setSystemColorTheme, setEnharmonicPresentation } = actions
+export const { setColorScale, setSystemColorTheme, setEnharmonicPresentation } =
+  actions
 export default reducer

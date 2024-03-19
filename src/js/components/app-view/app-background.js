@@ -1,5 +1,9 @@
 import { LitElement, css, html } from 'lit'
-import { registerElement, resolveCSSVariables, setMetaThemeColors } from '../../common/dom.js'
+import {
+  registerElement,
+  resolveCSSVariables,
+  setMetaThemeColors,
+} from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
   selectColorScale,
@@ -41,7 +45,7 @@ export class AppBackgroundElement extends LitElement {
   render() {
     const noteIds = this.#stateController.select(selectTuningNoteIds)
     const colorScale = this.#stateController.select(selectColorScale)
-    
+
     let background = 'var(--color-background)'
     let themeColor = background
     if (colorScale.startsWith('oklch')) {

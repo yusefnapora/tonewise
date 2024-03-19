@@ -23,4 +23,3 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   setBasePath('/node_modules/@shoelace-style/shoelace/dist')
 }
-
