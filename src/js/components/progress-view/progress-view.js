@@ -12,6 +12,7 @@ import {
   startNewGame,
 } from '../../state/sequences/game-sequences.js'
 import { landscapeMediaQuery } from '../../styles.js'
+import { triggerNoteStart, triggerNoteStop } from '../../state/slices/audio-slice.js'
 
 export class ProgressViewElement extends LitElement {
   static styles = css`
@@ -103,6 +104,22 @@ export class ProgressViewElement extends LitElement {
     this.requestUpdate()
   }
 
+  /** 
+   * @param {string} id
+   * @param {number} midiNumber
+   */
+  #startPlayback(id, midiNumber) {
+    this.#stateController.dispatch(triggerNoteStart({ id, midiNumber }))
+  }
+
+  /** 
+   * @param {string} id
+   * @param {number} midiNumber
+   */
+  #stopPlayback(id, midiNumber) {
+    this.#stateController.dispatch(triggerNoteStop({ id, midiNumber }))
+  }
+
   render() {
     const audioLoadingState = this.#stateController.select(
       selectAudioLoadingState,
@@ -131,15 +148,20 @@ export class ProgressViewElement extends LitElement {
     const noteInfo = this.#stateController.select(selectProgressNoteBadgeInfo)
 
     const noteBadges = noteInfo.map((info) => {
-      const { noteId, noteRevealed, highlighted, hidden } = info
+      const { noteId, noteRevealed, highlighted, hidden, midiNote } = info
       const label = this.#stateController.select(selectNoteLabel, noteId)
+      const pointerDown = () => this.#startPlayback(noteId, midiNote)
+      const pointerUp = () => this.#stopPlayback(noteId, midiNote)
       return html`
         <note-badge
           class=${hidden ? 'hidden' : ''}
           note-id=${noteId}
           label=${label}
           reveal=${noteRevealed ? 'true' : nothing}
-          highlight=${highlighted ? 'true' : nothing}></note-badge>
+          highlight=${highlighted ? 'true' : nothing}
+          @pointerdown=${pointerDown}
+          @pointerup=${pointerUp}
+          ></note-badge>
       `
     })
 

@@ -136,7 +136,7 @@ const audioSlice = createSlice({
       .addCase(triggerNoteStart.fulfilled, (state, action) => {
         state.soundingNotes.push(action.payload)
       })
-      .addCase(triggerNoteStop.fulfilled, (state, action) => {
+      .addCase(triggerNoteStop.pending, (state, action) => {
         state.soundingNotes = [
           ...state.soundingNotes.filter((n) => n === action.payload),
         ]

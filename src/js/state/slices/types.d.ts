@@ -62,6 +62,7 @@ export type NoteDisplay = {
 
 export type NoteBadgeInfo = {
   noteId: string
+  midiNote: number
   highlighted: boolean
   noteRevealed: boolean
   hidden: boolean

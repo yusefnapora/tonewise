@@ -155,12 +155,13 @@ export class NoteBadgeElement extends LitElement {
         fill: ${activeNoteColor};
       }
     `
+
     return svg`
       <style>
         ${segmentStyles.join('\n')}
         ${labelStyle}
       </style>
-      <g>${content}</g>
+      <g @click=${this.onclick}>${content}</g>
     `
   }
 

@@ -65,8 +65,8 @@ export const isGameCompleted = createSelector(
 )
 
 export const selectProgressNoteBadgeInfo = createSelector(
-  [selectCurrentRound],
-  (currentRound) => {
+  [selectCurrentRound, selectTuningState, selectAudioState],
+  (currentRound, tuning, audio) => {
     /** @type {import('../slices/types.js').NoteBadgeInfo[]} */
     const badges = []
 
@@ -78,6 +78,8 @@ export const selectProgressNoteBadgeInfo = createSelector(
 
     for (const note of notes) {
       const noteId = note.id
+      const midiNote = tuning.midiNotes[note.id]
+
       const played = currentRound.challengeNotesPlayed.some(
         (n) => n.id === noteId,
       )
@@ -87,10 +89,10 @@ export const selectProgressNoteBadgeInfo = createSelector(
         currentRound.progress.guesses.some(
           (g) => g.isCorrect && g.note.id === noteId,
         )
-      const highlighted = currentRound.challengeNotesSounding.some(
+      const highlighted = audio.soundingNotes.some(
         (n) => n.id === noteId,
       )
-      badges.push({ noteId, noteRevealed, hidden, highlighted })
+      badges.push({ noteId, noteRevealed, hidden, highlighted, midiNote })
     }
 
     return badges
