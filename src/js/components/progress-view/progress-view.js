@@ -23,17 +23,16 @@ export class ProgressViewElement extends LitElement {
       align-items: center;
       justify-content: center;
       min-height: 96px;
-      /* margin: 10px; */
     }
 
     .content {
+      touch-action: manipulation;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       width: 100%;
       height: 100%;
-      /* margin: 10px; */
     }
 
     .content.not-playing {
@@ -201,7 +200,16 @@ export class ProgressViewElement extends LitElement {
       </div>
     `
 
-    return html` <div class="content">${statusView} ${buttons}</div> `
+    /** 
+     * iOS safari needs the element to be clickable before it
+     * will apply `touch-action: manipulation`
+     * see: https://stackoverflow.com/a/54753520
+     * @param {Event} e
+     */
+    const dummyClick = (e) => e.preventDefault()
+    return html`
+      <div @click=${dummyClick} class="content">${statusView} ${buttons}</div>
+    `
   }
 }
 
