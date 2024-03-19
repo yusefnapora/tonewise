@@ -20,6 +20,7 @@ export class SettingsViewElement extends LitElement {
   static styles = css`
     :host {
       --glass-panel-padding: 20px;
+      margin-top: calc(48px + (2 * var(--toolbar-padding)));
     }
 
     nav-icon-bar {
