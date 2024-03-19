@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { endGame } from '../../state/sequences/game-sequences.js'
 import { navigate, sharedRouter } from '../../route-controller.js'
 
 export class NavIconBarElement extends LitElement {
@@ -29,7 +28,6 @@ export class NavIconBarElement extends LitElement {
       font-size: 1.6rem;
     }
   `
-  #stateController = new StateController(this)
 
   render() {
     const backButton = html`
@@ -37,7 +35,6 @@ export class NavIconBarElement extends LitElement {
         name="arrow-left-circle"
         label="Leave game"
         @click=${() => {
-          endGame(this.#stateController.dispatch)
           window.history.back()
         }}>
       </sl-icon-button>

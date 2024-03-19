@@ -2,6 +2,8 @@ import { LitElement, css, html } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { cardStyleBase, landscapeMediaQuery } from '../../styles.js'
 import { resumeAudio } from '../../state/slices/audio-slice.js'
+import { dispatch } from '../../state/store.js'
+import { endGame } from '../../state/sequences/game-sequences.js'
 
 const appName = `Training Wheels`
 const welcomeText = `
@@ -69,6 +71,11 @@ export class WelcomeViewElement extends LitElement {
   `
 
   render() {
+    const playClicked = () => {
+      resumeAudio()
+      endGame(dispatch)
+    }
+
     return html`
       <glass-panel>
         <div class="content">
@@ -77,7 +84,7 @@ export class WelcomeViewElement extends LitElement {
           <nav>
             <ul>
               <li>
-                <app-link @click=${() => resumeAudio()} href="play"
+                <app-link @click=${playClicked} href="play"
                   >Play</app-link
                 >
               </li>
