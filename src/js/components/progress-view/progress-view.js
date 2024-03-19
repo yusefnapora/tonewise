@@ -5,6 +5,7 @@ import {
   selectAudioLoadingState,
   selectCurrentRound,
   selectNoteLabel,
+  selectProgressNoteBadgeInfo,
 } from '../../state/selectors/selectors.js'
 import { restartGame, startNewGame } from '../../state/sequences/game-sequences.js'
 import { landscapeMediaQuery } from '../../styles.js'
@@ -110,31 +111,52 @@ export class ProgressViewElement extends LitElement {
     const tonic = currentRound.rules.tonic
     const challengePlaying = currentRound.challengePlaying ?? false
 
-    const targetNoteBadges = currentRound.rules.targets.map((note) => {
-      const reveal = currentRound.progress.guesses.some(
-        (guess) => guess.isCorrect && guess.note.id === note.id,
-      )
-      const label = this.#stateController.select(selectNoteLabel, note.id)
+    const noteInfo = this.#stateController.select(selectProgressNoteBadgeInfo)
+    console.log({ noteInfo })
+
+    const noteBadges = noteInfo.map((info) => {
+      const { noteId, revealed, highlighted } = info
+      const label = this.#stateController.select(selectNoteLabel, noteId)
       return html`
         <note-badge
-          note-id=${note.id}
+          note-id=${noteId}
           label=${label}
-          reveal=${reveal ? 'true' : nothing}
+          reveal=${revealed ? 'true' : nothing}
+          highlight=${highlighted ? 'true' : nothing}
         ></note-badge>
-      `
+      ` 
     })
 
-    const tonicLabel = this.#stateController.select(selectNoteLabel, tonic.id)
+    // const targetNoteBadges = currentRound.rules.targets.map((note) => {
+    //   const reveal = currentRound.progress.guesses.some(
+    //     (guess) => guess.isCorrect && guess.note.id === note.id,
+    //   )
+    //   const label = this.#stateController.select(selectNoteLabel, note.id)
+    //   return html`
+    //     <note-badge
+    //       note-id=${note.id}
+    //       label=${label}
+    //       reveal=${reveal ? 'true' : nothing}
+    //     ></note-badge>
+    //   `
+    // })
+
+    // const tonicLabel = this.#stateController.select(selectNoteLabel, tonic.id)
+    // const statusView = html`
+    //   <div class="badges">
+    //     <note-badge
+    //       note-id=${tonic.id}
+    //       label=${tonicLabel}
+    //       reveal
+    //     ></note-badge>
+    //     ${targetNoteBadges}
+    //   </div>
+    // `
     const statusView = html`
-      <div class="badges">
-        <note-badge
-          note-id=${tonic.id}
-          label=${tonicLabel}
-          reveal
-        ></note-badge>
-        ${targetNoteBadges}
-      </div>
-    `
+    <div class="badges">
+      ${noteBadges}
+    </div>
+  `
 
 
     const replayButton = html`

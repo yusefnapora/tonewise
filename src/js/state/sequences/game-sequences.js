@@ -7,6 +7,20 @@
 import { playChallengeSequence, reset, start } from '../slices/game-slice.js'
 import { resetInstrumentState } from '../slices/instrument-slice.js'
 
+/** 
+ * @param {import('../slices/types.js').GameRules} rules 
+ * @returns {import('../slices/types.js').GameRound}
+ */
+export function newRound(rules) {
+  return {
+    rules,
+    progress: { guesses: [] },
+    challengeNotesPlayed: [],
+    challengeNotesSounding: [],
+    challengePlaying: false,
+  }
+}
+
 /**
  * @param {RootState} state 
  * @param {AppDispatch} dispatch 
@@ -18,9 +32,9 @@ export function startNewGame(state, dispatch) {
     target = getRandomNoteId(state)
   }
   const rules = { tonic, targets: [target] }
-  const progress = { guesses: [] }
+  const round = newRound(rules)
 
-  dispatch(start({ rules, progress }))
+  dispatch(start(round))
   dispatch(resetInstrumentState())
   dispatch(playChallengeSequence())
 }
@@ -34,8 +48,8 @@ export function restartGame(state, dispatch) {
     return
   }
   const { rules } = state.game.currentRound
-  const progress = { guesses: [] }
-  dispatch(start({ rules, progress }))
+  const round = newRound(rules)
+  dispatch(start(round))
   dispatch(resetInstrumentState())
   dispatch(playChallengeSequence()) 
 }

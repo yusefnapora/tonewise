@@ -33,13 +33,14 @@ export function resumeAudio() {
 
 /**
  * @typedef {import('./types.js').Note} Note
+ * @typedef {import('./types.js').PitchedNote} PitchedNote
  * @typedef {import('./types.js').AudioState} AudioState
  */
 
 /** @type {AudioState} */
 const initialState = {
   samplerLoading: 'idle',
-  soundingMidiNotes: [],
+  soundingNotes: [],
 }
 
 /** @type {import('@reduxjs/toolkit').AsyncThunk<void, unknown, { state: { audio: AudioState }}>} */
@@ -66,16 +67,16 @@ export const loadSampler = createAsyncThunk(
   },
 )
 
-/** @type {import('@reduxjs/toolkit').AsyncThunk<{ midiNote: number }, { midiNote: number }, { state: { audio: AudioState }}>} */
+/** @type {import('@reduxjs/toolkit').AsyncThunk<PitchedNote, PitchedNote, { state: { audio: AudioState }}>} */
 export const triggerNoteStart = createAsyncThunk(
   'audio/noteStart',
   /**
    *
-   * @param {object} args
-   * @param {number} args.midiNote
-   * @param {{ requestId: string, getState: () => { audio: AudioState }}} thunkAPI
+   * @param {PitchedNote} note
+   * @param {{ requestId: string, getState: () => { audio: AudioState }}} _thunkAPI
    */
-  async ({ midiNote }, { requestId }) => {
+  async (note, _thunkAPI) => {
+    const midiNote = note.midiNumber
     const meta = AudioGlobals.playbackMeta[midiNote]
     if (meta) {
       meta.stop()
@@ -86,7 +87,7 @@ export const triggerNoteStart = createAsyncThunk(
     })
     AudioGlobals.playbackMeta[midiNote] = { stop, ended }
     await started
-    return { midiNote }
+    return note
   },
   {
     condition: (_, { getState }) => {
@@ -95,23 +96,23 @@ export const triggerNoteStart = createAsyncThunk(
   },
 )
 
-/** @type {import('@reduxjs/toolkit').AsyncThunk<{ midiNote: number }, { midiNote: number }, { state: { audio: AudioState }}>} */
+/** @type {import('@reduxjs/toolkit').AsyncThunk<PitchedNote, PitchedNote, { state: { audio: AudioState }}>} */
 export const triggerNoteStop = createAsyncThunk(
   'audio/noteStop',
   /**
    *
-   * @param {object} args
-   * @param {number} args.midiNote
+   * @param {PitchedNote} note
    * @param {{ requestId: string, getState: () => { audio: AudioState }}} thunkAPI
    */
-  async ({ midiNote }, { requestId }) => {
+  async (note, { requestId }) => {
+    const midiNote = note.midiNumber
     const meta = AudioGlobals.playbackMeta[midiNote]
     if (!meta) {
       return
     }
     meta.stop()
     await meta.ended
-    return { midiNote }
+    return note
   },
   {
     condition: (_, { getState }) => {
@@ -133,12 +134,12 @@ const audioSlice = createSlice({
         state.samplerLoading = 'loaded'
       })
       .addCase(triggerNoteStart.fulfilled, (state, action) => {
-        state.soundingMidiNotes.push(action.payload.midiNote)
+        state.soundingNotes.push(action.payload)
       })
       .addCase(triggerNoteStop.fulfilled, (state, action) => {
-        state.soundingMidiNotes = [
-          ...state.soundingMidiNotes.filter(
-            (n) => n === action.payload.midiNote,
+        state.soundingNotes = [
+          ...state.soundingNotes.filter(
+            (n) => n === action.payload,
           ),
         ]
       })

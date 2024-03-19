@@ -31,7 +31,7 @@ export class NoteBadgeElement extends LitElement {
       fill: var(--color-text-muted);
     }
 
-    .badge-rim-segment.highlighted {
+    .highlighted {
       stroke: var(--color-text);
       fill: var(--color-text);
     }
@@ -103,7 +103,7 @@ export class NoteBadgeElement extends LitElement {
       const className = `badge-segment-${i}`
       let fullClass = className
       if (this.highlight) {
-        fullClass += ' highlight'
+        fullClass += ' highlighted'
       }
       if (this.reveal && note.id === this.noteId) {
         fullClass += ' active-note'

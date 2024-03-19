@@ -81,13 +81,13 @@ export const playChallengeSequence = createAsyncThunk(
     for (let i = 0; i < notes.length; i++) {
       const note = notes[i]
       const highlight = i === 0 || i === notes.length - 1
-      const midiNote = tuning.midiNotes[note.id]
+      const midiNumber = tuning.midiNotes[note.id]
       // play and highlight tonic note
-      dispatch(triggerNoteStart({ midiNote }))
+      dispatch(triggerNoteStart({ ...note, midiNumber }))
       highlight && dispatch(highlightNote(note))
 
       await sleep(duration)
-      dispatch(triggerNoteStop({ midiNote }))
+      dispatch(triggerNoteStop({ ...note, midiNumber }))
       if (i === 0) {
         dispatch(clearNoteHighlight(note))
       }
@@ -140,12 +140,35 @@ const gameSlice = createSlice({
       .addCase(playChallengeSequence.pending, (state) => {
         if (state.currentRound) {
           state.currentRound.challengePlaying = true
+          state.currentRound.challengeNotesPlayed = []
         }
       })
       .addCase(playChallengeSequence.fulfilled, (state) => {
         if (state.currentRound) {
           state.currentRound.challengePlaying = false
+          state.currentRound.challengeNotesSounding = []
         }
+      })
+      .addCase(triggerNoteStart.fulfilled, (state, action) => {
+        const { currentRound } = state
+        if (!currentRound || !currentRound.challengePlaying) {
+          return
+        }
+        const noteId = action.payload.id
+        const challengeNoteIds = [currentRound.rules.tonic.id, ...currentRound.rules.targets.map(n => n.id)]
+
+        if (challengeNoteIds.includes(noteId)) {
+          state.currentRound.challengeNotesSounding.push({ id: noteId })
+          state.currentRound.challengeNotesPlayed.push({id: noteId })
+        }
+      })
+      .addCase(triggerNoteStop.pending, (state, action) => {
+        const { currentRound } = state
+        if (!currentRound || !currentRound.challengePlaying || !currentRound.challengeNotesSounding) {
+          return
+        }
+        currentRound.challengeNotesSounding = currentRound.challengeNotesSounding
+          .filter(n => n.id !== action.meta.arg.id)
       })
   },
 })

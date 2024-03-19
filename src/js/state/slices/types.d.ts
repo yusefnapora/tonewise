@@ -2,6 +2,10 @@ export type Note = {
   id: string
 }
 
+export type PitchedNote = Note & {
+  midiNumber: number
+}
+
 export type ChallengeMode = 'sequential' | 'chord'
 
 export type GameRules = {
@@ -24,6 +28,8 @@ export type GameRound = {
   rules: GameRules
   progress: GameProgress
   challengePlaying?: boolean
+  challengeNotesPlayed: Note[]
+  challengeNotesSounding: Note[]
 }
 
 export type GameState = {
@@ -44,7 +50,7 @@ export type SamplerLoadingState = 'idle' | 'loading' | 'loaded'
 
 export type AudioState = {
   samplerLoading: SamplerLoadingState
-  soundingMidiNotes: number[]
+  soundingNotes: PitchedNote[]
 }
 
 export type EnharmonicPresentation = 'sharp' | 'flat'
@@ -52,6 +58,12 @@ export type EnharmonicPresentation = 'sharp' | 'flat'
 export type NoteDisplay = {
   label: string
   enharmonicLabels?: Record<EnharmonicPresentation, string>
+}
+
+export type NoteBadgeInfo = {
+  noteId: string
+  highlighted: boolean
+  revealed: boolean
 }
 
 export type TuningState = {

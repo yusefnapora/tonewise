@@ -151,22 +151,22 @@ export class GameViewElement extends LitElement {
    * @param {string} noteId
    */
   #triggerNote(noteId) {
-    const midiNote = this.#stateController.select(selectMidiNote, noteId)
-    if (!midiNote) {
+    const midiNumber = this.#stateController.select(selectMidiNote, noteId)
+    if (!midiNumber) {
       return
     }
-    this.#stateController.dispatch(triggerNoteStart({ midiNote }))
+    this.#stateController.dispatch(triggerNoteStart({ id: noteId,  midiNumber }))
   }
 
   /**
    * @param {string} noteId
    */
   #endNotePlayback(noteId) {
-    const midiNote = this.#stateController.select(selectMidiNote, noteId)
-    if (!midiNote) {
+    const midiNumber = this.#stateController.select(selectMidiNote, noteId)
+    if (!midiNumber) {
       return
     }
-    this.#stateController.dispatch(triggerNoteStop({ midiNote }))
+    this.#stateController.dispatch(triggerNoteStop({ id: noteId, midiNumber }))
   }
 
   render() {
