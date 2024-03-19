@@ -63,7 +63,8 @@ export type NoteDisplay = {
 export type NoteBadgeInfo = {
   noteId: string
   highlighted: boolean
-  revealed: boolean
+  noteRevealed: boolean
+  hidden: boolean
 }
 
 export type TuningState = {

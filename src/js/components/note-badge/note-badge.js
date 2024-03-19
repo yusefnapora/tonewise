@@ -37,6 +37,7 @@ export class NoteBadgeElement extends LitElement {
     }
 
     .revealed {
+      transition: opacity 0.2s ease-in-out;
       opacity: 1;
     }
     .hidden {

@@ -52,6 +52,17 @@ export class ProgressViewElement extends LitElement {
       margin: 8px;
     }
 
+    note-badge.hidden {
+      opacity: 0;
+      transform: scale(0.05);
+    }
+
+    note-badge:not(.hidden) {
+      transition: all 0.2s ease-in-out;
+      opacity: 100%;
+      transform: scale(1);
+    }
+
     .buttons {
       display: flex;
       align-items: center;
@@ -108,56 +119,30 @@ export class ProgressViewElement extends LitElement {
             </sl-icon-button>
         </div>`
     }
-    const tonic = currentRound.rules.tonic
     const challengePlaying = currentRound.challengePlaying ?? false
 
     const noteInfo = this.#stateController.select(selectProgressNoteBadgeInfo)
     console.log({ noteInfo })
 
     const noteBadges = noteInfo.map((info) => {
-      const { noteId, revealed, highlighted } = info
+      const { noteId, noteRevealed, highlighted, hidden } = info
       const label = this.#stateController.select(selectNoteLabel, noteId)
       return html`
         <note-badge
+          class=${hidden ? 'hidden' : ''}
           note-id=${noteId}
           label=${label}
-          reveal=${revealed ? 'true' : nothing}
+          reveal=${noteRevealed ? 'true' : nothing}
           highlight=${highlighted ? 'true' : nothing}
         ></note-badge>
       ` 
     })
 
-    // const targetNoteBadges = currentRound.rules.targets.map((note) => {
-    //   const reveal = currentRound.progress.guesses.some(
-    //     (guess) => guess.isCorrect && guess.note.id === note.id,
-    //   )
-    //   const label = this.#stateController.select(selectNoteLabel, note.id)
-    //   return html`
-    //     <note-badge
-    //       note-id=${note.id}
-    //       label=${label}
-    //       reveal=${reveal ? 'true' : nothing}
-    //     ></note-badge>
-    //   `
-    // })
-
-    // const tonicLabel = this.#stateController.select(selectNoteLabel, tonic.id)
-    // const statusView = html`
-    //   <div class="badges">
-    //     <note-badge
-    //       note-id=${tonic.id}
-    //       label=${tonicLabel}
-    //       reveal
-    //     ></note-badge>
-    //     ${targetNoteBadges}
-    //   </div>
-    // `
     const statusView = html`
     <div class="badges">
       ${noteBadges}
     </div>
   `
-
 
     const replayButton = html`
         <sl-icon-button 

@@ -76,13 +76,11 @@ export const selectProgressNoteBadgeInfo = createSelector(
     for (const note of notes) {
       const noteId = note.id
       const played = currentRound.challengeNotesPlayed.some(n => n.id === noteId)
-      if (!played) {
-        continue
-      }
-      const revealed = noteId === tonic.id 
+      const hidden = !played
+      const noteRevealed = noteId === tonic.id 
         || currentRound.progress.guesses.some(g => g.isCorrect && g.note.id === noteId)
       const highlighted = currentRound.challengeNotesSounding.some(n => n.id === noteId)
-      badges.push({ noteId, revealed, highlighted })
+      badges.push({ noteId, noteRevealed, hidden, highlighted })
     }
 
     return badges
