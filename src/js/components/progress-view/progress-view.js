@@ -161,6 +161,7 @@ export class ProgressViewElement extends LitElement {
           highlight=${highlighted ? 'true' : nothing}
           @pointerdown=${pointerDown}
           @pointerup=${pointerUp}
+          @pointerleave=${pointerUp}
           ></note-badge>
       `
     })

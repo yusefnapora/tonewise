@@ -161,7 +161,7 @@ export class NoteBadgeElement extends LitElement {
         ${segmentStyles.join('\n')}
         ${labelStyle}
       </style>
-      <g @click=${this.onclick}>${content}</g>
+      <g>${content}</g>
     `
   }
 
