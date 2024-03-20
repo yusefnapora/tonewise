@@ -47,6 +47,10 @@ export default {
         "assets\/audio\/*",
         "assets\/fonts\/*",
       ],
+      runtimeCaching: [{
+        urlPattern: new RegExp('/shoelace/.*'),
+        handler: 'CacheFirst'
+      }],
       dontCacheBustURLsMatching: /inline-module-.*\.js/,
       navigateFallback: '/index.html',
     })
