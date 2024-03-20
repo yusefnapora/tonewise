@@ -2,6 +2,7 @@ import { rollupPluginHTML as html } from '@web/rollup-plugin-html'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import copy from 'rollup-plugin-copy'
+import { generateSW } from 'rollup-plugin-workbox'
 
 export default {
   input: 'src/index.html',
@@ -38,5 +39,16 @@ export default {
         },
       ],
     }),
+    generateSW({
+      swDest: 'dist/sw.js',
+      globDirectory: 'dist/',
+      globPatterns:  [
+        "**\/*.{js,css,html}",
+        "assets\/audio\/*",
+        "assets\/fonts\/*",
+      ],
+      dontCacheBustURLsMatching: /inline-module-.*\.js/,
+      navigateFallback: '/index.html',
+    })
   ],
 }

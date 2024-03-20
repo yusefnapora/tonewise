@@ -17,9 +17,16 @@ import '@shoelace-style/shoelace/dist/components/option/option.js'
 
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js'
 
-// @ts-expect-error
+// @ts-expect-error process is defined in rollup & not visible to typescript
 if (process.env.NODE_ENV === 'production') {
   setBasePath('/shoelace')
 } else {
   setBasePath('/node_modules/@shoelace-style/shoelace/dist')
+}
+
+// @ts-expect-error process is defined in rollup & not visible to typescript
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  const { Workbox } = await import('workbox-window')
+  const wb = new Workbox('/sw.js')
+  wb.register()
 }

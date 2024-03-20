@@ -28,6 +28,7 @@
     "rimraf": "^5.0.5",
     "rollup": "^4.12.0",
     "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-workbox": "^8.1.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "navigo": "^8.11.1",
     "redux-persist": "^6.0.0",
     "smplr": "^0.12.2",
-    "tonal": "^6.0.0"
+    "tonal": "^6.0.0",
+    "workbox-window": "^7.0.0"
   }
 }
