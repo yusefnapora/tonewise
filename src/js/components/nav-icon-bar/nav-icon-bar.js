@@ -1,9 +1,17 @@
 import { LitElement, html, css } from 'lit'
 import { registerElement } from '../../common/dom.js'
-import { StateController } from '../../state/controller.js'
 import { navigate, sharedRouter } from '../../route-controller.js'
 
 export class NavIconBarElement extends LitElement {
+  static properties = {
+    backRoute: { type: String, attribute: 'back-route' }
+  }
+
+  constructor() {
+    super()
+    this.backRoute = undefined
+  }
+
   static styles = css`
     :host {
       display: flex;
@@ -33,9 +41,23 @@ export class NavIconBarElement extends LitElement {
     const backButton = html`
       <sl-icon-button
         name="arrow-left-circle"
-        label="Leave game"
+        label="Go back"
         @click=${() => {
-          window.history.back()
+          if (typeof this.backRoute === 'string') {
+            navigate(this.backRoute)
+            return
+          }
+          const { history } = window
+          // Length of two means we're the first page on the stack
+          // after the "new tab" page, which means if we're "deep"
+          // into the app, we got there by direct linking (bookmark, etc).
+          // In that case, we probably don't have anywhere to go back to,
+          // and we should just pop to the '/' route.
+          if (history.length <= 2) {
+            navigate('/')
+            return
+          }
+          history.back()
         }}>
       </sl-icon-button>
     `

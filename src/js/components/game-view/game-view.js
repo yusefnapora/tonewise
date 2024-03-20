@@ -16,7 +16,6 @@ import {
   selectMidiNote,
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
-import { sharedRouter } from '../../route-controller.js'
 import gameViewStyles from './styles.js'
 
 export class GameViewElement extends LitElement {
@@ -92,7 +91,7 @@ export class GameViewElement extends LitElement {
 
     return html`
       <div class="toolbar">
-        <nav-icon-bar></nav-icon-bar>
+        <nav-icon-bar back-route="/"></nav-icon-bar>
       </div>
       <div class="contents">
         <div class="status">
