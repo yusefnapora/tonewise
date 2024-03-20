@@ -70,6 +70,10 @@ export class ToneWheel extends LitElement {
       fill: var(--color-text);
     }
 
+    .tone-label.hidden {
+      opacity: 0;
+    }
+
     .inner-wedge {
       opacity: 0;
       stroke: none;
@@ -150,6 +154,7 @@ export class ToneWheel extends LitElement {
     rotationOffset: { type: Number },
     fontSize: { type: Number },
     colorScale: { type: String, attribute: 'color-scale' },
+    hideLabels: { type: Boolean, attribute: 'hide-labels' },
   }
 
   constructor() {
@@ -158,6 +163,7 @@ export class ToneWheel extends LitElement {
     this.rotationOffset = DEFAULT_ROTATION_OFFSET
     this.fontSize = DEFAULT_FONT_SIZE
     this.colorScale = DEFAULT_COLOR_SCALE
+    this.hideLabels = false
   }
 
   get pitchClasses() {
@@ -254,6 +260,7 @@ export class ToneWheel extends LitElement {
           this.#createSegmentLabel({
             label: el.label,
             position: intervalPoint,
+            hidden: this.hideLabels,
           }),
         )
       }
@@ -406,6 +413,7 @@ export class ToneWheel extends LitElement {
    * @param {object} args
    * @param {string} args.label
    * @param {Point} args.position
+   * @param {boolean} [args.hidden]
    * @param {Function} [args.clickHandler]
    *
    * @returns {SVGTemplateResult}
@@ -414,9 +422,10 @@ export class ToneWheel extends LitElement {
     const { label, position } = args
     const x = position.x
     const y = position.y + this.fontSize * 0.25
+    const className = 'tone-label' + (args.hidden ? ' hidden' : '')
     return svg`
       <text
-        class="tone-label"
+        class=${className}
         stroke="white"
         fill="white"
         text-anchor="middle"
