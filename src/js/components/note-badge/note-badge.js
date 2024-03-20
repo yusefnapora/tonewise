@@ -18,6 +18,8 @@ export class NoteBadgeElement extends LitElement {
       display: block;
       font-family: var(--note-font-family);
       letter-spacing: var(--note-letter-spacing);
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .background {
