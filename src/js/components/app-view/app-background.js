@@ -25,8 +25,8 @@ export class AppBackgroundElement extends LitElement {
       grid-template-columns: 1fr;
       grid-template-rows: 1fr;
 
-      --color-primary-lightness: var(--bgcolor-lightness);
-      --color-primary-chroma: var(--bgcolor-chroma);
+      --color-primary-lightness: var(--bgcolor-lightness, 40%);
+      --color-primary-chroma: var(--bgcolor-chroma, 0.075);
     }
 
     :host > * {
