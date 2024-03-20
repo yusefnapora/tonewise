@@ -4,6 +4,19 @@ import replace from '@rollup/plugin-replace'
 import copy from 'rollup-plugin-copy'
 import { generateSW } from 'rollup-plugin-workbox'
 
+const precachedIcons = [
+  'arrow-left-circle',
+  'gear-wide',
+  'play-fill',
+  'arrow-counterclockwise',
+  'chevron-double-right',
+  'moon',
+  'sun',
+  'brilliance'
+]
+
+const iconCacheGlob = `shoelace\/assets\/icons\/+(${precachedIcons.join('|')}).svg`
+
 export default {
   input: 'src/index.html',
   output: {
@@ -46,11 +59,8 @@ export default {
         "**\/*.{js,css,html}",
         "assets\/audio\/*",
         "assets\/fonts\/*",
+        iconCacheGlob
       ],
-      runtimeCaching: [{
-        urlPattern: new RegExp('/shoelace/.*'),
-        handler: 'CacheFirst'
-      }],
       dontCacheBustURLsMatching: /inline-module-.*\.js/,
       navigateFallback: '/index.html',
     })
