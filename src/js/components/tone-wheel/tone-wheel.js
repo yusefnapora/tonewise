@@ -178,12 +178,12 @@ export class ToneWheel extends LitElement {
       <style>
         ${styleContent}
       </style>
-      <div class="base-background-layer"></div>
-      <div class="gradient-background gradient-colors">
+      <div part="inner-background" class="base-background-layer"></div>
+      <div part="inner-background" class="gradient-background gradient-colors">
         <div class="gradient-blur"></div>
       </div>
       <div class="gradient-background vibrant gradient-colors">
-        <div class="gradient-blur"></div>
+        <!-- <div class="gradient-blur"></div> -->
       </div>
       <svg viewBox="0 0 1000 1000">${content}</svg>
     `

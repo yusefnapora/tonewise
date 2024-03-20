@@ -19,4 +19,5 @@ export default {
   '/index.html': homeRoute,
   '/settings': settingsRoute,
   '/play': playGameRoute,
+  '/icon-sandbox': () => html`<icon-sandbox></icon-sandbox>`
 }

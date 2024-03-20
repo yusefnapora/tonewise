@@ -29,6 +29,10 @@ export default {
           dest: 'dist',
         },
         {
+          src: 'assets/favicon/favicon.ico',
+          dest: 'dist',
+        },
+        {
           src: 'node_modules/@shoelace-style/shoelace/dist/assets',
           dest: 'dist/shoelace',
         },
