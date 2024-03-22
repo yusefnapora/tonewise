@@ -23,14 +23,28 @@ export class WelcomeViewElement extends LitElement {
       grid-template-columns: 1fr;
     }
 
+    wheel-icon {
+      min-height: min(25dvh, 25dvw);
+      max-height: 25dvh;
+    }
+
     glass-panel {
       --glass-panel-padding: 20px;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .app-title {
       font-size: 2.25rem;
       font-family: var(--heading-font-family);
       grid-column: 1;
+      place-self: center;
+      text-align: center;
     }
 
     .welcome-text {
@@ -44,19 +58,33 @@ export class WelcomeViewElement extends LitElement {
     }
 
     ${landscapeMediaQuery} {
-      /* :host {
-        max-width: min(800px, calc(100vw - 64px));
-      } */
+      wheel-icon {
+        min-height: min(15dvh, 15dvw);
+        max-height: 30dvh;
+      }
 
       .content {
-        grid-template-rows: 4rem 1fr;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr 2fr;
+        grid-template-areas:
+         'logo welcome'
+         'logo nav'
+         ;
+      }
+
+      .app-title {
+        font-size: 1.75rem;
+      }
+
+      .logo {
+        grid-area: logo;
+      }
+
+      .welcome-text {
+        grid-area: welcome;
       }
 
       nav {
-        grid-column: 2;
-        grid-row-start: 1;
-        grid-row-end: 2;
+        grid-area: nav;
       }
     }
 
@@ -66,8 +94,6 @@ export class WelcomeViewElement extends LitElement {
       font-family: var(--heading-font-family);
       line-height: 4rem;
     }
-
-    ${cardStyleBase}
   `
 
   render() {
@@ -79,7 +105,10 @@ export class WelcomeViewElement extends LitElement {
     return html`
       <glass-panel>
         <div class="content">
-          <h1 class="app-title">${appName}</h1>
+          <div class="logo">
+            <wheel-icon active-notes="G♯,E"></wheel-icon>
+            <h1 class="app-title">${appName}</h1>
+          </div>
           <p class="welcome-text">${welcomeText}</p>
           <nav>
             <ul>

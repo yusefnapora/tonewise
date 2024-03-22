@@ -55,8 +55,9 @@ export class ToneWheel extends LitElement {
     }
 
     svg {
-      width: 100%;
+      /* width: 100%; */
       height: 100%;
+      aspect-ratio: 1;
       grid-row: 1;
       grid-column: 1;
       z-index: 2;
@@ -116,24 +117,27 @@ export class ToneWheel extends LitElement {
     .base-background-layer {
       clip-path: url(#gradient-clip);
       background-color: var(--color-wheel-bottom-layer-background);
-      width: 100%;
+      /* width: 100%; */
       height: 100%;
       grid-row: 1;
       grid-column: 1;
+      aspect-ratio: 1;
     }
 
     .gradient-background {
       clip-path: url(#gradient-clip);
-      width: 100%;
+      /* width: 100%; */
       height: 100%;
       opacity: var(--wheel-gradient-background-opacity, 0.5);
       grid-row: 1;
       grid-column: 1;
+      aspect-ratio: 1;
     }
 
     .vibrant {
       clip-path: url(#vibrant-gradient-reveal);
       opacity: var(--wheel-gradient-background-vibrant-opacity, 1);
+      aspect-ratio: 1;
     }
 
     .vibrant.hidden {

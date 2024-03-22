@@ -10,8 +10,9 @@ export class WheelIconElement extends LitElement {
   }
 
   static styles = css`
-    tone-wheel::part(inner-background) {
-      opacity: 0;
+    :host {
+      height: 100%;
+      aspect-ratio: 1;
     }
   `
 
