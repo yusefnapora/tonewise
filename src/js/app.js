@@ -5,6 +5,9 @@ import { setupColorScheme } from './color-scheme.js'
 unmuteIosAudio()
 setupColorScheme()
 
+// @ts-expect-error process is defined in rollup & not visible to typescript
+const isProd = process.env.NODE_ENV === 'production'
+
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import '@shoelace-style/shoelace/dist/components/card/card.js'
 import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js'
@@ -17,15 +20,13 @@ import '@shoelace-style/shoelace/dist/components/option/option.js'
 
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js'
 
-// @ts-expect-error process is defined in rollup & not visible to typescript
-if (process.env.NODE_ENV === 'production') {
+if (isProd) {
   setBasePath('/shoelace')
 } else {
   setBasePath('/node_modules/@shoelace-style/shoelace/dist')
 }
 
-// @ts-expect-error process is defined in rollup & not visible to typescript
-if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+if ('serviceWorker' in navigator && isProd) {
   const { Workbox } = await import('workbox-window')
   const wb = new Workbox('/sw.js')
   wb.register()
