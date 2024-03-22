@@ -54,7 +54,7 @@ export class NoteBadgeElement extends LitElement {
     label: { type: String },
   }
 
-  #stateController = new StateController(this)
+  #state = new StateController(this)
 
   constructor() {
     super()
@@ -70,13 +70,13 @@ export class NoteBadgeElement extends LitElement {
   }
 
   #svgContent() {
-    const noteIds = this.#stateController.select(selectTuningNoteIds)
-    const colorScale = this.#stateController.select(selectColorScale)
+    const noteIds = this.#state.select(selectTuningNoteIds)
+    const colorScale = this.#state.select(selectColorScale)
 
     /** @type {Array<{id: string, angle: number}>} */
     const notes = []
     for (const id of noteIds) {
-      const angle = this.#stateController.select(selectNoteAngle, id)
+      const angle = this.#state.select(selectNoteAngle, id)
       notes.push({ id, angle })
     }
 

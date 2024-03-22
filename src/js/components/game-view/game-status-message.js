@@ -36,12 +36,12 @@ export class GameStatusMessageElement extends LitElement {
       }
     }
   `
-  #stateController = new StateController(this)
+  #state = new StateController(this)
 
   render() {
-    const isCompleted = this.#stateController.select(isGameCompleted)
-    const message = this.#stateController.select(selectStatusMessage)
-    const intervalName = this.#stateController.select(selectTargetName)
+    const isCompleted = this.#state.select(isGameCompleted)
+    const message = this.#state.select(selectStatusMessage)
+    const intervalName = this.#state.select(selectTargetName)
 
     const intervalDisplay = isCompleted
       ? html`<p>${intervalName}</p>`

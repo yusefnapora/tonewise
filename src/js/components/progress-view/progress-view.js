@@ -95,7 +95,7 @@ export class ProgressViewElement extends LitElement {
     }
   `
 
-  #stateController = new StateController(this)
+  #state = new StateController(this)
 
   stateChanged() {
     // TODO: figure out why selector update logic in state controller
@@ -108,7 +108,7 @@ export class ProgressViewElement extends LitElement {
    * @param {number} midiNumber
    */
   #startPlayback(id, midiNumber) {
-    this.#stateController.dispatch(triggerNoteStart({ id, midiNumber }))
+    this.#state.dispatch(triggerNoteStart({ id, midiNumber }))
   }
 
   /** 
@@ -116,11 +116,11 @@ export class ProgressViewElement extends LitElement {
    * @param {number} midiNumber
    */
   #stopPlayback(id, midiNumber) {
-    this.#stateController.dispatch(triggerNoteStop({ id, midiNumber }))
+    this.#state.dispatch(triggerNoteStop({ id, midiNumber }))
   }
 
   render() {
-    const audioLoadingState = this.#stateController.select(
+    const audioLoadingState = this.#state.select(
       selectAudioLoadingState,
     )
     if (audioLoadingState === 'loading') {
@@ -128,7 +128,7 @@ export class ProgressViewElement extends LitElement {
         <sl-spinner></sl-spinner>
       </div>`
     }
-    const currentRound = this.#stateController.select(selectCurrentRound)
+    const currentRound = this.#state.select(selectCurrentRound)
     if (!currentRound) {
       return html` <div class="content not-playing">
         <sl-icon-button
@@ -136,19 +136,19 @@ export class ProgressViewElement extends LitElement {
           label="New game"
           @click=${() =>
             startNewGame(
-              this.#stateController.state,
-              this.#stateController.dispatch,
+              this.#state.state,
+              this.#state.dispatch,
             )}>
         </sl-icon-button>
       </div>`
     }
     const challengePlaying = currentRound.challengePlaying ?? false
 
-    const noteInfo = this.#stateController.select(selectProgressNoteBadgeInfo)
+    const noteInfo = this.#state.select(selectProgressNoteBadgeInfo)
 
     const noteBadges = noteInfo.map((info) => {
       const { noteId, noteRevealed, highlighted, hidden, midiNote } = info
-      const label = this.#stateController.select(selectNoteLabel, noteId)
+      const label = this.#state.select(selectNoteLabel, noteId)
       const pointerDown = () => this.#startPlayback(noteId, midiNote)
       const pointerUp = () => this.#stopPlayback(noteId, midiNote)
       return html`
@@ -172,8 +172,8 @@ export class ProgressViewElement extends LitElement {
         name="arrow-counterclockwise"
         @click=${() =>
           restartGame(
-            this.#stateController.state,
-            this.#stateController.dispatch,
+            this.#state.state,
+            this.#state.dispatch,
           )}>
       </sl-icon-button>
     `
@@ -183,8 +183,8 @@ export class ProgressViewElement extends LitElement {
         name="chevron-double-right"
         @click=${() =>
           startNewGame(
-            this.#stateController.state,
-            this.#stateController.dispatch,
+            this.#state.state,
+            this.#state.dispatch,
           )}>
       </sl-icon-button>
     `

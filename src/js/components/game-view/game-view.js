@@ -21,7 +21,7 @@ import gameViewStyles from './styles.js'
 export class GameViewElement extends LitElement {
   static styles = gameViewStyles
 
-  #stateController = new StateController(this)
+  #state = new StateController(this)
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
   get #wheel() {
@@ -34,10 +34,10 @@ export class GameViewElement extends LitElement {
   #pitchSelected(e) {
     const note = e.detail
     resumeAudio()
-    this.#stateController.dispatch(startPlayerNote(note))
+    this.#state.dispatch(startPlayerNote(note))
 
     this.#triggerNote(note.id)
-    this.#stateController.dispatch(guess(note))
+    this.#state.dispatch(guess(note))
   }
 
   /**
@@ -45,7 +45,7 @@ export class GameViewElement extends LitElement {
    */
   #pitchDeselected(e) {
     const note = e.detail
-    this.#stateController.dispatch(endPlayerNote(note))
+    this.#state.dispatch(endPlayerNote(note))
     this.#endNotePlayback(note.id)
   }
 
@@ -53,27 +53,27 @@ export class GameViewElement extends LitElement {
    * @param {string} noteId
    */
   #triggerNote(noteId) {
-    const midiNumber = this.#stateController.select(selectMidiNote, noteId)
+    const midiNumber = this.#state.select(selectMidiNote, noteId)
     if (!midiNumber) {
       return
     }
-    this.#stateController.dispatch(triggerNoteStart({ id: noteId, midiNumber }))
+    this.#state.dispatch(triggerNoteStart({ id: noteId, midiNumber }))
   }
 
   /**
    * @param {string} noteId
    */
   #endNotePlayback(noteId) {
-    const midiNumber = this.#stateController.select(selectMidiNote, noteId)
+    const midiNumber = this.#state.select(selectMidiNote, noteId)
     if (!midiNumber) {
       return
     }
-    this.#stateController.dispatch(triggerNoteStop({ id: noteId, midiNumber }))
+    this.#state.dispatch(triggerNoteStop({ id: noteId, midiNumber }))
   }
 
   render() {
-    const colorScale = this.#stateController.select(selectColorScale)
-    const wheelNotes = this.#stateController.select(selectWheelNotes)
+    const colorScale = this.#state.select(selectColorScale)
+    const wheelNotes = this.#state.select(selectWheelNotes)
 
     const pitchClasses = wheelNotes.map(
       ({ noteId, midiNote, label, active }) => html`

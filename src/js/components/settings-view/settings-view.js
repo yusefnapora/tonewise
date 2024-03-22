@@ -76,15 +76,15 @@ export class SettingsViewElement extends LitElement {
     }
   `
 
-  #stateController = new StateController(this)
+  #state = new StateController(this)
 
   render() {
-    const enharmonicPresentation = this.#stateController.select(
+    const enharmonicPresentation = this.#state.select(
       selectEnharmonicPresentation,
     )
-    const colorScale = this.#stateController.select(selectColorScale)
-    const wheelNotes = this.#stateController.select(selectWheelNotes)
-    const theme = this.#stateController.select(selectColorTheme)
+    const colorScale = this.#state.select(selectColorScale)
+    const wheelNotes = this.#state.select(selectWheelNotes)
+    const theme = this.#state.select(selectColorTheme)
 
     const pitchClasses = wheelNotes.map(
       ({ noteId, label }) => html`
@@ -102,7 +102,7 @@ export class SettingsViewElement extends LitElement {
     const colorChanged = (e) => {
       const newScale = asColorScaleName(e.target['value'])
       if (newScale) {
-        this.#stateController.dispatch(setColorScale(newScale))
+        this.#state.dispatch(setColorScale(newScale))
       }
     }
 
@@ -110,9 +110,9 @@ export class SettingsViewElement extends LitElement {
     const enharmonicsChanged = (e) => {
       const val = e.target['value']
       if (val === 'sharp') {
-        this.#stateController.dispatch(setEnharmonicPresentation('sharp'))
+        this.#state.dispatch(setEnharmonicPresentation('sharp'))
       } else if (val === 'flat') {
-        this.#stateController.dispatch(setEnharmonicPresentation('flat'))
+        this.#state.dispatch(setEnharmonicPresentation('flat'))
       }
     }
 
@@ -120,7 +120,7 @@ export class SettingsViewElement extends LitElement {
     const themeChanged = (e) => {
       const val = e.target['value']
       if (val === 'dark' || val === 'light' || val === 'auto') {
-        this.#stateController.dispatch(setSystemColorTheme(val))
+        this.#state.dispatch(setSystemColorTheme(val))
       }
     }
 
