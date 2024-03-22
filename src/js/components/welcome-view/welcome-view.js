@@ -53,6 +53,22 @@ export class WelcomeViewElement extends LitElement {
       color: var(--color-text-muted);
     }
 
+    .nav-link {
+      display: flex;
+      align-items: center;
+      
+      & > sl-icon {
+        margin-right: 20px;
+      }
+    }
+
+    nav > ul {
+      list-style: none;
+      font-size: 1.4rem;
+      font-family: var(--heading-font-family);
+      line-height: 3rem;
+    }
+
     nav {
       grid-column: 1;
     }
@@ -87,13 +103,6 @@ export class WelcomeViewElement extends LitElement {
         grid-area: nav;
       }
     }
-
-    nav > ul {
-      list-style: none;
-      font-size: 2rem;
-      font-family: var(--heading-font-family);
-      line-height: 4rem;
-    }
   `
 
   render() {
@@ -113,11 +122,30 @@ export class WelcomeViewElement extends LitElement {
           <nav>
             <ul>
               <li>
-                <app-link @click=${playClicked} href="play"
-                  >Play</app-link
-                >
+                <app-link @click=${playClicked} href="play">
+                  <div class="nav-link">
+                    <sl-icon name="hypnotize"></sl-icon>
+                    Free play
+                  </div>
+                </app-link>
               </li>
-              <li><app-link href="settings">Settings</app-link></li>
+              <li>
+                <!-- todo: add a new route for quiz mode -->
+                <app-link @click=${playClicked} href="play">
+                  <div class="nav-link">
+                    <sl-icon name="music-note-list"></sl-icon>
+                    Quiz
+                  </div>
+                </app-link>
+              </li>
+              <li>
+                <app-link href="about">
+                  <div class="nav-link">
+                    <sl-icon name="question"></sl-icon>
+                    About
+                  </div>
+                </app-link>
+              </li>
             </ul>
           </nav>
         </div>

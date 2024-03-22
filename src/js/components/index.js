@@ -1,3 +1,4 @@
+export * from './about-view/about-view.js'
 export * from './app-view/app-view.js'
 export * from './app-view/app-background.js'
 export * from './app-link.js'

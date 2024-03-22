@@ -8,11 +8,18 @@ const iconWhitelist = [
   'arrow-left-circle',
   'gear-wide',
   'play-fill',
+  'play',
+  'play-circle',
   'arrow-counterclockwise',
   'chevron-double-right',
   'moon',
   'sun',
-  'brilliance'
+  'brilliance',
+  'hypnotize',
+  'question',
+  'music-note',
+  'music-note-list',
+  'music-note-beamed',
 ]
 
 const iconBasePath = 'node_modules/@shoelace-style/shoelace/dist/assets/icons'

@@ -7,6 +7,8 @@ import { html } from 'lit'
 /** @type {RouteHandler} */
 const homeRoute = (_) => html`<welcome-view></welcome-view>`
 
+const aboutRoute = (_) => html`<about-view></about-view>`
+
 /** @type {RouteHandler} */
 const playGameRoute = (_) => html`<game-view></game-view>`
 
@@ -17,6 +19,7 @@ const settingsRoute = (_) => html`<settings-view></settings-view>`
 export default {
   '/': homeRoute,
   '/index.html': homeRoute,
+  '/about': aboutRoute,
   '/settings': settingsRoute,
   '/play': playGameRoute,
   '/icon-sandbox': () => html`<icon-sandbox></icon-sandbox>`
