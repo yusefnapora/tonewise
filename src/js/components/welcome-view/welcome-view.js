@@ -20,6 +20,10 @@ export class WelcomeViewElement extends LitElement {
     .content {
       display: grid;
 
+      grid-template-areas:
+        'logo'
+        'nav'
+        ;
       grid-template-columns: 1fr;
     }
 
@@ -37,6 +41,7 @@ export class WelcomeViewElement extends LitElement {
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
+      grid-area: logo;
     }
 
     .app-title {
@@ -51,6 +56,7 @@ export class WelcomeViewElement extends LitElement {
       font-size: 1.5rem;
       grid-column: 1;
       color: var(--color-text-muted);
+      grid-area: welcome;
     }
 
     .nav-link {
@@ -70,33 +76,24 @@ export class WelcomeViewElement extends LitElement {
     }
 
     nav {
-      grid-column: 1;
+      grid-area: nav;
     }
 
     ${landscapeMediaQuery} {
       wheel-icon {
         min-height: min(15dvh, 15dvw);
-        max-height: 30dvh;
+        max-height: max(30dvh, 30dvw);
       }
 
       .content {
-        grid-template-columns: 1fr 2fr;
+        grid-template-columns: 1fr 1fr;
         grid-template-areas:
-         'logo welcome'
          'logo nav'
          ;
       }
 
       .app-title {
         font-size: 1.75rem;
-      }
-
-      .logo {
-        grid-area: logo;
-      }
-
-      .welcome-text {
-        grid-area: welcome;
       }
 
       nav {
@@ -118,7 +115,7 @@ export class WelcomeViewElement extends LitElement {
             <wheel-icon active-notes="G♯,E"></wheel-icon>
             <h1 class="app-title">${appName}</h1>
           </div>
-          <p class="welcome-text">${welcomeText}</p>
+          <!-- <p class="welcome-text">${welcomeText}</p> -->
           <nav>
             <ul>
               <li>
@@ -134,7 +131,7 @@ export class WelcomeViewElement extends LitElement {
                 <app-link @click=${playClicked} href="play">
                   <div class="nav-link">
                     <sl-icon name="music-note-list"></sl-icon>
-                    Quiz
+                    Quiz mode
                   </div>
                 </app-link>
               </li>
