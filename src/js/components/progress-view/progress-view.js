@@ -1,5 +1,6 @@
 import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
+import { dispatch } from '../../state/store.js'
 import { StateController } from '../../state/controller.js'
 import {
   selectAudioLoadingState,
@@ -108,7 +109,7 @@ export class ProgressViewElement extends LitElement {
    * @param {number} midiNumber
    */
   #startPlayback(id, midiNumber) {
-    this.#state.dispatch(triggerNoteStart({ id, midiNumber }))
+    dispatch(triggerNoteStart({ id, midiNumber }))
   }
 
   /** 
@@ -116,7 +117,7 @@ export class ProgressViewElement extends LitElement {
    * @param {number} midiNumber
    */
   #stopPlayback(id, midiNumber) {
-    this.#state.dispatch(triggerNoteStop({ id, midiNumber }))
+    dispatch(triggerNoteStop({ id, midiNumber }))
   }
 
   render() {
@@ -137,7 +138,7 @@ export class ProgressViewElement extends LitElement {
           @click=${() =>
             startNewGame(
               this.#state.state,
-              this.#state.dispatch,
+              dispatch,
             )}>
         </sl-icon-button>
       </div>`
@@ -173,7 +174,7 @@ export class ProgressViewElement extends LitElement {
         @click=${() =>
           restartGame(
             this.#state.state,
-            this.#state.dispatch,
+            dispatch,
           )}>
       </sl-icon-button>
     `
@@ -184,7 +185,7 @@ export class ProgressViewElement extends LitElement {
         @click=${() =>
           startNewGame(
             this.#state.state,
-            this.#state.dispatch,
+            dispatch,
           )}>
       </sl-icon-button>
     `

@@ -1,5 +1,6 @@
 import { LitElement, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
+import { dispatch } from '../../state/store.js'
 import { StateController } from '../../state/controller.js'
 import { guess } from '../../state/slices/game-slice.js'
 import {
@@ -34,10 +35,10 @@ export class GameViewElement extends LitElement {
   #pitchSelected(e) {
     const note = e.detail
     resumeAudio()
-    this.#state.dispatch(startPlayerNote(note))
+    dispatch(startPlayerNote(note))
 
     this.#triggerNote(note.id)
-    this.#state.dispatch(guess(note))
+    dispatch(guess(note))
   }
 
   /**
@@ -45,7 +46,7 @@ export class GameViewElement extends LitElement {
    */
   #pitchDeselected(e) {
     const note = e.detail
-    this.#state.dispatch(endPlayerNote(note))
+    dispatch(endPlayerNote(note))
     this.#endNotePlayback(note.id)
   }
 
@@ -57,7 +58,7 @@ export class GameViewElement extends LitElement {
     if (!midiNumber) {
       return
     }
-    this.#state.dispatch(triggerNoteStart({ id: noteId, midiNumber }))
+    dispatch(triggerNoteStart({ id: noteId, midiNumber }))
   }
 
   /**
@@ -68,7 +69,7 @@ export class GameViewElement extends LitElement {
     if (!midiNumber) {
       return
     }
-    this.#state.dispatch(triggerNoteStop({ id: noteId, midiNumber }))
+    dispatch(triggerNoteStop({ id: noteId, midiNumber }))
   }
 
   render() {

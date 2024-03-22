@@ -2,6 +2,7 @@ import { LitElement, css, html } from 'lit'
 import { registerElement } from '../../common/dom.js'
 
 import { COLOR_SCALE_NAMES, asColorScaleName } from '../../common/color.js'
+import { dispatch } from '../../state/store.js'
 import { StateController } from '../../state/controller.js'
 import {
   selectColorScale,
@@ -102,7 +103,7 @@ export class SettingsViewElement extends LitElement {
     const colorChanged = (e) => {
       const newScale = asColorScaleName(e.target['value'])
       if (newScale) {
-        this.#state.dispatch(setColorScale(newScale))
+        dispatch(setColorScale(newScale))
       }
     }
 
@@ -110,9 +111,9 @@ export class SettingsViewElement extends LitElement {
     const enharmonicsChanged = (e) => {
       const val = e.target['value']
       if (val === 'sharp') {
-        this.#state.dispatch(setEnharmonicPresentation('sharp'))
+        dispatch(setEnharmonicPresentation('sharp'))
       } else if (val === 'flat') {
-        this.#state.dispatch(setEnharmonicPresentation('flat'))
+        dispatch(setEnharmonicPresentation('flat'))
       }
     }
 
@@ -120,7 +121,7 @@ export class SettingsViewElement extends LitElement {
     const themeChanged = (e) => {
       const val = e.target['value']
       if (val === 'dark' || val === 'light' || val === 'auto') {
-        this.#state.dispatch(setSystemColorTheme(val))
+        dispatch(setSystemColorTheme(val))
       }
     }
 
