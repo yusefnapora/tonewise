@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit'
+import { LitElement, css, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 
 import { COLOR_SCALE_NAMES, asColorScaleName } from '../../common/color.js'
@@ -59,7 +59,8 @@ export class SettingsViewElement extends LitElement {
     }
 
     tone-wheel {
-      max-width: 150px;
+      min-height: 150px;
+      max-height: 150px;
       margin: auto;
 
       grid-area: 'wheel';
@@ -87,9 +88,12 @@ export class SettingsViewElement extends LitElement {
     const wheelNotes = this.#state.select(selectWheelNotes)
     const theme = this.#state.select(selectColorTheme)
 
+    const activeNotes = ['G♯','E']
     const pitchClasses = wheelNotes.map(
       ({ noteId, label }) => html`
-        <pitch-class id=${noteId}> ${label} </pitch-class>
+        <pitch-class id=${noteId} active=${activeNotes.includes(noteId) ? true : nothing}> 
+          ${label}
+        </pitch-class>
       `,
     )
 
