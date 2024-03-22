@@ -1,4 +1,4 @@
-import { SplendidGrandPiano, CacheStorage } from 'smplr'
+import { SplendidGrandPiano } from 'smplr'
 
 /**
  * @typedef {import('./smplr-types.d.ts').SampleStart} SampleStart
@@ -18,11 +18,9 @@ export class Sampler {
    */
   constructor(opts) {
     this.#audioContext = opts?.context ?? new AudioContext()
-    const storage = new CacheStorage()
     // todo: option for named soundfont
 
     this.#instrument = new SplendidGrandPiano(this.#audioContext, {
-      storage,
       baseUrl: '/assets/audio/splendid-grand-piano',
       notesToLoad: {
         notes: NOTES_TO_LOAD,
