@@ -63,6 +63,7 @@ export default {
       ],
       dontCacheBustURLsMatching: /inline-module-.*\.js/,
       navigateFallback: '/index.html',
+      skipWaiting: true,
     })
   ],
 }
