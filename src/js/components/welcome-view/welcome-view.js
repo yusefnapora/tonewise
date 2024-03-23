@@ -47,7 +47,8 @@ export class WelcomeViewElement extends LitElement {
 
     .app-title {
       font-size: 2.25rem;
-      font-family: var(--heading-font-family);
+      font-family: var(--app-title-font-family);
+      letter-spacing: var(--app-title-letter-spacing);
       grid-column: 1;
       place-self: center;
       text-align: center;

@@ -13,3 +13,12 @@
   font-family: 'Ubuntu Mono';
   src: url('/assets/fonts/UbuntuMono-Regular.woff2') format('woff2');
 }
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('/assets/fonts/Comfortaa-Regular.woff2') format('woff2');
+}
+
+body {
+  font-family: var(--text-font-family);
+}
