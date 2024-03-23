@@ -36,7 +36,9 @@ export class NavIconBarElement extends LitElement {
   render() {
     const currentRoute = sharedRouter.getCurrentLocation().route.name 
 
-    const showBack = currentRoute !== '/' && currentRoute !== 'index.html' && currentRoute !== 'src'
+    // todo: pull into helper fn
+    const isHomeRoute = ['', '/', '/index.html', 'src'].includes(currentRoute)
+    const showBack = !isHomeRoute
     const showSettings = currentRoute !== 'settings'
     console.log({
       showSettings,
