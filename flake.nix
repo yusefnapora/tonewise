@@ -1,5 +1,5 @@
 {
-  description = "Dev flake for Training Wheels, a musical ear training game";
+  description = "Dev flake for Tonewise, a musical ear training game";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
