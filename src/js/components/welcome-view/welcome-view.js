@@ -29,7 +29,7 @@ export class WelcomeViewElement extends LitElement {
     }
 
     wheel-icon {
-      min-height: min(25dvh, 25dvw);
+      min-height: min(25dvh, 40dvw);
       max-height: 35dvh;
     }
 
@@ -83,7 +83,7 @@ export class WelcomeViewElement extends LitElement {
 
     ${landscapeMediaQuery} {
       wheel-icon {
-        min-height: min(15dvh, 15dvw);
+        min-height: min(25dvh, 25dvw);
         max-height: max(30dvh, 30dvw);
       }
 
