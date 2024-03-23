@@ -133,7 +133,6 @@ export class SettingsViewElement extends LitElement {
     this.renderRoot.querySelector('tone-wheel')?.requestUpdate()
 
     return html`
-      <nav-icon-bar></nav-icon-bar>
       <glass-panel>
         <div class="card-title">settings</div>
 

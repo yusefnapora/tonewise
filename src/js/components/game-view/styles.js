@@ -36,13 +36,6 @@ const styles = css`
     place-items: center;
   }
 
-  .toolbar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: ${TOOLBAR_ICON_SIZE};
-  }
 
   .status {
     grid-area: status;

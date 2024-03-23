@@ -26,6 +26,16 @@ export class AppViewElement extends LitElement {
       z-index: 0;
     }
 
+    .toolbar {
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      left: 0;
+      width: 100%;
+      min-height: calc(48px + var(--toolbar-padding));
+    }
+
+
     .content {
       min-width: 100vw;
       height: 100%;
@@ -45,8 +55,14 @@ export class AppViewElement extends LitElement {
   }
 
   render() {
+    // @ts-expect-error todo: make the icon bar update itself on route changes
+    this.renderRoot.querySelector('nav-icon-bar')?.requestUpdate()
+    
     return html`
       <app-background></app-background>
+      <div class="toolbar">
+        <nav-icon-bar></nav-icon-bar>
+      </div>
       <div class="content">${this.#routeController.content}</div>
     `
   }

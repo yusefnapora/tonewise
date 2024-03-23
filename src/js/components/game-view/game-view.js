@@ -107,9 +107,6 @@ export class GameViewElement extends LitElement {
     this.#wheel?.requestUpdate()
 
     return html`
-      <div class="toolbar">
-        <nav-icon-bar back-route="/"></nav-icon-bar>
-      </div>
       <div class="contents">
         <div class="status">
           <game-status-message></game-status-message>
