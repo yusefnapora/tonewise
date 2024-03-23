@@ -9,7 +9,7 @@ export class AppLinkElement extends LitElement {
       text-decoration: none;
     }
     a:hover {
-      color: color-mix(in lch, var(--color-primary), white 20%);
+      color: color-mix(in lch, var(--color-primary), var(--color-text) 20%);
       text-decoration: underline;
     }
   `

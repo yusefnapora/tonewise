@@ -5,7 +5,7 @@ import { resumeAudio } from '../../state/slices/audio-slice.js'
 import { dispatch } from '../../state/store.js'
 import { endGame } from '../../state/sequences/game-sequences.js'
 
-const appName = `Training Wheels`
+const appName = `Tonewise`
 const welcomeText = `
 A game for learning musical intervals
 `
@@ -24,12 +24,12 @@ export class WelcomeViewElement extends LitElement {
         'logo'
         'nav'
         ;
-      grid-template-columns: 1fr;
+      grid-template-columns: min(300px, calc(100vw - 32px));
     }
 
     wheel-icon {
       min-height: min(25dvh, 25dvw);
-      max-height: 25dvh;
+      max-height: 35dvh;
     }
 
     glass-panel {
@@ -119,7 +119,7 @@ export class WelcomeViewElement extends LitElement {
           <nav>
             <ul>
               <li>
-                <app-link @click=${playClicked} href="play">
+                <app-link @click=${playClicked} href="/free-play">
                   <div class="nav-link">
                     <sl-icon name="hypnotize"></sl-icon>
                     Free play
@@ -138,7 +138,7 @@ export class WelcomeViewElement extends LitElement {
               <li>
                 <app-link href="about">
                   <div class="nav-link">
-                    <sl-icon name="question"></sl-icon>
+                    <sl-icon name="question-lg"></sl-icon>
                     About
                   </div>
                 </app-link>

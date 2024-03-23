@@ -20,9 +20,17 @@ import {
 import gameViewStyles from './styles.js'
 
 export class GameViewElement extends LitElement {
-  static styles = gameViewStyles
+  static properties = {
+    freePlayMode: { type: Boolean, attribute: 'free-play' }
+  }
 
+  static styles = gameViewStyles
   #state = new StateController(this)
+
+  constructor() {
+    super()
+    this.freePlayMode = false
+  }
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
   get #wheel() {
@@ -38,7 +46,9 @@ export class GameViewElement extends LitElement {
     dispatch(startPlayerNote(note))
 
     this.#triggerNote(note.id)
-    dispatch(guess(note))
+    if (!this.freePlayMode) {
+      dispatch(guess(note))
+    }
   }
 
   /**
@@ -87,6 +97,12 @@ export class GameViewElement extends LitElement {
       `,
     )
 
+    const progressView = this.freePlayMode ? undefined : html`
+      <glass-panel class="progress">
+        <progress-view></progress-view>
+      </glass-panel>
+    `
+
     // TODO: make tone-wheel update itself when active pitch classes change
     this.#wheel?.requestUpdate()
 
@@ -106,9 +122,7 @@ export class GameViewElement extends LitElement {
             ${pitchClasses}
           </tone-wheel>
         </div>
-        <glass-panel class="progress">
-          <progress-view></progress-view>
-        </glass-panel>
+        ${progressView}
       </div>
     `
   }

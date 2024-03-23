@@ -20,12 +20,7 @@ import '@shoelace-style/shoelace/dist/components/spinner/spinner.js'
 import '@shoelace-style/shoelace/dist/components/option/option.js'
 
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js'
-
-if (isProd) {
-  setBasePath('/shoelace')
-} else {
-  setBasePath('/node_modules/@shoelace-style/shoelace/dist')
-}
+setBasePath('/')
 
 if ('serviceWorker' in navigator && isProd) {
   const { Workbox } = await import('workbox-window')

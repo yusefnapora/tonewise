@@ -4,27 +4,6 @@ import replace from '@rollup/plugin-replace'
 import copy from 'rollup-plugin-copy'
 import { generateSW } from 'rollup-plugin-workbox'
 
-const iconWhitelist = [
-  'arrow-left-circle',
-  'gear-wide',
-  'play-fill',
-  'play',
-  'play-circle',
-  'arrow-counterclockwise',
-  'chevron-double-right',
-  'moon',
-  'sun',
-  'brilliance',
-  'hypnotize',
-  'question',
-  'music-note',
-  'music-note-list',
-  'music-note-beamed',
-]
-
-const iconBasePath = 'node_modules/@shoelace-style/shoelace/dist/assets/icons'
-const iconGlob = `${iconBasePath}/{${iconWhitelist.join(',')}}.svg`
-
 export default {
   input: 'src/index.html',
   output: {
@@ -53,10 +32,6 @@ export default {
         {
           src: 'assets/favicon/favicon.ico',
           dest: 'dist',
-        },
-        {
-          src: iconGlob,
-          dest: 'dist/shoelace/assets/icons/',
         },
       ],
     }),
