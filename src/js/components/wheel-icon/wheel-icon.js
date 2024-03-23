@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
-import { selectWheelNotes } from '../../state/selectors/selectors.js'
+import { selectColorScale, selectWheelNotes } from '../../state/selectors/selectors.js'
 import { store } from '../../state/store.js'
 
 export class WheelIconElement extends LitElement {
@@ -23,6 +23,7 @@ export class WheelIconElement extends LitElement {
 
   render() {
     const state = store.getState()
+    const colorScale = selectColorScale(store.getState())
     const wheelNotes = selectWheelNotes(state)
 
     const activeNoteIds = this.activeNotes.split(',')
@@ -35,7 +36,7 @@ export class WheelIconElement extends LitElement {
     )
 
     return html`
-      <tone-wheel hide-labels>
+      <tone-wheel hide-labels color-scale=${colorScale}>
         ${pitchClasses}
       </tone-wheel>
     `
