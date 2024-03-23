@@ -16,7 +16,9 @@ export class GameStatusMessageElement extends LitElement {
       align-items: stretch;
       justify-content: center;
 
+      max-width: calc(100dvw - 128px);
       width: 100%;
+      margin: auto;
       height: 100%;
     }
 
@@ -29,10 +31,14 @@ export class GameStatusMessageElement extends LitElement {
       text-align: center;
       font-family: var(--status-message-font-family);
       font-size: 1.6rem;
+
+      /* padding-left: 12px;
+      margin-right: 48px; */
     }
     ${landscapeMediaQuery} {
       :host {
         justify-content: flex-start;
+        max-width: 100%;
       }
     }
   `
