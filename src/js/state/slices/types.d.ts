@@ -6,6 +6,8 @@ export type PitchedNote = Note & {
   midiNumber: number
 }
 
+export type GameMode = 'free-play' | 'challenge'
+
 export type ChallengeMode = 'sequential' | 'chord'
 
 export type GameRules = {
@@ -33,6 +35,7 @@ export type GameRound = {
 }
 
 export type GameState = {
+  currentMode: GameMode
   currentRound: GameRound | null
 }
 

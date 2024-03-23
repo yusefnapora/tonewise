@@ -4,6 +4,7 @@ import { cardStyleBase, landscapeMediaQuery } from '../../styles.js'
 import { resumeAudio } from '../../state/slices/audio-slice.js'
 import { dispatch } from '../../state/store.js'
 import { endGame } from '../../state/sequences/game-sequences.js'
+import { setGameMode } from '../../state/slices/game-slice.js'
 
 const appName = `Tonewise`
 const welcomeText = `
@@ -103,9 +104,11 @@ export class WelcomeViewElement extends LitElement {
   `
 
   render() {
-    const playClicked = () => {
+    /** @param {import('../../state/slices/types.js').GameMode} gameMode */
+    const playClicked = (gameMode) => {
       resumeAudio()
       endGame(dispatch)
+      dispatch(setGameMode(gameMode))
     }
 
     return html`
@@ -119,7 +122,7 @@ export class WelcomeViewElement extends LitElement {
           <nav>
             <ul>
               <li>
-                <app-link @click=${playClicked} href="/free-play">
+                <app-link @click=${() => playClicked('free-play')} href="/free-play">
                   <div class="nav-link">
                     <sl-icon name="hypnotize"></sl-icon>
                     Free play
@@ -128,7 +131,7 @@ export class WelcomeViewElement extends LitElement {
               </li>
               <li>
                 <!-- todo: add a new route for quiz mode -->
-                <app-link @click=${playClicked} href="play">
+                <app-link @click=${() => playClicked('challenge')} href="play">
                   <div class="nav-link">
                     <sl-icon name="music-note-list"></sl-icon>
                     Quiz mode

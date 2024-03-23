@@ -22,6 +22,7 @@ import { clearNoteHighlight, highlightNote } from './instrument-slice.js'
 
 /** @type {GameState} */
 const initialState = {
+  currentMode: 'free-play',
   currentRound: null,
 }
 
@@ -114,6 +115,7 @@ const gameSlice = createSlice({
      * @param {GameRoundAction} action
      */
     start(state, action) {
+      state.currentMode = 'challenge'
       state.currentRound = action.payload
     },
 
@@ -134,6 +136,14 @@ const gameSlice = createSlice({
         state.currentRound.progress.isCompleted = true
       }
     },
+
+    /**
+     * @param {GameState} state 
+     * @param {import('@reduxjs/toolkit').PayloadAction<import('./types.js').GameMode>} action 
+     */
+    setGameMode(state, action) {
+      state.currentMode = action.payload
+    }
   },
   extraReducers(builder) {
     builder
@@ -183,5 +193,5 @@ const gameSlice = createSlice({
 })
 
 const { actions, reducer } = gameSlice
-export const { start, reset, guess } = actions
+export const { start, reset, guess, setGameMode } = actions
 export default reducer
