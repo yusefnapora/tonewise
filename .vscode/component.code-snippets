@@ -1,0 +1,21 @@
+{
+	"Lit Component": {
+		"prefix": "lit",
+		"body": [
+			"import { LitElement, html, css } from 'lit'",
+			"import { registerElement } from '../../common/dom.js'",
+			"",
+			"export class ${1:name}Element extends LitElement {",
+			"  static styles = css``",
+			"",
+			"  render() {",
+			"    return html``",
+			"  }",
+			"}",
+			"",
+			"registerElement('${2:tagName}', ${1:name}Element)",
+			""
+		],
+		"description": "Lit Component"
+	}
+}
