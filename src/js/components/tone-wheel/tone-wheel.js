@@ -1,4 +1,5 @@
 import { LitElement, css, html, svg } from 'lit'
+import { classMap } from 'lit/directives/class-map.js'
 import {
   calculateSegmentAngles,
   degreesBetween,
@@ -99,6 +100,20 @@ export class ToneWheel extends LitElement {
     .tone-group.active > .inner-wedge {
       opacity: 0;
     }
+
+    .tone-group.disabled {
+      filter: saturate(0.6);
+      cursor: auto;
+      
+      &:hover > .inner-wedge {
+        opacity: 0;
+      }
+
+      & > .tone-label {
+        opacity: 0;
+      }
+    }
+
 
     .pitch-line {
       opacity: 0;
@@ -267,7 +282,7 @@ export class ToneWheel extends LitElement {
           this.#createSegmentLabel({
             label: el.label,
             position: intervalPoint,
-            hidden: this.hideLabels,
+            hidden: this.hideLabels || el.disabled,
           }),
         )
       }
@@ -332,6 +347,7 @@ export class ToneWheel extends LitElement {
         e.preventDefault()
       }
 
+      const classes = { 'tone-group': true, active: el.active, disabled: el.disabled }
       groups.push(svg`
         <g 
           @touchstart=${touchDown}
@@ -339,7 +355,7 @@ export class ToneWheel extends LitElement {
           @pointerenter=${pointerEnter} 
           @pointerleave=${pointerLeave}
           @pointerup=${pointerUp}
-          class="tone-group ${className} ${el.active ? 'active' : undefined}"
+          class=${classMap(classes)}
         >
           ${groupContent}
         </g>
@@ -426,13 +442,13 @@ export class ToneWheel extends LitElement {
    * @returns {SVGTemplateResult}
    */
   #createSegmentLabel(args) {
-    const { label, position } = args
+    const { label, position, hidden } = args
     const x = position.x
     const y = position.y + this.fontSize * 0.25
-    const className = 'tone-label' + (args.hidden ? ' hidden' : '')
+    const classes = { 'tone-label': true, hidden }
     return svg`
       <text
-        class=${className}
+        class=${classMap(classes)}
         stroke="white"
         fill="white"
         text-anchor="middle"

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Scale } from 'tonal'
+import { Scale, Note } from 'tonal'
 
 /**
  * @typedef {import('./types.js').TuningState} TuningState
@@ -77,6 +77,29 @@ const DefaultDisplay = {
 const EDOAngles = (noteIds) =>
   Object.fromEntries(noteIds.map((n, i) => [n, (360 / noteIds.length) * i]))
 
+
+/**
+ * 
+ * @param {string[]} noteIds all notes in tuning
+ * @param {string} tonicNote
+ * @param {string} scaleQuality 
+ */
+function deriveScaleNotes(noteIds, tonicNote, scaleQuality) {
+  const scaleName = [tonicNote, scaleQuality].join(' ')
+  const scale = Scale.get(scaleName)
+  if (!scale) {
+    console.warn('no scale matches scale name: ', scaleName)
+    return undefined
+  }
+  const scaleNotes = []
+  for (const n of scale.notes) {
+    const alt = Note.enharmonic(n)
+    const noteId = noteIds.find((id) => id === n || id === alt)
+    scaleNotes.push(noteId)
+  }
+  return scaleNotes
+}
+
 /** @type {TuningState} */
 const initialState = {
   noteIds: [...DefaultNoteIds],
@@ -98,6 +121,7 @@ const tuningSlice = createSlice({
      */
     setScaleNotes(state, action) {
       state.scaleNotes = action.payload.filter(noteId => state.noteIds.includes(noteId))
+      // todo: derive quality
     },
 
     /**
@@ -105,9 +129,16 @@ const tuningSlice = createSlice({
      * @param {import('@reduxjs/toolkit').PayloadAction<string>} action 
      */
     setTonicNote(state, action) {
-      if (state.noteIds.includes(action.payload)) {
-        state.tonicNote = action.payload
+      if (!state.noteIds.includes(action.payload)) {
+        return
       }
+      const tonicNote = action.payload
+      const scaleNotes = deriveScaleNotes(state.noteIds, tonicNote, state.scaleQuality)
+      if (!scaleNotes) {
+        return
+      }
+      state.tonicNote = tonicNote
+      state.scaleNotes = scaleNotes
     },
 
     /**
@@ -116,12 +147,10 @@ const tuningSlice = createSlice({
      */ 
     setScaleQuality(state, action) {
       const quality = action.payload
-      const scaleName = [state.tonicNote, quality].join(' ')
-      const scale = Scale.get(scaleName)
-      if (scale) {
-        console.log('scale', { scaleName, scale })
+      const scaleNotes = deriveScaleNotes(state.noteIds, state.tonicNote, quality)
+      if (scaleNotes) {
+        state.scaleNotes = scaleNotes
         state.scaleQuality = quality
-        state.scaleNotes = [...scale.notes]
       }
     }
   },

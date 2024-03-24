@@ -45,6 +45,12 @@ export class GameViewElement extends LitElement {
    */
   #pitchSelected(e) {
     const note = e.detail
+
+    const { scaleNotes } = this.#state.state.tuning
+    if (!scaleNotes.includes(note.id)) {
+      return
+    }
+
     resumeAudio()
     dispatch(startPlayerNote(note))
 

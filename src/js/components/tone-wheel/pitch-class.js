@@ -4,6 +4,7 @@ import { registerElement } from '../../common/dom.js'
 export class PitchClassElement extends LitElement {
   static properties = {
     active: { type: Boolean },
+    disabled: { type: Boolean },
     interval: { type: Number, converter: convertIntervalString },
     midiNote: { type: Number, attribute: 'midi-note' },
   }
@@ -11,6 +12,7 @@ export class PitchClassElement extends LitElement {
   constructor() {
     super()
     this.active = false
+    this.disabled = false
     this.interval = 0
     this.interval = undefined
     this.midiNote = 0
@@ -22,8 +24,8 @@ export class PitchClassElement extends LitElement {
   }
 
   toJsObject() {
-    const { active, interval, midiNote, id } = this
-    return { active, interval, midiNote, id }
+    const { active, disabled, interval, midiNote, id } = this
+    return { active, disabled, interval, midiNote, id }
   }
 }
 

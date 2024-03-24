@@ -77,7 +77,7 @@ export function endGame(dispatch) {
  * @returns {{ id: string }}
  */
 export function getRandomNote(state) {
-  const { noteIds } = state.tuning
-  const id = noteIds[Math.floor(Math.random() * noteIds.length)]
+  const { scaleNotes } = state.tuning
+  const id = scaleNotes[Math.floor(Math.random() * scaleNotes.length)]
   return { id }
 }
