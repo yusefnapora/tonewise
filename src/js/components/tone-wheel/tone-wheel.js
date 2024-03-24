@@ -60,7 +60,7 @@ export class ToneWheel extends LitElement {
       aspect-ratio: 1;
       grid-row: 1;
       grid-column: 1;
-      z-index: 2;
+      /* z-index: 2; */
     }
 
     .tone-label {
@@ -122,6 +122,7 @@ export class ToneWheel extends LitElement {
       grid-row: 1;
       grid-column: 1;
       aspect-ratio: 1;
+      z-index: -2;
     }
 
     .gradient-background {
@@ -132,12 +133,14 @@ export class ToneWheel extends LitElement {
       grid-row: 1;
       grid-column: 1;
       aspect-ratio: 1;
+      z-index: -1;
     }
 
     .vibrant {
       clip-path: url(#vibrant-gradient-reveal);
       opacity: var(--wheel-gradient-background-vibrant-opacity, 1);
       aspect-ratio: 1;
+      z-index: -1;
     }
 
     .vibrant.hidden {

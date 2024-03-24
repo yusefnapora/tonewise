@@ -23,12 +23,13 @@ export class ScaleBadgeElement extends LitElement {
     }
 
     .background {
-      fill: var(--color-background);
-      opacity: 0.75;
+      fill: var(--color-glass-background);
+      /* opacity: 0.75; */
     }
 
     .badge-rim-segment {
-      stroke: var(--color-text-muted);
+      stroke-width: 10;
+      stroke: var(--color-text);
       fill: var(--color-text-muted);
     }
 
@@ -94,6 +95,11 @@ export class ScaleBadgeElement extends LitElement {
 
 
     const gapDegrees = 10
+    const cx = 500
+    const cy = 500
+    const radius = 340
+    const backgroundRadius = radius * 0.6
+    const thickness = radius - backgroundRadius
 
     const content = []
     const colors = []
@@ -117,6 +123,8 @@ export class ScaleBadgeElement extends LitElement {
 
       const segment = this.#createRimSegment({
         className: fullClass,
+        radius,
+        thickness,
         startAngle,
         endAngle,
       })
@@ -126,7 +134,6 @@ export class ScaleBadgeElement extends LitElement {
       colors.push(color)
       segmentStyles.push(`
         .${className}.active-note {
-          stroke: ${color};
           fill: ${color};
         }
       `)
@@ -136,17 +143,15 @@ export class ScaleBadgeElement extends LitElement {
     //   activeNoteColor = colorForAngle(activeNote.angle, colorScale)
     // }
 
-    const r = 420
-    const cx = 500
-    const cy = 500
+
     const backgroundCircle = svg`
-    <circle class="background" r=${r} cx=${cx} cy=${cy} />
+    <circle class="background" r=${backgroundRadius} cx=${cx} cy=${cy} />
     `
 
-    const r2 = r-60
+    const r = 500
     const textArcPath = `
-      M ${cx-r2},${cy}
-      a ${r2},${r2} 0 1,0 ${r2*2},0
+      M ${cx-r},${cy}
+      a ${r},${r} 0 1,0 ${r*2},0
       `
 
     const arcDef = svg`
@@ -211,11 +216,13 @@ export class ScaleBadgeElement extends LitElement {
    * @param {string} args.className
    * @param {number} args.startAngle
    * @param {number} args.endAngle
+   * @param {number} [args.radius]
+   * @param {number} [args.thickness]
    */
   #createRimSegment(args) {
     const center = { x: 500, y: 500 }
-    const radius = 500
-    const thickness = 500
+    const radius = args.radius ?? 480
+    const thickness = args.thickness ?? (radius / 2)
 
     const startAngle = args.startAngle + this.rotationOffset
     const endAngle = args.endAngle + this.rotationOffset

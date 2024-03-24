@@ -22,7 +22,8 @@ import gameViewStyles from './styles.js'
 
 export class GameViewElement extends LitElement {
   static properties = {
-    freePlayMode: { type: Boolean, attribute: 'free-play' }
+    freePlayMode: { type: Boolean, attribute: 'free-play' },
+    scalePickerActive: { type: Boolean, attribute: 'scale-picker-active' }
   }
 
   static styles = gameViewStyles
@@ -31,6 +32,7 @@ export class GameViewElement extends LitElement {
   constructor() {
     super()
     this.freePlayMode = false
+    this.scalePickerActive = false
   }
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
@@ -99,8 +101,10 @@ export class GameViewElement extends LitElement {
       `,
     )
 
-    const progressView = this.freePlayMode ? undefined : html`
-      <glass-panel class="progress">
+    const showProgress = !this.freePlayMode && !this.scalePickerActive
+
+    const progressView = !showProgress ? undefined : html`
+      <glass-panel class="controls">
         <progress-view></progress-view>
       </glass-panel>
     `
@@ -111,11 +115,22 @@ export class GameViewElement extends LitElement {
     const isChromatic = scaleNotes.length === wheelNotes.length
     const scaleLabel = isChromatic ? 'scale' : 'major' // todo: name of current scale (derive from state)
     const tonic = isChromatic ? '' : 'C' // todo: pull current tonic from state
-    const scaleBadgeClicked = () => {
-      console.log('scale badge clicked')
+    const toggleScaleControls = () => {
+      this.scalePickerActive = !this.scalePickerActive
     }
-    const scaleBadge = html`
-      <scale-badge @click=${scaleBadgeClicked} tonic=${tonic} label=${scaleLabel} note-ids=${JSON.stringify(scaleNotes)}></scale-badge>
+
+    const closeIcon = html`
+      <sl-icon-button @click=${toggleScaleControls} name="x-circle"></sl-icon-button>
+    `
+
+    const scaleBadge = this.scalePickerActive ? closeIcon : html`
+      <scale-badge @click=${toggleScaleControls} tonic=${tonic} label=${scaleLabel} note-ids=${JSON.stringify(scaleNotes)}></scale-badge>
+    `
+
+    const scaleControls = !this.scalePickerActive ? undefined : html`
+      <glass-panel class="controls">
+        <scale-controls></scale-controls>
+      </glass-panel>
     `
 
     return html`
@@ -132,8 +147,11 @@ export class GameViewElement extends LitElement {
           </tone-wheel>
         </div>
         <div class="scale">
-          ${scaleBadge}
+          <div class="toggle-icon">
+            ${scaleBadge}
+          </div>
         </div>
+        ${scaleControls}
         ${progressView}
       </div>
     `

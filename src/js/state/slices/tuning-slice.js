@@ -83,6 +83,7 @@ const initialState = {
   display: { ...DefaultDisplay },
   angles: EDOAngles(DefaultNoteIds),
   scaleNotes: [...DefaultNoteIds],
+  tonicNote: 'C',
 }
 
 const tuningSlice = createSlice({
@@ -90,15 +91,25 @@ const tuningSlice = createSlice({
   initialState,
   reducers: {
     /**
-     * 
      * @param {TuningState} state 
      * @param {import('@reduxjs/toolkit').PayloadAction<string[]>} action 
      */
     setScaleNotes(state, action) {
       state.scaleNotes = action.payload.filter(noteId => state.noteIds.includes(noteId))
+    },
+
+    /**
+     * @param {TuningState} state 
+     * @param {import('@reduxjs/toolkit').PayloadAction<string>} action 
+     */
+    setTonicNote(state, action) {
+      if (state.noteIds.includes(action.payload)) {
+        state.tonicNote = action.payload
+      }
     }
   },
 })
 
-const { reducer } = tuningSlice
+const { reducer, actions } = tuningSlice
+export const { setScaleNotes, setTonicNote } = actions
 export default reducer

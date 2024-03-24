@@ -77,6 +77,7 @@ export type TuningState = {
   display: Record<string, NoteDisplay>
   angles: Record<string, number>
   scaleNotes: string[]
+  tonicNote: string
 }
 
 import type { ColorScaleName } from '../../common/types.d.ts'

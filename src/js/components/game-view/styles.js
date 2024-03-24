@@ -32,7 +32,7 @@ const styles = css`
       '. status .'
       '. wheel .'
       '. scale .'
-      '. progress .'
+      '. controls .'
       '. . .';
     place-items: center;
   }
@@ -45,27 +45,32 @@ const styles = css`
 
   .scale {
     grid-area: scale;
-    z-index: 10;
+    /* z-index: 10; */
     width: 100%;
     height: 0;
     position: relative;
   }
 
-  .scale scale-badge {
-    width: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.16));
+  .scale .toggle-icon {
+    font-size: 48px;
+    width: min(64px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.16));
     aspect-ratio: 1;
     position: absolute;
-    top: max(-48px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.16));
+    top: max(-64px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.16));
     left: 0px;
   }
+
+  /* .scale scale-badge {
+
+  } */
 
   .wheel {
     grid-area: wheel;
     width: 100%;
   }
 
-  .progress {
-    grid-area: progress;
+  .controls {
+    grid-area: controls;
     width: 100%;
     /* height: 100%; */
   }
@@ -84,24 +89,24 @@ const styles = css`
         /* status   */ ${PANEL_SIZE}
         /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
         /* scale    */ min-content
-        /* progress */ ${PANEL_SIZE}
+        /* controls */ ${PANEL_SIZE}
         /* .        */ max(${TOOLBAR_ICON_SIZE}, 0px);
 
       /* note: useless max() above is to trick the vscode lit plugin's invalid syntax checker,
         which breaks if the last element before a ';' char is a template string interpolation */
-      grid-template-areas: '. status wheel scale progress . ';
+      grid-template-areas: '. status wheel scale controls . ';
     }
     .status {
       height: ${WHEEL_SIZE_LANDSCAPE};
     }
-    .progress {
+    .controls {
       height: ${WHEEL_SIZE_LANDSCAPE};
       max-width: ${PANEL_SIZE_PX};
     }
     .scale {
       height: 100%;
     }
-    .scale scale-badge {
+    .scale .toggle-icon {
       width: min(48px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.16));
       top: auto;
       bottom: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.16));
