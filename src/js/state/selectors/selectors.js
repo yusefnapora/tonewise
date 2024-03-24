@@ -180,6 +180,11 @@ export const selectTuningNoteIds = createSelector(
   (tuning) => tuning.noteIds,
 )
 
+export const selectScaleNoteIds = createSelector(
+  [selectTuningState],
+  (tuning) => tuning.scaleNotes
+)
+
 export const selectMidiNote = createSelector(
   [
     selectTuningState,

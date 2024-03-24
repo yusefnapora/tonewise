@@ -15,6 +15,7 @@ import {
 import {
   selectColorScale,
   selectMidiNote,
+  selectScaleNoteIds,
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
 import gameViewStyles from './styles.js'
@@ -85,6 +86,7 @@ export class GameViewElement extends LitElement {
   render() {
     const colorScale = this.#state.select(selectColorScale)
     const wheelNotes = this.#state.select(selectWheelNotes)
+    const scaleNotes = this.#state.select(selectScaleNoteIds)
 
     const pitchClasses = wheelNotes.map(
       ({ noteId, midiNote, label, active }) => html`
@@ -106,11 +108,14 @@ export class GameViewElement extends LitElement {
     // TODO: make tone-wheel update itself when active pitch classes change
     this.#wheel?.requestUpdate()
 
-    // TODO: don't hardcode this :)
-    const noteIds = wheelNotes.map(n => n.noteId)
+    const isChromatic = scaleNotes.length === wheelNotes.length
+    const scaleLabel = isChromatic ? 'scale' : 'major' // todo: name of current scale (derive from state)
+    const tonic = isChromatic ? '' : 'C' // todo: pull current tonic from state
+    const scaleBadgeClicked = () => {
+      console.log('scale badge clicked')
+    }
     const scaleBadge = html`
-      <!-- <scale-badge tonic="C" label="major" note-ids='["C", "D", "E", "F", "G", "A", "B"]'></scale-badge> -->
-      <scale-badge tonic="" label="" note-ids=${JSON.stringify(noteIds)}></scale-badge>
+      <scale-badge @click=${scaleBadgeClicked} tonic=${tonic} label=${scaleLabel} note-ids=${JSON.stringify(scaleNotes)}></scale-badge>
     `
 
     return html`

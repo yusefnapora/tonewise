@@ -45,6 +45,7 @@ const styles = css`
 
   .scale {
     grid-area: scale;
+    z-index: 10;
     width: 100%;
     height: 0;
     position: relative;
@@ -54,8 +55,8 @@ const styles = css`
     width: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.16));
     aspect-ratio: 1;
     position: absolute;
-    top: min(-48px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.16));
-    right: 0px;
+    top: max(-48px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.16));
+    left: 0px;
   }
 
   .wheel {

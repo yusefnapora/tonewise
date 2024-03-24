@@ -82,13 +82,21 @@ const initialState = {
   midiNotes: { ...NoteIdMidiMap },
   display: { ...DefaultDisplay },
   angles: EDOAngles(DefaultNoteIds),
+  scaleNotes: [...DefaultNoteIds],
 }
 
 const tuningSlice = createSlice({
   name: 'tuning',
   initialState,
   reducers: {
-    // todo: actions to change tuning & presentation preferences
+    /**
+     * 
+     * @param {TuningState} state 
+     * @param {import('@reduxjs/toolkit').PayloadAction<string[]>} action 
+     */
+    setScaleNotes(state, action) {
+      state.scaleNotes = action.payload.filter(noteId => state.noteIds.includes(noteId))
+    }
   },
 })
 
