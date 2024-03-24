@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Scale } from 'tonal'
 
 /**
  * @typedef {import('./types.js').TuningState} TuningState
@@ -6,16 +7,16 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export const DefaultNoteIds = [
   'C',
-  'C♯',
+  'Db',
   'D',
-  'D♯',
+  'Eb',
   'E',
   'F',
-  'F♯',
+  'Gb',
   'G',
-  'G♯',
+  'Ab',
   'A',
-  'A♯',
+  'Bb',
   'B',
 ]
 
@@ -27,7 +28,7 @@ const NoteIdMidiMap = Object.fromEntries(
 /** @type {Record<string, import("./types.js").NoteDisplay>} */
 const DefaultDisplay = {
   C: { label: 'C' },
-  'C♯': {
+  'Db': {
     label: 'C♯',
     enharmonicLabels: {
       sharp: 'C♯',
@@ -35,7 +36,7 @@ const DefaultDisplay = {
     },
   },
   D: { label: 'D' },
-  'D♯': {
+  'Eb': {
     label: 'D♯',
     enharmonicLabels: {
       sharp: 'D♯',
@@ -44,7 +45,7 @@ const DefaultDisplay = {
   },
   E: { label: 'E' },
   F: { label: 'F' },
-  'F♯': {
+  'Gb': {
     label: 'F♯',
     enharmonicLabels: {
       sharp: 'F♯',
@@ -52,7 +53,7 @@ const DefaultDisplay = {
     },
   },
   G: { label: 'G' },
-  'G♯': {
+  'Ab': {
     label: 'G♯',
     enharmonicLabels: {
       sharp: 'G♯',
@@ -60,7 +61,7 @@ const DefaultDisplay = {
     },
   },
   A: { label: 'A' },
-  'A♯': {
+  'Bb': {
     label: 'A♯',
     enharmonicLabels: {
       sharp: 'A♯',
@@ -84,6 +85,7 @@ const initialState = {
   angles: EDOAngles(DefaultNoteIds),
   scaleNotes: [...DefaultNoteIds],
   tonicNote: 'C',
+  scaleQuality: 'chromatic',
 }
 
 const tuningSlice = createSlice({
@@ -106,10 +108,25 @@ const tuningSlice = createSlice({
       if (state.noteIds.includes(action.payload)) {
         state.tonicNote = action.payload
       }
+    },
+
+    /**
+     * @param {TuningState} state 
+     * @param {import('@reduxjs/toolkit').PayloadAction<string>} action 
+     */ 
+    setScaleQuality(state, action) {
+      const quality = action.payload
+      const scaleName = [state.tonicNote, quality].join(' ')
+      const scale = Scale.get(scaleName)
+      if (scale) {
+        console.log('scale', { scaleName, scale })
+        state.scaleQuality = quality
+        state.scaleNotes = [...scale.notes]
+      }
     }
   },
 })
 
 const { reducer, actions } = tuningSlice
-export const { setScaleNotes, setTonicNote } = actions
+export const { setScaleNotes, setTonicNote, setScaleQuality } = actions
 export default reducer

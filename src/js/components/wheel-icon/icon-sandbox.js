@@ -5,7 +5,7 @@ export class IconSandboxViewElement extends LitElement {
 
   render() {
     return html`
-      <wheel-icon active-notes="G♯,E"></wheel-icon>
+      <wheel-icon active-notes="G,E"></wheel-icon>
     `
   }
 }

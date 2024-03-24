@@ -95,7 +95,9 @@ export class GameViewElement extends LitElement {
         <pitch-class
           id=${noteId}
           midi-note=${midiNote}
-          active=${active || nothing}>
+          active=${active || nothing}
+          disabled=${scaleNotes.includes(noteId) ? nothing : true}
+          >
           ${label}
         </pitch-class>
       `,
@@ -112,9 +114,10 @@ export class GameViewElement extends LitElement {
     // TODO: make tone-wheel update itself when active pitch classes change
     this.#wheel?.requestUpdate()
 
+    const { tuning: { tonicNote, scaleQuality } } = this.#state.state
     const isChromatic = scaleNotes.length === wheelNotes.length
-    const scaleLabel = isChromatic ? 'scale' : 'major' // todo: name of current scale (derive from state)
-    const tonic = isChromatic ? '' : 'C' // todo: pull current tonic from state
+    const scaleLabel = isChromatic ? 'scale' : scaleQuality
+    const tonic = isChromatic ? '' : tonicNote
     const toggleScaleControls = () => {
       this.scalePickerActive = !this.scalePickerActive
     }

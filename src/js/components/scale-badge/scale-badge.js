@@ -34,7 +34,9 @@ export class ScaleBadgeElement extends LitElement {
     }
 
     .badge-rim-segment:not(.active-note) {
-      opacity: 0;
+      stroke: var(--color-text-muted);
+      fill: var(--color-text-muted);
+      opacity: 0.5;
     }
 
     .highlighted {
@@ -97,7 +99,7 @@ export class ScaleBadgeElement extends LitElement {
     const gapDegrees = 10
     const cx = 500
     const cy = 500
-    const radius = 340
+    const radius = 300
     const backgroundRadius = radius * 0.6
     const thickness = radius - backgroundRadius
 
@@ -148,24 +150,31 @@ export class ScaleBadgeElement extends LitElement {
     <circle class="background" r=${backgroundRadius} cx=${cx} cy=${cy} />
     `
 
-    const r = 500
-    const textArcPath = `
+    let r = 460
+    const bottomTextArc = `
       M ${cx-r},${cy}
       a ${r},${r} 0 1,0 ${r*2},0
       `
 
+    r = radius + 60
+    const topTextArc = `
+      M ${cx-r},${cy}
+      a ${r},${r} 0 1,1 ${r*2},0
+    `
+
     const arcDef = svg`
     <defs>
-      <path id="text-arc" d=${textArcPath} style="stroke: red; stroke-width: 10; fill: none;"/>
+      <path id="text-arc" d=${bottomTextArc} />
+      <path id="text-arc-top" d=${topTextArc} />
     </defs>
     `
 
     content.push(arcDef)
     content.push(backgroundCircle)
 
-    const label = this.label ?? ''
+    let label = this.label ?? ''
 
-    const fontSize = 280
+    const fontSize = 220
     const yOffset = fontSize * 0.25
     const transform = `translate(0 ${yOffset})`
 
@@ -182,11 +191,28 @@ export class ScaleBadgeElement extends LitElement {
     `
     content.push(tonicLabelText)
 
+    const labelWords = label.split(' ')
+    if (labelWords.length > 1) {
+      const first = labelWords[0]
+      const upperText = svg`
+        <text
+          class="quality-label"
+          text-anchor="middle"
+          font-size="160">
+          <textPath href="#text-arc-top" startOffset="50%">
+            ${first}
+          </textPath>
+        </text>
+      `
+      content.push(upperText)
+      label = labelWords.slice(1).join(' ')
+    }
+
     const qualityLabelText = svg`
       <text
         class="quality-label"
         text-anchor="middle"
-        font-size="180"
+        font-size="160"
       >
         <textPath href="#text-arc" startOffset="50%">
           ${label}
@@ -194,6 +220,7 @@ export class ScaleBadgeElement extends LitElement {
       </text>
     `
     content.push(qualityLabelText)
+
     const labelStyle = `
       text.note-label {
         stroke: ${activeNoteColor};

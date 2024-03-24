@@ -116,7 +116,7 @@ export class WelcomeViewElement extends LitElement {
       <glass-panel>
         <div class="content">
           <div class="logo">
-            <wheel-icon active-notes="G♯,E"></wheel-icon>
+            <wheel-icon active-notes="G#,E"></wheel-icon>
             <h1 class="app-title">${appName}</h1>
           </div>
           <!-- <p class="welcome-text">${welcomeText}</p> -->

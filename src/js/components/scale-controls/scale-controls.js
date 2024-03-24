@@ -3,7 +3,7 @@ import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import { selectNoteLabel, selectScaleNoteIds } from '../../state/selectors/selectors.js'
 import { dispatch } from '../../state/store.js'
-import { setTonicNote } from '../../state/slices/tuning-slice.js'
+import { setScaleQuality, setTonicNote } from '../../state/slices/tuning-slice.js'
 
 export class ScaleControlsElement extends LitElement {
   static styles = css`
@@ -18,6 +18,10 @@ export class ScaleControlsElement extends LitElement {
     scale-badge {
       width: 80px;
       aspect-ratio: 1;
+    }
+
+    .quality-dropdown::part(label) {
+      min-width: 16ch;
     }
   `
 
@@ -47,10 +51,17 @@ export class ScaleControlsElement extends LitElement {
 
     // todo: don't hardcode, derive from state
     const scaleQualities = ['major', 'minor', 'harmonic minor', 'blues', 'chromatic']
-    const currentScale = 'chromatic'
+    /** @param {import('@shoelace-style/shoelace').SlSelectEvent} e */
+    const qualitySelected = (e) => {
+      dispatch(setScaleQuality(e.detail.item.value))
+    }
+    const currentScale = tuning.scaleQuality 
     const qualityMenuItems = scaleQualities.map(quality => html`
-      <sl-menu-item value=${quality}>${quality}</sl-menu-item>
+      <sl-menu-item value=${quality}>
+        ${quality}
+      </sl-menu-item>
     `)
+    const badgeLabel = currentScale === 'chromatic' ? '' : currentScale
 
     const buttons = html`
       <sl-button-group>
@@ -64,10 +75,10 @@ export class ScaleControlsElement extends LitElement {
         </sl-dropdown>
 
         <sl-dropdown hoist>
-          <sl-button slot="trigger" caret pill>
+          <sl-button class="quality-dropdown" slot="trigger" caret pill>
             ${currentScale}
           </sl-button>
-          <sl-menu>
+          <sl-menu @sl-select=${qualitySelected}>
             ${qualityMenuItems}
           </sl-menu>
         </sl-dropdown>
@@ -75,10 +86,14 @@ export class ScaleControlsElement extends LitElement {
     `
 
     return html`
-      <scale-badge tonic=${tonicNoteLabel} note-ids=${JSON.stringify(scaleNoteIds)}></scale-badge>
-      <!-- <div class="controls"> -->
+      <scale-badge 
+        tonic=${tonicNoteLabel}
+        label=${badgeLabel}
+        note-ids=${JSON.stringify(scaleNoteIds)}>
+      </scale-badge>
+      <div class="controls">
         ${buttons}
-      <!-- </div> -->
+      </div>
     `
   }
 }
