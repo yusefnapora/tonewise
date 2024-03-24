@@ -24,13 +24,14 @@ const styles = css`
     /* column-gap: 10px; */
     row-gap: 10px;
 
-    grid-template-rows: 0 1fr ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
+    grid-template-rows: 0 1fr ${WHEEL_SIZE_PORTRAIT} min-content ${PANEL_SIZE} 0;
     grid-template-columns: 1fr ${WHEEL_SIZE_PORTRAIT} 1fr;
 
     grid-template-areas:
       '. . .'
       '. status .'
       '. wheel .'
+      '. scale .'
       '. progress .'
       '. . .';
     place-items: center;
@@ -40,6 +41,21 @@ const styles = css`
   .status {
     grid-area: status;
     width: 100%;
+  }
+
+  .scale {
+    grid-area: scale;
+    width: 100%;
+    height: 0;
+    position: relative;
+  }
+
+  .scale scale-badge {
+    width: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.16));
+    aspect-ratio: 1;
+    position: absolute;
+    top: min(-48px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.16));
+    right: 0px;
   }
 
   .wheel {
@@ -66,12 +82,13 @@ const styles = css`
         ${TOOLBAR_ICON_SIZE}
         /* status   */ ${PANEL_SIZE}
         /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
+        /* scale    */ min-content
         /* progress */ ${PANEL_SIZE}
         /* .        */ max(${TOOLBAR_ICON_SIZE}, 0px);
 
       /* note: useless max() above is to trick the vscode lit plugin's invalid syntax checker,
         which breaks if the last element before a ';' char is a template string interpolation */
-      grid-template-areas: '. status wheel progress . ';
+      grid-template-areas: '. status wheel scale progress . ';
     }
     .status {
       height: ${WHEEL_SIZE_LANDSCAPE};
@@ -79,6 +96,15 @@ const styles = css`
     .progress {
       height: ${WHEEL_SIZE_LANDSCAPE};
       max-width: ${PANEL_SIZE_PX};
+    }
+    .scale {
+      height: 100%;
+    }
+    .scale scale-badge {
+      width: min(48px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.16));
+      top: auto;
+      bottom: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.16));
+      right: 0px;
     }
   }
 `

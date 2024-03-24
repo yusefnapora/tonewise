@@ -106,6 +106,13 @@ export class GameViewElement extends LitElement {
     // TODO: make tone-wheel update itself when active pitch classes change
     this.#wheel?.requestUpdate()
 
+    // TODO: don't hardcode this :)
+    const noteIds = wheelNotes.map(n => n.noteId)
+    const scaleBadge = html`
+      <!-- <scale-badge tonic="C" label="major" note-ids='["C", "D", "E", "F", "G", "A", "B"]'></scale-badge> -->
+      <scale-badge tonic="" label="" note-ids=${JSON.stringify(noteIds)}></scale-badge>
+    `
+
     return html`
       <div class="contents">
         <div class="status">
@@ -118,6 +125,9 @@ export class GameViewElement extends LitElement {
             @note:holdEnded=${this.#pitchDeselected}>
             ${pitchClasses}
           </tone-wheel>
+        </div>
+        <div class="scale">
+          ${scaleBadge}
         </div>
         ${progressView}
       </div>
