@@ -25,6 +25,24 @@ const NoteIdMidiMap = Object.fromEntries(
   DefaultNoteIds.map((n, i) => [n, startMidiNote + i]),
 )
 
+/** @param {string} tonicNoteId  */
+function midiNoteMapForTonic(tonicNoteId, noteIds=DefaultNoteIds) {
+  const index = DefaultNoteIds.indexOf(tonicNoteId)
+
+  if (index < 0) {
+    return {...NoteIdMidiMap}
+  }
+
+  const octave = 4 // index === 0 ? 4 : 3
+  const noteName = `${tonicNoteId}${octave}`
+  const tonic = Note.get(noteName)
+  const startMidi = tonic.midi
+  const sorted = [...noteIds.slice(index), ...noteIds.slice(0, index)]
+  return Object.fromEntries(
+    sorted.map((n, i) => [n, startMidi + i]),
+  )
+}
+
 /** @type {Record<string, import("./types.js").NoteDisplay>} */
 const DefaultDisplay = {
   C: { label: 'C' },
@@ -133,11 +151,12 @@ const tuningSlice = createSlice({
         return
       }
       const tonicNote = action.payload
+      state.tonicNote = tonicNote
+      state.midiNotes = midiNoteMapForTonic(tonicNote)
       const scaleNotes = deriveScaleNotes(state.noteIds, tonicNote, state.scaleQuality)
       if (!scaleNotes) {
         return
       }
-      state.tonicNote = tonicNote
       state.scaleNotes = scaleNotes
     },
 

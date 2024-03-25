@@ -4,6 +4,7 @@ import { StateController } from '../../state/controller.js'
 import { selectNoteLabel, selectScaleNoteIds } from '../../state/selectors/selectors.js'
 import { dispatch } from '../../state/store.js'
 import { setScaleQuality, setTonicNote } from '../../state/slices/tuning-slice.js'
+import { landscapeMediaQuery } from '../../styles.js'
 
 export class ScaleControlsElement extends LitElement {
   static styles = css`
@@ -12,7 +13,7 @@ export class ScaleControlsElement extends LitElement {
       width: 100%;
       min-height: 96px;
       align-items: center;
-      justify-content: space-evenly;
+      justify-content: space-between;
     }
 
     scale-badge {
@@ -22,6 +23,32 @@ export class ScaleControlsElement extends LitElement {
 
     .quality-dropdown::part(label) {
       min-width: 15ch;
+    }
+
+    .landscape-controls {
+      display: none;
+    }
+
+    ${landscapeMediaQuery} {
+      :host {
+        min-width: calc(15ch + 32px);
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .landscape-controls {
+        display: flex;
+        height: 100%;
+        min-height: 100px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .portrait-controls {
+        display: none;
+      }
     }
   `
 
@@ -63,26 +90,35 @@ export class ScaleControlsElement extends LitElement {
     `)
     const badgeLabel = currentScale === 'chromatic' ? '' : currentScale
 
-    const buttons = html`
-      <sl-button-group>
-        <sl-dropdown hoist>
-          <sl-button slot="trigger" caret pill>
-            ${tonicNoteLabel}
-          </sl-button>
-          <sl-menu @sl-select=${noteSelected}>
-            ${noteMenuItems}
-          </sl-menu>
-        </sl-dropdown>
+    const buttons = placement => html`
+      <sl-dropdown hoist placement=${placement}>
+        <sl-button slot="trigger" caret pill>
+          ${tonicNoteLabel}
+        </sl-button>
+        <sl-menu @sl-select=${noteSelected}>
+          ${noteMenuItems}
+        </sl-menu>
+      </sl-dropdown>
 
-        <sl-dropdown hoist>
-          <sl-button class="quality-dropdown" slot="trigger" caret pill>
-            ${currentScale}
-          </sl-button>
-          <sl-menu @sl-select=${qualitySelected}>
-            ${qualityMenuItems}
-          </sl-menu>
-        </sl-dropdown>
+      <sl-dropdown hoist placement=${placement}>
+        <sl-button class="quality-dropdown" slot="trigger" caret pill>
+          ${currentScale}
+        </sl-button>
+        <sl-menu @sl-select=${qualitySelected}>
+          ${qualityMenuItems}
+        </sl-menu>
+      </sl-dropdown>
+    `
+    const buttonsPortrait = html`
+      <sl-button-group class="portrait-controls">
+        ${buttons('top')}
       </sl-button-group>
+    `
+
+    const buttonsLandscape = html`
+      <div class="landscape-controls">
+        ${buttons('left')}
+      </div>
     `
 
     return html`
@@ -92,7 +128,8 @@ export class ScaleControlsElement extends LitElement {
         note-ids=${JSON.stringify(scaleNoteIds)}>
       </scale-badge>
       <div class="controls">
-        ${buttons}
+        ${buttonsPortrait}
+        ${buttonsLandscape}
       </div>
     `
   }

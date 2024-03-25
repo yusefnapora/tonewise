@@ -283,7 +283,7 @@ export const selectAppBackgroundCss = createSelector(
     if (colorScale.startsWith('oklch')) {
       const rotation = `-${tonicAngle}deg`
       background = `conic-gradient(from ${rotation}, ${colors.join(', ')})`
-      themeColor = colorForAngle(345, colorScale)
+      themeColor = colorForAngle(345+tonicAngle, colorScale)
     }
     return { background, themeColor }
   }

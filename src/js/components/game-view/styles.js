@@ -101,15 +101,15 @@ const styles = css`
     }
     .controls {
       height: ${WHEEL_SIZE_LANDSCAPE};
-      max-width: ${PANEL_SIZE_PX};
+      max-width: 200px;
     }
     .scale {
       height: 100%;
     }
     .scale .toggle-icon {
-      width: min(48px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.16));
+      width: min(64px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.16));
       top: auto;
-      bottom: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.16));
+      top: min(64px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.16));
       right: 0px;
     }
   }

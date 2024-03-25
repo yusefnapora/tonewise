@@ -88,7 +88,7 @@ export class SettingsViewElement extends LitElement {
     const wheelNotes = this.#state.select(selectWheelNotes)
     const theme = this.#state.select(selectColorTheme)
 
-    const activeNotes = ['G#','E']
+    const activeNotes = ['Ab','E']
     const pitchClasses = wheelNotes.map(
       ({ noteId, label }) => html`
         <pitch-class id=${noteId} active=${activeNotes.includes(noteId) ? true : nothing}> 

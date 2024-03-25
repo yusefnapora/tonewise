@@ -124,9 +124,8 @@ export class GameViewElement extends LitElement {
 
     const tonicAngle = selectTonicNoteAngle(this.#state.state)
     const { tuning: { tonicNote, scaleQuality } } = this.#state.state
-    const isChromatic = scaleNotes.length === wheelNotes.length
-    const scaleLabel = isChromatic ? 'scale' : scaleQuality
-    const tonic = isChromatic ? '' : tonicNote
+    const scaleLabel = scaleQuality
+    const tonic = tonicNote
     const toggleScaleControls = () => {
       this.scalePickerActive = !this.scalePickerActive
     }
