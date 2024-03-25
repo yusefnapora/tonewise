@@ -21,7 +21,7 @@ export class ScaleControlsElement extends LitElement {
     }
 
     .quality-dropdown::part(label) {
-      min-width: 16ch;
+      min-width: 15ch;
     }
   `
 
