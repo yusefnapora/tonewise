@@ -16,9 +16,11 @@ import {
   selectColorScale,
   selectMidiNote,
   selectScaleNoteIds,
+  selectTonicNoteAngle,
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
 import gameViewStyles from './styles.js'
+import { DEFAULT_ROTATION_OFFSET } from '../index.js'
 
 export class GameViewElement extends LitElement {
   static properties = {
@@ -120,6 +122,7 @@ export class GameViewElement extends LitElement {
     // TODO: make tone-wheel update itself when active pitch classes change
     this.#wheel?.requestUpdate()
 
+    const tonicAngle = selectTonicNoteAngle(this.#state.state)
     const { tuning: { tonicNote, scaleQuality } } = this.#state.state
     const isChromatic = scaleNotes.length === wheelNotes.length
     const scaleLabel = isChromatic ? 'scale' : scaleQuality
@@ -142,6 +145,8 @@ export class GameViewElement extends LitElement {
       </glass-panel>
     `
 
+    const wheelRotation = DEFAULT_ROTATION_OFFSET - tonicAngle
+
     return html`
       <div class="contents">
         <div class="status">
@@ -149,6 +154,7 @@ export class GameViewElement extends LitElement {
         </div>
         <div class="wheel">
           <tone-wheel
+            rotationOffset=${wheelRotation}
             color-scale=${colorScale}
             @note:holdBegan=${this.#pitchSelected}
             @note:holdEnded=${this.#pitchDeselected}>

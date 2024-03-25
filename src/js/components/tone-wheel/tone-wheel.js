@@ -29,7 +29,7 @@ const DEFAULT_RADIUS = 500
 // SVG starts counting degrees from the "eastward" point of the circle
 // but I want 0 degrees to mean due north. So by default we apply a
 // global rotation of -90deg.
-const DEFAULT_ROTATION_OFFSET = -90
+export const DEFAULT_ROTATION_OFFSET = -90
 
 const DEFAULT_FONT_SIZE = 75
 
@@ -205,7 +205,7 @@ export class ToneWheel extends LitElement {
         <div class="gradient-blur"></div>
       </div>
       <div class="gradient-background vibrant gradient-colors">
-        <!-- <div class="gradient-blur"></div> -->
+        <div class="gradient-blur"></div>
       </div>
       <svg viewBox="0 0 1000 1000">${content}</svg>
     `
@@ -365,9 +365,11 @@ export class ToneWheel extends LitElement {
     // repeat the first color at the end, so the
     // to act as the end point for the last gradient stop
     const backgroundColors = [...colors, colors[0]]
+    const backgroundRotation = `from ${90+this.rotationOffset}deg`
     styleContent += `
       .gradient-colors {
         background: conic-gradient(
+          ${backgroundRotation},
           ${backgroundColors.join(', ')}
         );
       }

@@ -3,6 +3,7 @@ import {
   intervalDisplayName,
   midiNoteInterval,
 } from '../../common/intervals.js'
+import { colorForAngle } from '../../common/color.js'
 /**
  * @typedef {import('../store.js').RootState} RootState
  * @typedef {import('../store.js').AppDispatch} AppDispatch
@@ -252,4 +253,38 @@ export const selectWheelNotes = createSelector(
       return { noteId: id, midiNote, label, active }
     })
   },
+)
+
+export const selectTonicNoteAngle = createSelector(
+  [selectTuningState],
+  (tuning) => {
+    return tuning.angles[tuning.tonicNote]
+  }
+)
+
+export const selectGradientColors = createSelector(
+  [selectTuningState, selectColorScale],
+  (tuning, colorScale) => {
+    const { noteIds, angles } = tuning
+    const colors = [...noteIds, noteIds[0]].map((noteId) => {
+      const angle = angles[noteId]
+      return colorForAngle(angle, colorScale)
+    })
+    return colors
+  }
+)
+
+export const selectAppBackgroundCss = createSelector(
+  [selectGradientColors, selectColorScale, selectTonicNoteAngle],
+  (colors, colorScale, tonicAngle) => {
+    
+    let background = 'var(--color-background)'
+    let themeColor = background
+    if (colorScale.startsWith('oklch')) {
+      const rotation = `-${tonicAngle}deg`
+      background = `conic-gradient(from ${rotation}, ${colors.join(', ')})`
+      themeColor = colorForAngle(345, colorScale)
+    }
+    return { background, themeColor }
+  }
 )

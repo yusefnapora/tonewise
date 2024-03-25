@@ -6,11 +6,8 @@ import {
 } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
-  selectColorScale,
-  selectNoteAngle,
-  selectTuningNoteIds,
+  selectAppBackgroundCss,
 } from '../../state/selectors/selectors.js'
-import { colorForAngle } from '../../common/color.js'
 import Color from 'colorjs.io'
 
 export class AppBackgroundElement extends LitElement {
@@ -43,21 +40,7 @@ export class AppBackgroundElement extends LitElement {
   #state = new StateController(this)
 
   render() {
-    const noteIds = this.#state.select(selectTuningNoteIds)
-    const colorScale = this.#state.select(selectColorScale)
-
-    let background = 'var(--color-background)'
-    let themeColor = background
-    if (colorScale.startsWith('oklch')) {
-      // todo: pull this into a helper that builds the conic-gradient(...)
-      // for the current tuning & color scale
-      const colors = [...noteIds, noteIds[0]].map((noteId) => {
-        const angle = this.#state.select(selectNoteAngle, noteId)
-        return colorForAngle(angle, colorScale)
-      })
-      background = `conic-gradient(${colors.join(', ')})`
-      themeColor = colorForAngle(345, colorScale)
-    }
+    let { background, themeColor } = this.#state.select(selectAppBackgroundCss)
 
     themeColor = resolveCSSVariables(themeColor, this)
     const c = new Color(themeColor).to('srgb').toString({ format: 'hex' })

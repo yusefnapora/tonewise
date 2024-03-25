@@ -9,8 +9,10 @@ import { StateController } from '../../state/controller.js'
 import {
   selectColorScale,
   selectNoteAngle,
+  selectTonicNoteAngle,
   selectTuningNoteIds,
 } from '../../state/selectors/selectors.js'
+import { DEFAULT_ROTATION_OFFSET } from '../index.js'
 
 export class ScaleBadgeElement extends LitElement {
   static styles = css`
@@ -22,10 +24,9 @@ export class ScaleBadgeElement extends LitElement {
       -webkit-user-select: none;
     }
 
-    .background {
+    /* .background {
       fill: var(--color-glass-background);
-      /* opacity: 0.75; */
-    }
+    } */
 
     .badge-rim-segment {
       stroke-width: 10;
@@ -73,7 +74,7 @@ export class ScaleBadgeElement extends LitElement {
 
   constructor() {
     super()
-    this.rotationOffset = -90
+    this.rotationOffset = DEFAULT_ROTATION_OFFSET
     this.tonic = ''
     this.noteIds = []
     this.highlight = false
@@ -85,8 +86,12 @@ export class ScaleBadgeElement extends LitElement {
   }
 
   #svgContent() {
+    const tonicAngle = this.#state.select(selectTonicNoteAngle)
+    this.rotationOffset = DEFAULT_ROTATION_OFFSET - tonicAngle
+    
     const noteIds = this.#state.select(selectTuningNoteIds)
     const colorScale = this.#state.select(selectColorScale)
+    
 
     /** @type {Array<{id: string, angle: number}>} */
     const notes = []
@@ -141,10 +146,11 @@ export class ScaleBadgeElement extends LitElement {
       `)
     }
     let activeNoteColor = 'var(--color-text)'
-    // if (activeNote && colorScale.startsWith('oklch')) {
-    //   activeNoteColor = colorForAngle(activeNote.angle, colorScale)
+    let backgroundColor = 'var(--color-glass-background)'
+    // if (colorScale.startsWith('oklch')) {
+    //   const noteColor = colorForAngle(tonicAngle, colorScale)
+    //   backgroundColor = `color-mix(in lch, ${noteColor}, var(--color-glass-background) 20%)`
     // }
-
 
     const backgroundCircle = svg`
     <circle class="background" r=${backgroundRadius} cx=${cx} cy=${cy} />
@@ -228,10 +234,17 @@ export class ScaleBadgeElement extends LitElement {
       }
     `
 
+    const backgroundStyle = `
+      .background {
+        fill: ${backgroundColor};
+      }
+    `
+
     return svg`
       <style>
         ${segmentStyles.join('\n')}
         ${labelStyle}
+        ${backgroundStyle}
       </style>
       <g>${content}</g>
     `

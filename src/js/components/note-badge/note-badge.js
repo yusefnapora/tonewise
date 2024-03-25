@@ -9,8 +9,10 @@ import { StateController } from '../../state/controller.js'
 import {
   selectColorScale,
   selectNoteAngle,
+  selectTonicNoteAngle,
   selectTuningNoteIds,
 } from '../../state/selectors/selectors.js'
+import { DEFAULT_ROTATION_OFFSET } from '../index.js'
 
 export class NoteBadgeElement extends LitElement {
   static styles = css`
@@ -58,7 +60,7 @@ export class NoteBadgeElement extends LitElement {
 
   constructor() {
     super()
-    this.rotationOffset = -90
+    this.rotationOffset = DEFAULT_ROTATION_OFFSET
     this.noteId = undefined
     this.reveal = false
     this.highlight = false
@@ -66,6 +68,9 @@ export class NoteBadgeElement extends LitElement {
   }
 
   render() {
+    const tonicAngle = this.#state.select(selectTonicNoteAngle)
+    this.rotationOffset = DEFAULT_ROTATION_OFFSET - tonicAngle
+    
     return html` <svg viewBox="0 0 1000 1000">${this.#svgContent()}</svg> `
   }
 
