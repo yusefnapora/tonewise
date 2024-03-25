@@ -17,7 +17,9 @@ export class ScaleControlsElement extends LitElement {
     }
 
     scale-badge {
-      width: 80px;
+      min-width: 60px;
+      max-width: 80px;
+      width: 100%;
       aspect-ratio: 1;
     }
 

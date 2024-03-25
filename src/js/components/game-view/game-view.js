@@ -139,9 +139,11 @@ export class GameViewElement extends LitElement {
     `
 
     const scaleControls = !this.scalePickerActive ? undefined : html`
-      <glass-panel class="controls">
+      <!-- <glass-panel class="controls"> -->
+      <div class="controls">
         <scale-controls></scale-controls>
-      </glass-panel>
+      </div>
+      <!-- </glass-panel> -->
     `
 
     const wheelRotation = DEFAULT_ROTATION_OFFSET - tonicAngle
