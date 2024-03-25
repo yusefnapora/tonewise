@@ -52,12 +52,12 @@ const styles = css`
   }
 
   .scale .toggle-icon {
-    font-size: 48px;
+    font-size: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.1));
     width: min(64px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.2));
     aspect-ratio: 1;
     position: absolute;
     top: max(-64px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.2));
-    left: max(-16px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.2 / 4));
+    right: max(-16px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.2 / 4));
   }
 
   /* .scale scale-badge {
@@ -107,10 +107,11 @@ const styles = css`
       height: 100%;
     }
     .scale .toggle-icon {
+      font-size: min(48px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.1));
       width: min(64px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.2));
       top: auto;
-      top: min(64px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.2));
-      left: min(-48px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.2));
+      bottom: min(64px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.2));
+      right: min(-16px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.1));
     }
   }
 `
