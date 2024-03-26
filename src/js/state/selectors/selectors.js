@@ -262,6 +262,25 @@ export const selectTonicNoteAngle = createSelector(
   }
 )
 
+export const selectNoteColor = createSelector(
+  [
+    selectTuningState, 
+    selectColorScale, 
+    /** 
+     * @param {RootState} _state
+     * @param {string} noteId
+     */
+    (_state, noteId) => noteId
+  ],
+  (tuning, colorScale, noteId) => {
+    const angle = tuning.angles[noteId]
+    if (angle == null) {
+      return undefined
+    }
+    return colorForAngle(angle, colorScale)
+  }
+)
+
 export const selectGradientColors = createSelector(
   [selectTuningState, selectColorScale],
   (tuning, colorScale) => {

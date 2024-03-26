@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { selectNoteLabel } from '../../state/selectors/selectors.js'
+import { selectNoteColor, selectNoteLabel } from '../../state/selectors/selectors.js'
 import { dispatch } from '../../state/store.js'
 import { deriveScaleNotes, setScaleQuality, setTonicNote } from '../../state/slices/tuning-slice.js'
 import { landscapeMediaQuery } from '../../styles.js'
@@ -16,6 +16,8 @@ export class ScaleControlsElement extends LitElement {
       min-height: 96px;
       align-items: center;
       justify-content: space-between;
+
+      --color-selected-scale-highlight: var(--color-text);
     }
 
     scale-badge {
@@ -26,9 +28,13 @@ export class ScaleControlsElement extends LitElement {
     }
 
     scale-badge.selected {
-      border: 2px solid var(--color-text);
+      border: 2px solid var(--color-selected-scale-highlight);
       border-radius: 10px;
       filter: drop-shadow(0 0 25px white);
+    }
+
+    sl-button::part(label) {
+      color: var(--color-text);
     }
 
     .note-dropdown::part(label) {
@@ -73,7 +79,28 @@ export class ScaleControlsElement extends LitElement {
     const { tonicNote } = tuning
 
 
+    /**
+     * @param {string} noteId 
+     * @param {1|-1} direction
+     */
+    const nextNoteId = (noteId, direction) => {
+      let i = tuning.noteIds.indexOf(noteId)
+      if (i < 0) {
+        return undefined
+      }
+      i += direction
+      if (i < 0) {
+        i = tuning.noteIds.length - 1
+      } else if (i >= tuning.noteIds.length) {
+        i = 0
+      }
+      return tuning.noteIds[i]
+    }
+
     const tonicNoteLabel = selectNoteLabel(state, tonicNote)
+    const tonicColor = selectNoteColor(state, tonicNote)
+    const prevColor = selectNoteColor(state, nextNoteId(tonicNote, -1))
+    const nextColor = selectNoteColor(state, nextNoteId(tonicNote, 1))
 
     const noteMenuItems = tuning.noteIds.map(noteId => html`
       <sl-menu-item value=${noteId}>${selectNoteLabel(state, noteId)}</sl-menu-item>
@@ -87,18 +114,8 @@ export class ScaleControlsElement extends LitElement {
 
     /** @param {1|-1} adjust */
     const noteStepBy = (adjust) => {
-      const tonicIndex = tuning.noteIds.indexOf(tonicNote)
-      if (tonicIndex < 0) {
-        return
-      }
-      let nextIndex = tonicIndex + adjust
-      if (nextIndex < 0) {
-        nextIndex = tuning.noteIds.length - 1
-      }
-      if (nextIndex >= tuning.noteIds.length) {
-        nextIndex = 0
-      }
-      dispatch(setTonicNote(tuning.noteIds[nextIndex]))
+      const nextNote = nextNoteId(tonicNote, adjust)
+      dispatch(setTonicNote(nextNote))
     }
 
 
@@ -126,7 +143,7 @@ export class ScaleControlsElement extends LitElement {
 
     const tonicControl = html`
       <sl-button-group>
-        <sl-button pill @click=${() => noteStepBy(-1)}>
+        <sl-button class="prev-note" pill @click=${() => noteStepBy(-1)}>
           <sl-icon name="chevron-compact-left"></sl-icon>
         </sl-button>
         <sl-dropdown hoist>
@@ -137,7 +154,7 @@ export class ScaleControlsElement extends LitElement {
             ${noteMenuItems}
           </sl-menu>
         </sl-dropdown>
-        <sl-button pill @click=${() => noteStepBy(1)}>
+        <sl-button class="next-note" pill @click=${() => noteStepBy(1)}>
           <sl-icon name="chevron-compact-right"></sl-icon>
         </sl-button>
       </sl-button-group>
@@ -145,7 +162,25 @@ export class ScaleControlsElement extends LitElement {
 
 
     return html`
+      <style>
+        .badges {
+          --color-selected-scale-highlight: ${tonicColor};
+        }
+
+        .note-dropdown::part(base) {
+          background-color: ${tonicColor};
+        }
+
+        .prev-note::part(base) {
+          background-color: ${prevColor};
+        }
+
+        .next-note::part(base) {
+          background-color: ${nextColor};
+        }
+      </style>
       <div class="badges">
+
         ${qualityBadges}
       </div>
       <div class="controls">
