@@ -146,7 +146,7 @@ export class GameViewElement extends LitElement {
       <!-- </glass-panel> -->
     `
 
-    const wheelRotation = DEFAULT_ROTATION_OFFSET - tonicAngle
+    const wheelRotation = 360-tonicAngle
 
     return html`
       <div class="contents">
@@ -155,7 +155,7 @@ export class GameViewElement extends LitElement {
         </div>
         <div class="wheel">
           <tone-wheel
-            rotationOffset=${wheelRotation}
+            rotation=${wheelRotation}
             color-scale=${colorScale}
             @note:holdBegan=${this.#pitchSelected}
             @note:holdEnded=${this.#pitchDeselected}>

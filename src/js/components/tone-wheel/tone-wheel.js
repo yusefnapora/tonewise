@@ -173,7 +173,7 @@ export class ToneWheel extends LitElement {
 
   static properties = {
     radius: { type: Number },
-    rotationOffset: { type: Number },
+    rotation: { type: Number },
     fontSize: { type: Number },
     colorScale: { type: String, attribute: 'color-scale' },
     hideLabels: { type: Boolean, attribute: 'hide-labels' },
@@ -182,10 +182,14 @@ export class ToneWheel extends LitElement {
   constructor() {
     super()
     this.radius = DEFAULT_RADIUS
-    this.rotationOffset = DEFAULT_ROTATION_OFFSET
+    this.rotation = 0
     this.fontSize = DEFAULT_FONT_SIZE
     this.colorScale = DEFAULT_COLOR_SCALE
     this.hideLabels = false
+  }
+
+  get rotationOffset() {
+    return DEFAULT_ROTATION_OFFSET + this.rotation
   }
 
   get pitchClasses() {
@@ -400,12 +404,19 @@ export class ToneWheel extends LitElement {
     )
     let revealMaskPath = revealClipPath?.getAttribute('d') ?? ''
     let showVibrantBackground = false
+    const revealMaskTransform = `rotate(${DEFAULT_ROTATION_OFFSET} 0.5 0.5)`
     if (activeIntervalAngles.length >= 2) {
       showVibrantBackground = true
-      const startAngle = activeIntervalAngles[0] + this.rotationOffset
-      const endAngle =
-        activeIntervalAngles[activeIntervalAngles.length - 1] +
-        this.rotationOffset
+      let startAngle = activeIntervalAngles[0] + this.rotation
+      let endAngle =
+        activeIntervalAngles[activeIntervalAngles.length - 1] + this.rotation
+      if (startAngle >= 360) {
+        startAngle = startAngle - 360
+      }
+      if (endAngle >= 360) {
+        endAngle = endAngle - 360
+      }
+      // console.log('reveal angles', { startAngle, endAngle, rot: this.rotation })
       revealMaskPath = rimSegmentSVGPath({
         center: { x: 0.5, y: 0.5 },
         radius: this.radius / 1000,
@@ -423,7 +434,7 @@ export class ToneWheel extends LitElement {
         <circle cx="0.5" cy="0.5" r=${clipRadius} />
       </clipPath>      
       <clipPath id="vibrant-gradient-reveal" clipPathUnits="objectBoundingBox">
-        <path d=${revealMaskPath} />
+        <path d=${revealMaskPath} transform=${revealMaskTransform} />
       </clipPath>
     </defs>
     <g>
