@@ -1,15 +1,17 @@
 import { LitElement, html, css } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { selectNoteLabel, selectScaleNoteIds } from '../../state/selectors/selectors.js'
+import { selectNoteLabel } from '../../state/selectors/selectors.js'
 import { dispatch } from '../../state/store.js'
-import { setScaleQuality, setTonicNote } from '../../state/slices/tuning-slice.js'
+import { deriveScaleNotes, setScaleQuality, setTonicNote } from '../../state/slices/tuning-slice.js'
 import { landscapeMediaQuery } from '../../styles.js'
+import { classMap } from 'lit/directives/class-map.js'
 
 export class ScaleControlsElement extends LitElement {
   static styles = css`
     :host {
       display: flex;
+      flex-direction: column;
       width: 100%;
       min-height: 96px;
       align-items: center;
@@ -23,33 +25,39 @@ export class ScaleControlsElement extends LitElement {
       aspect-ratio: 1;
     }
 
-    .quality-dropdown::part(label) {
-      min-width: 15ch;
+    scale-badge.selected {
+      border: 2px solid var(--color-text);
+      border-radius: 10px;
+      filter: drop-shadow(0 0 25px white);
     }
 
-    .landscape-controls {
-      display: none;
+    .note-dropdown::part(label) {
+      min-width: 6ch;
+    }
+
+    .badges {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      max-width: 100%;
     }
 
     ${landscapeMediaQuery} {
       :host {
-        min-width: calc(15ch + 32px);
+        /* min-width: calc(15ch + 32px); */
         height: 100%;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-
-      .landscape-controls {
-        display: flex;
-        height: 100%;
-        min-height: 100px;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
       }
 
-      .portrait-controls {
-        display: none;
+      .badges {
+        flex-direction: column;
+        flex-wrap: wrap;
+        width: 100%;
+        max-height: 90%;
       }
     }
   `
@@ -66,7 +74,6 @@ export class ScaleControlsElement extends LitElement {
 
 
     const tonicNoteLabel = selectNoteLabel(state, tonicNote)
-    const scaleNoteIds = tuning.scaleNotes
 
     const noteMenuItems = tuning.noteIds.map(noteId => html`
       <sl-menu-item value=${noteId}>${selectNoteLabel(state, noteId)}</sl-menu-item>
@@ -78,60 +85,71 @@ export class ScaleControlsElement extends LitElement {
       dispatch(setTonicNote(noteId))
     }
 
+    /** @param {1|-1} adjust */
+    const noteStepBy = (adjust) => {
+      const tonicIndex = tuning.noteIds.indexOf(tonicNote)
+      if (tonicIndex < 0) {
+        return
+      }
+      let nextIndex = tonicIndex + adjust
+      if (nextIndex < 0) {
+        nextIndex = tuning.noteIds.length - 1
+      }
+      if (nextIndex >= tuning.noteIds.length) {
+        nextIndex = 0
+      }
+      dispatch(setTonicNote(tuning.noteIds[nextIndex]))
+    }
+
+
     // todo: don't hardcode, derive from state
     const scaleQualities = ['major', 'minor', 'harmonic minor', 'blues', 'chromatic']
-    /** @param {import('@shoelace-style/shoelace').SlSelectEvent} e */
-    const qualitySelected = (e) => {
-      dispatch(setScaleQuality(e.detail.item.value))
+    /** @param {string} q */
+    const qualitySelected = (q) => {
+      dispatch(setScaleQuality(q))
     }
-    const currentScale = tuning.scaleQuality 
-    const qualityMenuItems = scaleQualities.map(quality => html`
-      <sl-menu-item value=${quality}>
-        ${quality}
-      </sl-menu-item>
-    `)
-    const badgeLabel = currentScale === 'chromatic' ? '' : currentScale
 
-    const buttons = placement => html`
-      <sl-dropdown hoist placement=${placement}>
-        <sl-button slot="trigger" caret pill>
-          ${tonicNoteLabel}
-        </sl-button>
-        <sl-menu @sl-select=${noteSelected}>
-          ${noteMenuItems}
-        </sl-menu>
-      </sl-dropdown>
+    const qualityBadges = scaleQualities.map(quality => {
+      const noteIds = JSON.stringify(deriveScaleNotes(tuning.noteIds, tonicNote, quality))
+      const selected = quality === tuning.scaleQuality
+      const classes = { selected }
+      return html`
+        <scale-badge
+          class=${classMap(classes)}
+          @click=${() => qualitySelected(quality)}
+          tonic=${tonicNoteLabel}
+          label=${quality}
+          note-ids=${noteIds}>
+        </scale-badge>
+      `
+    })
 
-      <sl-dropdown hoist placement=${placement}>
-        <sl-button class="quality-dropdown" slot="trigger" caret pill>
-          ${currentScale}
+    const tonicControl = html`
+      <sl-button-group>
+        <sl-button pill @click=${() => noteStepBy(-1)}>
+          <sl-icon name="chevron-compact-left"></sl-icon>
         </sl-button>
-        <sl-menu @sl-select=${qualitySelected}>
-          ${qualityMenuItems}
-        </sl-menu>
-      </sl-dropdown>
-    `
-    const buttonsPortrait = html`
-      <sl-button-group class="portrait-controls">
-        ${buttons('top')}
+        <sl-dropdown hoist>
+          <sl-button class="note-dropdown" slot="trigger">
+            ${tonicNoteLabel}
+          </sl-button>
+          <sl-menu @sl-select=${noteSelected}>
+            ${noteMenuItems}
+          </sl-menu>
+        </sl-dropdown>
+        <sl-button pill @click=${() => noteStepBy(1)}>
+          <sl-icon name="chevron-compact-right"></sl-icon>
+        </sl-button>
       </sl-button-group>
     `
 
-    const buttonsLandscape = html`
-      <div class="landscape-controls">
-        ${buttons('left')}
-      </div>
-    `
 
     return html`
-      <scale-badge 
-        tonic=${tonicNoteLabel}
-        label=${badgeLabel}
-        note-ids=${JSON.stringify(scaleNoteIds)}>
-      </scale-badge>
+      <div class="badges">
+        ${qualityBadges}
+      </div>
       <div class="controls">
-        ${buttonsPortrait}
-        ${buttonsLandscape}
+        ${tonicControl}
       </div>
     `
   }

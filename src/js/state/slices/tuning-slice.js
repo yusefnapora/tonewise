@@ -102,7 +102,7 @@ const EDOAngles = (noteIds) =>
  * @param {string} tonicNote
  * @param {string} scaleQuality 
  */
-function deriveScaleNotes(noteIds, tonicNote, scaleQuality) {
+export function deriveScaleNotes(noteIds, tonicNote, scaleQuality) {
   const scaleName = [tonicNote, scaleQuality].join(' ')
   const scale = Scale.get(scaleName)
   if (!scale) {

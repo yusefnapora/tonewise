@@ -6,26 +6,25 @@ import { navigate, sharedRouter } from '../../route-controller.js'
 export class NavIconBarElement extends LitElement {
   static styles = css`
     :host {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: space-between;
-
+      position: relative;
       width: 100%;
-      height: 100%;
-    }
-
-    .buttons {
+      height: 0px;
       font-size: 36px;
+
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: var(--toolbar-padding);
     }
-    .message {
-      width: 100%;
-      text-align: center;
-      font-size: 1.6rem;
+
+    .back-button {
+      position: absolute;
+      top: var(--toolbar-padding, 0px);
+      left: var(--toolbar-padding, 0px);
+    }
+
+    .settings-button {
+      position: absolute;
+      top: var(--toolbar-padding, 0px);
+      right: var(--toolbar-padding, 0px);
     }
 
     .hidden {
@@ -40,11 +39,6 @@ export class NavIconBarElement extends LitElement {
     const isHomeRoute = ['', '/', '/index.html', 'src'].includes(currentRoute)
     const showBack = !isHomeRoute
     const showSettings = currentRoute !== 'settings'
-    console.log({
-      showSettings,
-      showBack,
-      currentRoute: sharedRouter.getCurrentLocation().route.name,
-    })
 
     const goBack = () => {
       const { history } = window
@@ -60,7 +54,7 @@ export class NavIconBarElement extends LitElement {
       history.back()
     }
 
-    const backClasses = { hidden: !showBack }
+    const backClasses = { 'back-button': true, hidden: !showBack }
     const backButton = html`
       <sl-icon-button
         class=${classMap(backClasses)}
@@ -70,7 +64,7 @@ export class NavIconBarElement extends LitElement {
       </sl-icon-button>
     `
 
-    const settingsClasses = { hidden: !showSettings }
+    const settingsClasses = { 'settings-button': true, hidden: !showSettings }
     const settingsButton = html`
       <sl-icon-button
         class=${classMap(settingsClasses)}
@@ -80,9 +74,7 @@ export class NavIconBarElement extends LitElement {
     `
 
     return html`
-      <div class="buttons">
         ${backButton} ${settingsButton}
-      </div>
     `
   }
 }

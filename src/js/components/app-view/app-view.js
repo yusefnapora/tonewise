@@ -28,11 +28,11 @@ export class AppViewElement extends LitElement {
 
     .toolbar {
       position: absolute;
-      z-index: 10;
+      z-index: 3;
       top: 0;
       left: 0;
       width: 100%;
-      min-height: calc(48px + var(--toolbar-padding));
+      /* min-height: calc(48px + var(--toolbar-padding)); */
     }
 
 
