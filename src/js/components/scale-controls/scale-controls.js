@@ -88,6 +88,11 @@ export class ScaleControlsElement extends LitElement {
         width: 100%;
         max-height: 90%;
       }
+
+      .controls {
+        margin-top: 8px;
+        margin-bottom: 0px;
+      }
     }
   `
 
