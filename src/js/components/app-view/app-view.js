@@ -15,6 +15,8 @@ export class AppViewElement extends LitElement {
       place-items: center;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr;
+
+      touch-action: manipulation;
     }
 
     :host > * {
