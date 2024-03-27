@@ -134,6 +134,9 @@ export const selectStatusMessage = createSelector(
     if (loading === 'loading') {
       return 'Loading...'
     }
+    if (game.scaleControlsActive) {
+      return 'Choose a scale to change the wheel'
+    }
     if (game.currentMode === 'free-play') {
       return 'Tap the wheel to make music'
     }
@@ -306,4 +309,9 @@ export const selectAppBackgroundCss = createSelector(
     }
     return { background, themeColor }
   }
+)
+
+export const selectScaleControlsActive = createSelector(
+  [selectGameState],
+  (game) => game.scaleControlsActive
 )

@@ -37,6 +37,7 @@ export type GameRound = {
 export type GameState = {
   currentMode: GameMode
   currentRound: GameRound | null
+  scaleControlsActive?: boolean
 }
 
 export type InstrumentState = {

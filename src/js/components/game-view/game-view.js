@@ -2,7 +2,7 @@ import { LitElement, html, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { dispatch } from '../../state/store.js'
 import { StateController } from '../../state/controller.js'
-import { guess } from '../../state/slices/game-slice.js'
+import { guess, setScaleControlsActive } from '../../state/slices/game-slice.js'
 import {
   endPlayerNote,
   startPlayerNote,
@@ -16,17 +16,16 @@ import {
   selectColorScale,
   selectMidiNote,
   selectNoteLabel,
+  selectScaleControlsActive,
   selectScaleNoteIds,
   selectTonicNoteAngle,
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
 import gameViewStyles from './styles.js'
-import { DEFAULT_ROTATION_OFFSET } from '../index.js'
 
 export class GameViewElement extends LitElement {
   static properties = {
     freePlayMode: { type: Boolean, attribute: 'free-play' },
-    scalePickerActive: { type: Boolean, attribute: 'scale-picker-active' }
   }
 
   static styles = gameViewStyles
@@ -35,7 +34,6 @@ export class GameViewElement extends LitElement {
   constructor() {
     super()
     this.freePlayMode = false
-    this.scalePickerActive = false
   }
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
@@ -98,6 +96,7 @@ export class GameViewElement extends LitElement {
     const colorScale = this.#state.select(selectColorScale)
     const wheelNotes = this.#state.select(selectWheelNotes)
     const scaleNotes = this.#state.select(selectScaleNoteIds)
+    const scaleControlsActive = this.#state.select(selectScaleControlsActive)
 
     const pitchClasses = wheelNotes.map(
       ({ noteId, midiNote, label, active }) => html`
@@ -112,7 +111,7 @@ export class GameViewElement extends LitElement {
       `,
     )
 
-    const showProgress = !this.freePlayMode && !this.scalePickerActive
+    const showProgress = !this.freePlayMode && !scaleControlsActive
 
     const progressView = !showProgress ? undefined : html`
       <glass-panel class="controls">
@@ -128,14 +127,14 @@ export class GameViewElement extends LitElement {
     const scaleLabel = scaleQuality
     const tonicLabel = selectNoteLabel(this.#state.state, tonicNote)
     const toggleScaleControls = () => {
-      this.scalePickerActive = !this.scalePickerActive
+      dispatch(setScaleControlsActive(!scaleControlsActive))
     }
 
     const closeIcon = html`
       <sl-icon-button @click=${toggleScaleControls} name="x-circle"></sl-icon-button>
     `
 
-    const scaleBadge = this.scalePickerActive ? closeIcon : html`
+    const scaleBadge = scaleControlsActive ? closeIcon : html`
       <scale-badge 
         @click=${toggleScaleControls}
         tonic=${tonicLabel} 
@@ -144,7 +143,7 @@ export class GameViewElement extends LitElement {
       </scale-badge>
     `
 
-    const scaleControls = !this.scalePickerActive ? undefined : html`
+    const scaleControls = !scaleControlsActive ? undefined : html`
       <div class="scale-controls">
         <scale-controls></scale-controls>
       </div>

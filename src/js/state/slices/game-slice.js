@@ -24,6 +24,7 @@ import { clearNoteHighlight, highlightNote } from './instrument-slice.js'
 const initialState = {
   currentMode: 'free-play',
   currentRound: null,
+  scaleControlsActive: false,
 }
 
 /**
@@ -143,6 +144,15 @@ const gameSlice = createSlice({
      */
     setGameMode(state, action) {
       state.currentMode = action.payload
+    },
+
+    /**
+     * 
+     * @param {GameState} state 
+     * @param {import('@reduxjs/toolkit').PayloadAction<boolean>} action 
+     */
+    setScaleControlsActive(state, action) {
+      state.scaleControlsActive = action.payload
     }
   },
   extraReducers(builder) {
@@ -193,5 +203,5 @@ const gameSlice = createSlice({
 })
 
 const { actions, reducer } = gameSlice
-export const { start, reset, guess, setGameMode } = actions
+export const { start, reset, guess, setGameMode, setScaleControlsActive } = actions
 export default reducer
