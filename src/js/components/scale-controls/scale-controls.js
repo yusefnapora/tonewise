@@ -65,6 +65,10 @@ export class ScaleControlsElement extends LitElement {
       max-width: 100%;
     }
 
+    .controls {
+      margin-bottom: 8px;
+    }
+
     ${landscapeMediaQuery} {
       :host {
         /* min-width: calc(15ch + 32px); */
