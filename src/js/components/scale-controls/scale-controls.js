@@ -17,7 +17,8 @@ export class ScaleControlsElement extends LitElement {
       min-height: 96px;
       align-items: center;
       justify-content: space-between;
-      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
     
       --color-selected-scale-highlight: var(--color-text);
     }
