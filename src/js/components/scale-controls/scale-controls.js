@@ -41,6 +41,15 @@ export class ScaleControlsElement extends LitElement {
       font-size: 1.4rem;
     }
 
+    sl-menu-item::part(label) {
+      color: var(--color-text);
+      font-size: 1.2rem;
+    }
+
+    sl-menu-item:active::part(base) {
+      filter: brightness(0.8);
+    }
+
     .note-dropdown::part(label) {
       min-width: 6ch;
       font-family: var(--note-font-family);
@@ -108,8 +117,16 @@ export class ScaleControlsElement extends LitElement {
     const nextColor = selectNoteColor(state, nextNoteId(tonicNote, 1))
 
     const noteMenuItems = tuning.noteIds.map(noteId => html`
-      <sl-menu-item value=${noteId}>${selectNoteLabel(state, noteId)}</sl-menu-item>
+      <sl-menu-item class=${`note-${noteId}`} value=${noteId}>
+        ${selectNoteLabel(state, noteId)}
+      </sl-menu-item>
     `)
+
+    const noteMenuStyles = tuning.noteIds.map(noteId => `
+      sl-menu-item.note-${noteId}::part(base) {
+        background-color: ${selectNoteColor(state, noteId)};
+      }
+    `).join('\n')
 
     /** @param {import('@shoelace-style/shoelace').SlSelectEvent} e */
     const noteSelected = (e) => {
@@ -182,6 +199,8 @@ export class ScaleControlsElement extends LitElement {
         .next-note::part(base) {
           background-color: ${nextColor};
         }
+
+        ${noteMenuStyles}
       </style>
       <div class="badges">
 
