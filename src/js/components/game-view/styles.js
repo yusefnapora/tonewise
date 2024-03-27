@@ -72,7 +72,12 @@ const styles = css`
   .controls {
     grid-area: controls;
     width: 100%;
-    /* height: 100%; */
+  }
+
+  .scale-controls {
+    grid-area: controls;
+    width: 100%;
+    height: 100%;
   }
 
   ${landscapeMediaQuery} {
@@ -100,6 +105,10 @@ const styles = css`
       height: ${WHEEL_SIZE_LANDSCAPE};
     }
     .controls {
+      height: ${WHEEL_SIZE_LANDSCAPE};
+      max-width: ${PANEL_SIZE_PX};
+    }
+    .scale-controls {
       height: ${WHEEL_SIZE_LANDSCAPE};
       max-width: ${PANEL_SIZE_PX};
     }

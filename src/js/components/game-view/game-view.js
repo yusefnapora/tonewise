@@ -145,7 +145,7 @@ export class GameViewElement extends LitElement {
     `
 
     const scaleControls = !this.scalePickerActive ? undefined : html`
-      <div class="controls">
+      <div class="scale-controls">
         <scale-controls></scale-controls>
       </div>
     `
