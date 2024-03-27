@@ -38,10 +38,12 @@ export class ScaleControlsElement extends LitElement {
 
     sl-button::part(label) {
       color: var(--color-text);
+      font-size: 1.4rem;
     }
 
     .note-dropdown::part(label) {
       min-width: 6ch;
+      font-family: var(--note-font-family);
     }
 
     .badges {
