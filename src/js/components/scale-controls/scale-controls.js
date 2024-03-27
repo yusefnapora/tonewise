@@ -37,6 +37,10 @@ export class ScaleControlsElement extends LitElement {
       filter: drop-shadow(0 0 25px white);
     }
 
+    sl-button::part(base), sl-menu-item::part(base) {
+      touch-action: manipulation;
+    }
+
     sl-button::part(label) {
       color: var(--color-text);
       font-size: 1.4rem;
