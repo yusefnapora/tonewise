@@ -4,8 +4,8 @@ import { landscapeMediaQuery } from '../../styles.js'
 const TOOLBAR_ICON_SIZE = css`calc(48px + var(--toolbar-padding))`
 const PANEL_SIZE_PX = css`128px`
 const PANEL_SIZE = css`minmax(${PANEL_SIZE_PX}, 1fr)`
-const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 85dvw)`
-const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(85dvw - 248px), 85dvh)`
+const WHEEL_SIZE_PORTRAIT = css`min(800px, calc(85dvh - 200px), 85vw, 85dvw)`
+const WHEEL_SIZE_LANDSCAPE = css`min(800px, calc(85dvw - 248px), 85vh, 85dvh)`
 
 const styles = css`
   :host {
