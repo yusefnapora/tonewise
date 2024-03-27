@@ -15,6 +15,7 @@ import {
 import {
   selectColorScale,
   selectMidiNote,
+  selectNoteLabel,
   selectScaleNoteIds,
   selectTonicNoteAngle,
   selectWheelNotes,
@@ -125,7 +126,7 @@ export class GameViewElement extends LitElement {
     const tonicAngle = selectTonicNoteAngle(this.#state.state)
     const { tuning: { tonicNote, scaleQuality } } = this.#state.state
     const scaleLabel = scaleQuality
-    const tonic = tonicNote
+    const tonicLabel = selectNoteLabel(this.#state.state, tonicNote)
     const toggleScaleControls = () => {
       this.scalePickerActive = !this.scalePickerActive
     }
@@ -135,15 +136,18 @@ export class GameViewElement extends LitElement {
     `
 
     const scaleBadge = this.scalePickerActive ? closeIcon : html`
-      <scale-badge @click=${toggleScaleControls} tonic=${tonic} label=${scaleLabel} note-ids=${JSON.stringify(scaleNotes)}></scale-badge>
+      <scale-badge 
+        @badge:selected=${toggleScaleControls}
+        tonic=${tonicLabel} 
+        label=${scaleLabel} 
+        note-ids=${JSON.stringify(scaleNotes)}>
+      </scale-badge>
     `
 
     const scaleControls = !this.scalePickerActive ? undefined : html`
-      <!-- <glass-panel class="controls"> -->
       <div class="controls">
         <scale-controls></scale-controls>
       </div>
-      <!-- </glass-panel> -->
     `
 
     const wheelRotation = 360-tonicAngle

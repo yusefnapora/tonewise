@@ -24,9 +24,9 @@ export class ScaleBadgeElement extends LitElement {
       -webkit-user-select: none;
     }
 
-    /* .background {
-      fill: var(--color-glass-background);
-    } */
+    .pointer-down {
+      filter: drop-shadow(0 0 25px white);
+    }
 
     .badge-rim-segment {
       stroke-width: 10;
@@ -64,10 +64,10 @@ export class ScaleBadgeElement extends LitElement {
 
   static properties = {
     noteIds: { type: Array, attribute: 'note-ids' },
-    highlight: { type: Boolean },
     colorScale: { type: String, attribute: 'color-scale' },
     tonic: { type: String },
     label: { type: String },
+    nonInteractive: { type: Boolean, attribute: 'non-interactive' },
   }
 
   #state = new StateController(this)
@@ -77,12 +77,54 @@ export class ScaleBadgeElement extends LitElement {
     this.rotationOffset = DEFAULT_ROTATION_OFFSET
     this.tonic = ''
     this.noteIds = []
-    this.highlight = false
     this.label = undefined
+    this.nonInteractive = false
   }
 
   render() {
-    return html` <svg viewBox="0 0 1000 1000">${this.#svgContent()}</svg> `
+    /** @param {PointerEvent} e */
+    const pointerDown = (e) => {
+      console.log('pointer event', e.type)
+      if (e.target instanceof Element) {
+        e.target.releasePointerCapture(e.pointerId)
+      }
+      if (e.pointerType !== 'touch' && e.buttons === 0) {
+        return
+      }
+      this.#svgElement?.classList.add('pointer-down')
+    }
+
+    /** @param {PointerEvent} e */
+    const pointerUp = (e) => {
+      console.log('pointer event', e.type)
+
+      if (!this.#svgElement?.classList.contains('pointer-down')) {
+        return
+      }
+
+      this.#svgElement?.classList.remove('pointer-down')
+      if (e.type === 'pointerup' || e.type === 'pointercancel') {
+        console.log('dispatching badge:selected')
+        this.dispatchEvent(new CustomEvent('badge:selected', { detail: this }))
+      } else {
+        console.log('other pointer end event', e.type)
+      }
+    }
+
+    return html`
+      <svg viewBox="0 0 1000 1000"
+        @pointerdown=${pointerDown}
+        @pointerenter=${pointerDown}
+        @pointerup=${pointerUp}
+        @pointerleave=${pointerUp}
+        @pointercancel=${pointerUp}>
+        ${this.#svgContent()}
+      </svg>
+    `
+  }
+
+  get #svgElement() {
+    return this.renderRoot.querySelector('svg')
   }
 
   #svgContent() {
@@ -121,9 +163,6 @@ export class ScaleBadgeElement extends LitElement {
 
       const className = `badge-segment-${i}`
       let fullClass = className
-      if (this.highlight) {
-        fullClass += ' highlighted'
-      }
       if (this.noteIds.includes(note.id)) {
         fullClass += ' active-note'
       }

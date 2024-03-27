@@ -16,11 +16,13 @@ export class ScaleControlsElement extends LitElement {
       min-height: 96px;
       align-items: center;
       justify-content: space-between;
-
+      touch-action: none;
+    
       --color-selected-scale-highlight: var(--color-text);
     }
 
     scale-badge {
+      margin: 4px 2px;
       min-width: 60px;
       max-width: 80px;
       width: 100%;
@@ -28,7 +30,8 @@ export class ScaleControlsElement extends LitElement {
     }
 
     scale-badge.selected {
-      border: 2px solid var(--color-selected-scale-highlight);
+      outline: 2px solid var(--color-selected-scale-highlight);
+      outline-offset: 2px;
       border-radius: 10px;
       filter: drop-shadow(0 0 25px white);
     }
@@ -133,7 +136,7 @@ export class ScaleControlsElement extends LitElement {
       return html`
         <scale-badge
           class=${classMap(classes)}
-          @click=${() => qualitySelected(quality)}
+          @badge:selected=${() => qualitySelected(quality)}
           tonic=${tonicNoteLabel}
           label=${quality}
           note-ids=${noteIds}>
@@ -159,7 +162,6 @@ export class ScaleControlsElement extends LitElement {
         </sl-button>
       </sl-button-group>
     `
-
 
     return html`
       <style>
