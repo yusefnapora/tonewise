@@ -137,7 +137,7 @@ export class GameViewElement extends LitElement {
 
     const scaleBadge = this.scalePickerActive ? closeIcon : html`
       <scale-badge 
-        @badge:selected=${toggleScaleControls}
+        @click=${toggleScaleControls}
         tonic=${tonicLabel} 
         label=${scaleLabel} 
         note-ids=${JSON.stringify(scaleNotes)}>

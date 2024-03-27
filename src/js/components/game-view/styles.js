@@ -11,6 +11,7 @@ const styles = css`
   :host {
     width: 100%;
     height: 100%;
+    touch-action: manipulation;
     /* display: grid;
     place-items: center;  */
   }

@@ -84,7 +84,9 @@ export class ScaleBadgeElement extends LitElement {
   render() {
     /** @param {PointerEvent} e */
     const pointerDown = (e) => {
-      console.log('pointer event', e.type)
+      if (this.nonInteractive) {
+        return
+      }
       if (e.target instanceof Element) {
         e.target.releasePointerCapture(e.pointerId)
       }
@@ -96,8 +98,9 @@ export class ScaleBadgeElement extends LitElement {
 
     /** @param {PointerEvent} e */
     const pointerUp = (e) => {
-      console.log('pointer event', e.type)
-
+      if (this.nonInteractive) {
+        return
+      }
       if (!this.#svgElement?.classList.contains('pointer-down')) {
         return
       }
