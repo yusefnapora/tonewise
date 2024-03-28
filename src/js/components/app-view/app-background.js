@@ -9,7 +9,6 @@ import {
   selectAppBackgroundCss,
 } from '../../state/selectors/selectors.js'
 import Color from 'colorjs.io'
-import { applyCurrentTintColor } from '../../color-scheme.js'
 
 export class AppBackgroundElement extends LitElement {
   static styles = css`
@@ -41,9 +40,12 @@ export class AppBackgroundElement extends LitElement {
   #state = new StateController(this)
 
   render() {
-    let { background } = this.#state.select(selectAppBackgroundCss)
+    let { background, themeColor } = this.#state.select(selectAppBackgroundCss)
 
-    applyCurrentTintColor()
+    themeColor = resolveCSSVariables(themeColor, this)
+    const c = new Color(themeColor).to('srgb').toString({ format: 'hex' })
+    setMetaThemeColors(c)
+
 
     return html`
       <style>
