@@ -23,8 +23,8 @@ import { registerElement } from '../../common/dom.js'
  */
 
 // Our SVG view box is 1000x1000 "user units" and we want to fill it completely,
-// so default radius is 500 units.
-const DEFAULT_RADIUS = 500
+// so default radius is just shy of 500 units (small offset to avoid clipping the edges).
+const DEFAULT_RADIUS = 498
 
 // SVG starts counting degrees from the "eastward" point of the circle
 // but I want 0 degrees to mean due north. So by default we apply a
