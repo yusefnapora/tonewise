@@ -297,8 +297,8 @@ export const selectGradientColors = createSelector(
 )
 
 export const selectAppBackgroundCss = createSelector(
-  [selectGradientColors, selectColorScale, selectTonicNoteAngle],
-  (colors, colorScale, tonicAngle) => {
+  [selectGradientColors, selectColorScale, selectTonicNoteAngle, selectColorTheme],
+  (colors, colorScale, tonicAngle, _theme) => {
     
     let background = 'var(--color-background)'
     let themeColor = background
