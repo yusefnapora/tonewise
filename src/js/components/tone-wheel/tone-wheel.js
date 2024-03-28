@@ -85,6 +85,11 @@ export class ToneWheel extends LitElement {
       opacity: 0.3;
     }
 
+    .rim-segment-overlay {
+      fill: none;
+      stroke: none;
+    }
+
     @media (pointer: fine) {
       .tone-group {
         cursor: pointer;
@@ -102,9 +107,13 @@ export class ToneWheel extends LitElement {
     }
 
     .tone-group.disabled {
-      filter: saturate(0.6);
       cursor: auto;
       
+      & > .rim-segment-overlay {
+        fill: var(--color-background);
+        opacity: 0.3;
+      }
+
       &:hover > .inner-wedge {
         opacity: 0;
       }
@@ -266,6 +275,14 @@ export class ToneWheel extends LitElement {
         className,
       })
 
+      const { path: segmentOverlayPath } = this.#createRimSegment({
+        startAngle: segmentStartAngle,
+        endAngle: segmentEndAngle,
+        intervalAngle: intervalAngle,
+        thickness: rimThickness,
+        className: 'rim-segment-overlay',
+      })
+
       // scale the pitch line width proportional to the wheel radius,
       // and also shrink the width for pitches whose rim segment length
       // is less than 1 EDO-step
@@ -283,6 +300,7 @@ export class ToneWheel extends LitElement {
 
       // push rim segment after pitch line, so it renders on top
       groupContent.push(segmentPath)
+      groupContent.push(segmentOverlayPath)
 
       if (el.label) {
         groupContent.push(
@@ -293,6 +311,7 @@ export class ToneWheel extends LitElement {
           }),
         )
       }
+
 
       const color = colorForAngle(intervalAngle, this.colorScale)
       const textColor = getContrastingTextColor(color)
