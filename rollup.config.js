@@ -1,6 +1,7 @@
 import { rollupPluginHTML as html } from '@web/rollup-plugin-html'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
+import terser from '@rollup/plugin-terser'
 import copy from 'rollup-plugin-copy'
 import { generateSW } from 'rollup-plugin-workbox'
 
@@ -46,6 +47,11 @@ export default {
       dontCacheBustURLsMatching: /inline-module-.*\.js/,
       navigateFallback: '/index.html',
       skipWaiting: true,
+    }),
+    terser({
+      ecma: '2016',
+      keep_fnames: true,
+      
     })
   ],
 }
