@@ -38,8 +38,6 @@ const DEFAULT_PITCH_LINE_WIDTH = 200
 export class ToneWheel extends LitElement {
   static styles = css`
     :host {
-      /* prevent browser from eating touch events for scrolling, etc */
-      touch-action: none;
 
       /** 
        * Layout children in a 1x1 grid, so that they overlap back-to-front
@@ -62,6 +60,11 @@ export class ToneWheel extends LitElement {
       grid-row: 1;
       grid-column: 1;
       z-index: 1;
+    }
+
+    svg:not(.non-interactive) {
+      /* prevent browser from eating touch events for scrolling, etc */
+      touch-action: none;
     }
 
     .tone-label {
@@ -91,13 +94,13 @@ export class ToneWheel extends LitElement {
     }
 
     @media (pointer: fine) {
-      .tone-group {
+      svg:not(.non-interactive) .tone-group {
         cursor: pointer;
       }
     }
 
     @media (hover: hover) and (pointer: fine) {
-      .tone-group:hover > .inner-wedge {
+      svg:not(.non-interactive) .tone-group:hover > .inner-wedge {
         opacity: 0.3;
       }
     }
@@ -107,18 +110,19 @@ export class ToneWheel extends LitElement {
     }
 
     .tone-group.disabled {
-      cursor: auto;
       
       & > .rim-segment-overlay {
         fill: var(--color-background);
         opacity: 0.3;
       }
 
-      &:hover > .inner-wedge {
+      & > .tone-label {
         opacity: 0;
       }
-
-      & > .tone-label {
+    }
+    svg:not(.non-interactive) .tone-group.disabled {
+      cursor: auto;
+      &:hover > .inner-wedge {
         opacity: 0;
       }
     }
@@ -189,6 +193,7 @@ export class ToneWheel extends LitElement {
     fontSize: { type: Number },
     colorScale: { type: String, attribute: 'color-scale' },
     hideLabels: { type: Boolean, attribute: 'hide-labels' },
+    nonInteractive: { type: Boolean, attribute: 'non-interactive' },
   }
 
   constructor() {
@@ -198,6 +203,7 @@ export class ToneWheel extends LitElement {
     this.fontSize = DEFAULT_FONT_SIZE
     this.colorScale = DEFAULT_COLOR_SCALE
     this.hideLabels = false
+    this.nonInteractive = false
   }
 
   get rotationOffset() {
@@ -212,6 +218,7 @@ export class ToneWheel extends LitElement {
 
   render() {
     const { content, styleContent } = this.renderContent()
+    const classes = { 'non-interactive': this.nonInteractive }
     return html`
       <style>
         ${styleContent}
@@ -223,7 +230,7 @@ export class ToneWheel extends LitElement {
       <div class="gradient-background vibrant gradient-colors">
         <div class="gradient-blur"></div>
       </div>
-      <svg viewBox="0 0 1000 1000">${content}</svg>
+      <svg class=${classMap(classes)} viewBox="0 0 1000 1000">${content}</svg>
     `
   }
 
@@ -343,6 +350,9 @@ export class ToneWheel extends LitElement {
        * @param {PointerEvent} e
        */
       const pointerDown = (e) => {
+        if (this.nonInteractive) {
+          return
+        }
         if (e.target instanceof Element) {
           e.target.releasePointerCapture(e.pointerId)
         }
@@ -354,6 +364,9 @@ export class ToneWheel extends LitElement {
        * @param {PointerEvent} e
        */
       const pointerEnter = (e) => {
+        if (this.nonInteractive) {
+          return
+        }
         if (e.pointerType !== 'touch' && e.buttons === 0) {
           return
         }
@@ -361,15 +374,24 @@ export class ToneWheel extends LitElement {
       }
 
       const pointerLeave = (e) => {
+        if (this.nonInteractive) {
+          return
+        }
         if (e.pointerType !== 'touch' && e.buttons === 0) {
           return
         }
         deactivated()
       }
       const pointerUp = (e) => {
+        if (this.nonInteractive) {
+          return
+        }
         deactivated()
       }
       const touchDown = (e) => {
+        if (this.nonInteractive) {
+          return
+        }
         e.preventDefault()
       }
 

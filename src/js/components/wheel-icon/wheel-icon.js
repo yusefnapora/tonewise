@@ -36,7 +36,7 @@ export class WheelIconElement extends LitElement {
     )
 
     return html`
-      <tone-wheel hide-labels color-scale=${colorScale}>
+      <tone-wheel non-interactive hide-labels color-scale=${colorScale}>
         ${pitchClasses}
       </tone-wheel>
     `

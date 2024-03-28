@@ -137,7 +137,7 @@ export class SettingsViewElement extends LitElement {
         <div class="card-title">settings</div>
 
         <div class="appearance">
-          <tone-wheel color-scale=${colorScale}> ${pitchClasses} </tone-wheel>
+          <tone-wheel non-interactive color-scale=${colorScale}> ${pitchClasses} </tone-wheel>
 
           <div class="appearance-controls">
             <div class="control">
