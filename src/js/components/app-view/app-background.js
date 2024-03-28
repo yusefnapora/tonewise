@@ -38,6 +38,9 @@ export class AppBackgroundElement extends LitElement {
   `
 
   #state = new StateController(this)
+  stateChanged() {
+    this.requestUpdate()
+  }
 
   render() {
     let { background, themeColor } = this.#state.select(selectAppBackgroundCss)
