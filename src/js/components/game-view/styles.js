@@ -59,6 +59,7 @@ const styles = css`
     position: absolute;
     top: max(-64px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.2));
     right: max(-16px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.2 / 4));
+    z-index: 5;
   }
 
   /* .scale scale-badge {

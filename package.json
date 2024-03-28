@@ -25,6 +25,7 @@
     "@web/test-runner": "^0.18.0",
     "chai": "npm:@esm-bundle/chai@^4.3.4-fix.0",
     "prettier": "3.2.5",
+    "pwa-asset-generator": "^6.3.1",
     "rimraf": "^5.0.5",
     "rollup": "^4.12.0",
     "rollup-plugin-copy": "^3.5.0",

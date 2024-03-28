@@ -61,7 +61,7 @@ export class ToneWheel extends LitElement {
       aspect-ratio: 1;
       grid-row: 1;
       grid-column: 1;
-      /* z-index: 2; */
+      z-index: 1;
     }
 
     .tone-label {
@@ -155,7 +155,10 @@ export class ToneWheel extends LitElement {
       clip-path: url(#vibrant-gradient-reveal);
       opacity: var(--wheel-gradient-background-vibrant-opacity, 1);
       aspect-ratio: 1;
-      z-index: -1;
+      height: 100%;
+      grid-row: 1;
+      grid-column: 1;
+      z-index: 0;
     }
 
     .vibrant.hidden {
