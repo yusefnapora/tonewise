@@ -23,9 +23,9 @@ const styles = css`
     height: 100%;
 
     /* column-gap: 10px; */
-    row-gap: 10px;
+    /* row-gap: 10px; */
 
-    grid-template-rows: 0 1fr ${WHEEL_SIZE_PORTRAIT} min-content ${PANEL_SIZE} 0;
+    grid-template-rows: 0 1fr ${WHEEL_SIZE_PORTRAIT} 10px ${PANEL_SIZE} 0;
     grid-template-columns: 1fr ${WHEEL_SIZE_PORTRAIT} 1fr;
 
     grid-template-areas:
@@ -95,7 +95,7 @@ const styles = css`
         ${TOOLBAR_ICON_SIZE}
         /* status   */ ${PANEL_SIZE}
         /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
-        /* scale    */ min-content
+        /* scale    */ 10px
         /* controls */ ${PANEL_SIZE}
         /* .        */ max(${TOOLBAR_ICON_SIZE}, 0px);
 
