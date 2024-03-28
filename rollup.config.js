@@ -50,8 +50,7 @@ export default {
     }),
     terser({
       ecma: '2016',
-      keep_fnames: true,
-      
+      // keep_fnames: true,
     })
   ],
 }
