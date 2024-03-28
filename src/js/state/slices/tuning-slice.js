@@ -20,6 +20,16 @@ export const DefaultNoteIds = [
   'B',
 ]
 
+export const DefaultScale = [
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'A',
+  'B',
+]
+
 const startMidiNote = 60
 const NoteIdMidiMap = Object.fromEntries(
   DefaultNoteIds.map((n, i) => [n, startMidiNote + i]),
@@ -124,9 +134,9 @@ const initialState = {
   midiNotes: { ...NoteIdMidiMap },
   display: { ...DefaultDisplay },
   angles: EDOAngles(DefaultNoteIds),
-  scaleNotes: [...DefaultNoteIds],
+  scaleNotes: [...DefaultScale],
   tonicNote: 'C',
-  scaleQuality: 'chromatic',
+  scaleQuality: 'major',
 }
 
 const tuningSlice = createSlice({
