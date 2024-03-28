@@ -12,8 +12,6 @@ const styles = css`
     width: 100%;
     height: 100%;
     touch-action: manipulation;
-    /* display: grid;
-    place-items: center;  */
   }
 
   .contents {
@@ -22,17 +20,13 @@ const styles = css`
     width: 100%;
     height: 100%;
 
-    /* column-gap: 10px; */
-    /* row-gap: 10px; */
-
-    grid-template-rows: 0 1fr ${WHEEL_SIZE_PORTRAIT} 10px ${PANEL_SIZE} 0;
+    grid-template-rows: 0 1fr ${WHEEL_SIZE_PORTRAIT} ${PANEL_SIZE} 0;
     grid-template-columns: 1fr ${WHEEL_SIZE_PORTRAIT} 1fr;
 
     grid-template-areas:
       '. . .'
       '. status .'
       '. wheel .'
-      '. scale .'
       '. controls .'
       '. . .';
     place-items: center;
@@ -44,31 +38,26 @@ const styles = css`
     width: 100%;
   }
 
-  .scale {
-    grid-area: scale;
-    /* z-index: 10; */
-    width: 100%;
-    height: 0;
-    position: relative;
-  }
-
-  .scale .toggle-icon {
-    font-size: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.1));
-    width: min(64px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.2));
-    aspect-ratio: 1;
-    position: absolute;
-    top: max(-64px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.2));
-    right: max(-16px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.2 / 4));
-    z-index: 5;
-  }
-
-  /* .scale scale-badge {
-
-  } */
-
   .wheel {
     grid-area: wheel;
     width: 100%;
+    aspect-ratio: 1;
+    display: grid;
+
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+  }
+
+  .wheel tone-wheel {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+  }
+
+  .wheel .scale-toggle-icon {
+    grid-column: -2;
+    grid-row: -2;
+    z-index: 5;
+    font-size: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.1));
   }
 
   .controls {
@@ -95,13 +84,12 @@ const styles = css`
         ${TOOLBAR_ICON_SIZE}
         /* status   */ ${PANEL_SIZE}
         /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
-        /* scale    */ 10px
         /* controls */ ${PANEL_SIZE}
         /* .        */ max(${TOOLBAR_ICON_SIZE}, 0px);
 
       /* note: useless max() above is to trick the vscode lit plugin's invalid syntax checker,
         which breaks if the last element before a ';' char is a template string interpolation */
-      grid-template-areas: '. status wheel scale controls . ';
+      grid-template-areas: '. status wheel controls . ';
     }
     .status {
       height: ${WHEEL_SIZE_LANDSCAPE};
@@ -114,15 +102,9 @@ const styles = css`
       height: ${WHEEL_SIZE_LANDSCAPE};
       max-width: ${PANEL_SIZE_PX};
     }
-    .scale {
-      height: 100%;
-    }
-    .scale .toggle-icon {
+
+    .wheel .scale-toggle-icon {
       font-size: min(48px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.1));
-      width: min(64px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.2));
-      top: auto;
-      bottom: min(64px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.2));
-      right: min(-16px, calc((${WHEEL_SIZE_PORTRAIT}) * -0.1));
     }
   }
 `

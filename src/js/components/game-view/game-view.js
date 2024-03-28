@@ -164,9 +164,7 @@ export class GameViewElement extends LitElement {
             @note:holdEnded=${this.#pitchDeselected}>
             ${pitchClasses}
           </tone-wheel>
-        </div>
-        <div class="scale">
-          <div class="toggle-icon">
+          <div class="scale-toggle-icon">
             ${scaleBadge}
           </div>
         </div>
