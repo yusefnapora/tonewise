@@ -41,35 +41,19 @@
       grid-column: 1;
     }
 
-    .logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      height: 100%;
-      max-width: min(50vw, 50vh);
-      max-height: min(75vh, 750vw);
-    }
-
-    .app-title {
-      font-size: 2.25rem;
-      font-family: var(--app-title-font-family);
-      letter-spacing: var(--app-title-letter-spacing);
-      text-align: center;
-    }
 
     tone-wheel {
-      max-width: min(50vw, 50vh);
-      max-height: min(75vh, 75vw);
+      min-width: min(50vw, 50vh); 
+      max-width: min(85vw, 85vh);
+      max-height: min(85vw, 85vh);
+      /* max-height: min(75vh, 75vw); */
       aspect-ratio: 1;
       height: 100%;
     }
   </style>
   </head>
   <body oncontextmenu="return false;">
-    <app-background></app-background>
-    <div class="logo">
+      <app-background></app-background>
       <tone-wheel hide-labels>
         <pitch-class class="C" midi-note="60">C</pitch-class>
         <pitch-class class="C♯" midi-note="61">C♯</pitch-class>
@@ -84,7 +68,5 @@
         <pitch-class class="A♯"  midi-note="70">A♯</pitch-class>
         <pitch-class class="B"  midi-note="71">B</pitch-class>
       </tone-wheel>
-      <h1 class="app-title">Tonewise</h1>
-    </div>
   </body>
 </html>

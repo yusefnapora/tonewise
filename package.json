@@ -10,7 +10,10 @@
     "serve": "web-dev-server --node-resolve --watch --open --app-index src/index.html",
     "format": "prettier --write .",
     "test": "web-test-runner test/**/*.test.js --node-resolve",
-    "typecheck": "tsc -p ./jsconfig.json"
+    "typecheck": "tsc -p ./jsconfig.json",
+    "splash-screen-light": "pwa-asset-generator http://localhost:8000/src/splash-screen.html assets/splash",
+    "splash-screen-dark": "pwa-asset-generator http://localhost:8000/src/splash-screen.html assets/splash --dark-mode",
+    "splash-screen": "run-s splash-screen-light splash-screen-dark"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +27,7 @@
     "@web/rollup-plugin-html": "^2.1.2",
     "@web/test-runner": "^0.18.0",
     "chai": "npm:@esm-bundle/chai@^4.3.4-fix.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "3.2.5",
     "pwa-asset-generator": "^6.3.1",
     "rimraf": "^5.0.5",

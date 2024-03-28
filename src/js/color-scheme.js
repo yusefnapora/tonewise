@@ -1,4 +1,17 @@
 import { store } from './state/store.js'
+import { resolveCSSVariables, setMetaThemeColors } from './common/dom.js'
+import { selectAppBackgroundCss } from './state/selectors/selectors.js'
+import Color from 'colorjs.io'
+
+export function applyCurrentTintColor() {
+  let { themeColor } = selectAppBackgroundCss(store.getState())
+  themeColor = themeColor
+    .replace('--color-primary-lightness', '--bgcolor-lightness')
+    .replace('--color-primary-chroma', '--bgcolor-chroma')
+  themeColor = resolveCSSVariables(themeColor, document.body)
+  const c = new Color(themeColor).to('srgb').toString({ format: 'hex' })
+  setMetaThemeColors(c)
+}
 
 let currentColorScheme = ''
 /**
@@ -14,6 +27,7 @@ function applyColorScheme(scheme) {
     html.classList.remove('sl-theme-light', 'light-theme')
   }
   currentColorScheme = scheme
+  applyCurrentTintColor()
 }
 
 /**
@@ -46,6 +60,7 @@ function applyCurrentPreferredColorScheme() {
 
 export function setupColorScheme() {
   applyCurrentPreferredColorScheme()
+  applyCurrentTintColor()
 
   window
     .matchMedia('(prefers-color-scheme: dark)')
