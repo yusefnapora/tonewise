@@ -12,7 +12,7 @@ import {
   selectTonicNoteAngle,
   selectTuningNoteIds,
 } from '../../state/selectors/selectors.js'
-import { DEFAULT_ROTATION_OFFSET } from '../index.js'
+import { DEFAULT_ROTATION_OFFSET } from '../tone-wheel/tone-wheel.js'
 
 export class NoteBadgeElement extends LitElement {
   static styles = css`

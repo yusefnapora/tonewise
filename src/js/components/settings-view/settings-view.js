@@ -16,7 +16,7 @@ import {
   setSystemColorTheme,
 } from '../../state/slices/preferences-slice.js'
 import { landscapeMediaQuery } from '../../styles.js'
-import { unregisterServiceWorker } from '../../app.js'
+import { unregisterServiceWorker } from '../../worker-setup.js'
 
 export class SettingsViewElement extends LitElement {
   static styles = css`
