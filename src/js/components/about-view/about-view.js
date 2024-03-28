@@ -75,7 +75,7 @@ export class AboutViewElement extends LitElement {
         </p>
         <p>
           First, the app will play a reference note and highlight it on
-          the wheel. Next, you'll hear a "hidden note," but it won't be
+          the wheel. Next, you'll hear a "hidden note" that is not
           highlighted. When you tap the hidden note on the wheel, you'll
           see the name of the interval between the two notes.
         </p>
