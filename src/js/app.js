@@ -29,5 +29,14 @@ setBasePath('/')
 if ('serviceWorker' in navigator && isProd) {
   const { Workbox } = await import('workbox-window')
   const wb = new Workbox('/sw.js')
+
+  /** @type {Array<keyof import('workbox-window').WorkboxEventMap>} */
+  const eventNames = ['activated', 'activating', 'controlling', 'installed', 'installing', 'redundant', 'waiting']
+  for (const n of eventNames) {
+    wb.addEventListener(n, (e) => {
+      console.log(`service worker event ${n}`, e)
+    })
+  }
   wb.register()
+  wb.update()
 }
