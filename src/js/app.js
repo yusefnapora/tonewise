@@ -26,6 +26,9 @@ import '@shoelace-style/shoelace/dist/components/option/option.js'
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js'
 setBasePath('/')
 
+/** @type {ServiceWorkerRegistration | null} */
+let swRegistration = null
+
 if ('serviceWorker' in navigator && isProd) {
   const { Workbox } = await import('workbox-window')
   const wb = new Workbox('/sw.js')
@@ -38,5 +41,25 @@ if ('serviceWorker' in navigator && isProd) {
     })
   }
   wb.register()
+    .then(registration => {
+      swRegistration = registration
+    })
   wb.update()
+}
+
+export async function unregisterServiceWorker() {
+  if (!swRegistration) {
+    return
+  }
+  console.log('unregistering service worker')
+  try {
+    const success = swRegistration.unregister()
+    if (success) {
+      console.log('unregistered service worker successfully')
+    } else {
+      console.log('service worker unregister failed')
+    }
+  } catch (e) {
+    console.error('error unregistering service worker:', e)
+  }
 }

@@ -16,6 +16,7 @@ import {
   setSystemColorTheme,
 } from '../../state/slices/preferences-slice.js'
 import { landscapeMediaQuery } from '../../styles.js'
+import { unregisterServiceWorker } from '../../app.js'
 
 export class SettingsViewElement extends LitElement {
   static styles = css`
@@ -129,6 +130,13 @@ export class SettingsViewElement extends LitElement {
       }
     }
 
+    const forceRefresh = async () => {
+      console.log('forcing service worker reload')
+      await unregisterServiceWorker()
+      console.log('reloading page')
+      window.location.reload()
+    }
+
     //@ts-expect-error
     this.renderRoot.querySelector('tone-wheel')?.requestUpdate()
 
@@ -186,6 +194,15 @@ export class SettingsViewElement extends LitElement {
               </sl-radio-group>
             </div>
           </div>
+        </div>
+
+        <div class="debug">
+          <sl-button 
+            @click=${() => forceRefresh()}
+            label="Refresh cache">
+            <sl-icon slot="prefix" name="arrow-clockwise"></sl-icon>
+            Clear offline cache
+          </sl-button>
         </div>
       </glass-panel>
     `
