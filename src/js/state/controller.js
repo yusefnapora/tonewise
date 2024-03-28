@@ -4,7 +4,7 @@
  * @typedef {import('./store.js').RootState} RootState
  *
  * @typedef {object} StateListener
- * @property {(RootState) => void} [stateChanged]
+ * @property {(state: RootState) => void} [stateChanged]
  *
  * @typedef {(state: RootState, args: any) => any & { lastResult: () => any }} SelectorFn
  */
@@ -24,6 +24,8 @@ export class StateController {
     /** @type {[SelectorFn, any][]} */
     this.selectors = []
 
+    this.lastSelectorResults = []
+
     /** @type {Function[]} */
     this.unsubscribeFns = []
 
@@ -38,7 +40,7 @@ export class StateController {
    * @template ResultT
    * @template ArgsT
    *
-   * @param {((state: RootState, args: any) => ResultT) & {lastResult: () => ResultT}} selector
+   * @param {((state: RootState, args: any) => ResultT)} selector
    * @param  {ArgsT} [args]
    */
   select(selector, args) {
@@ -59,13 +61,12 @@ export class StateController {
       }
 
       let needsUpdate = false
-      for (const [selector, args] of this.selectors) {
-        //@ts-expect-error
-        const lastResult = selector.lastResult()
+      for (let i = 0; i < this.selectors.length; i++) {
+        const [selector, args] = this.selectors[i]
+        const lastResult = this.lastSelectorResults[i]
         const nextResult = selector(this.state, args)
         if (lastResult !== nextResult) {
           needsUpdate = true
-          break
         }
       }
       if (needsUpdate) {

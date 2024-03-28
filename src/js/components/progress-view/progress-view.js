@@ -98,12 +98,6 @@ export class ProgressViewElement extends LitElement {
 
   #state = new StateController(this)
 
-  stateChanged() {
-    // TODO: figure out why selector update logic in state controller
-    // isn't working for this component
-    this.requestUpdate()
-  }
-
   /** 
    * @param {string} id
    * @param {number} midiNumber

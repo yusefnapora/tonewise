@@ -108,8 +108,8 @@ export class WelcomeViewElement extends LitElement {
     /** @param {import('../../state/slices/types.js').GameMode} gameMode */
     const playClicked = (gameMode) => {
       resumeAudio()
-      endGame(dispatch)
-      dispatch(setGameMode(gameMode))
+      // endGame(dispatch)
+      // dispatch(setGameMode(gameMode))
     }
 
     return html`
@@ -131,7 +131,6 @@ export class WelcomeViewElement extends LitElement {
                 </app-link>
               </li>
               <li>
-                <!-- todo: add a new route for quiz mode -->
                 <app-link @click=${() => playClicked('challenge')} href="play">
                   <div class="nav-link">
                     <sl-icon name="music-note-list"></sl-icon>

@@ -130,7 +130,6 @@ export const selectActiveNoteIds = createSelector(
 export const selectStatusMessage = createSelector(
   [selectGameState, selectAudioLoadingState],
   (game, loading) => {
-    const { currentRound } = game
     if (loading === 'loading') {
       return 'Loading...'
     }
@@ -140,6 +139,7 @@ export const selectStatusMessage = createSelector(
     if (game.currentMode === 'free-play') {
       return 'Tap the wheel to make music'
     }
+    const { currentRound } = game
     if (!currentRound) {
       return 'Press play'
     }

@@ -1,6 +1,6 @@
 import { html } from 'lit'
 import Navigo from 'navigo'
-import defaultRoutes from './routes.js'
+import defaultRoutes, { hooks } from './routes.js'
 
 // @ts-expect-error
 const APP_BASE_PATH = process.env.NODE_ENV === 'development' ? '/src' : '/'
@@ -27,6 +27,8 @@ export class RouteController {
     this.router = router
     this.routes = routes
     this.content = html``
+    /** @type {Function[]} */
+    this.unhookFns = []
     host.addController(this)
   }
 
@@ -36,6 +38,17 @@ export class RouteController {
         this.content = render(match)
         this.host.requestUpdate()
       })
+      
+      const trimmedPath = path.replace(/^\//, '')
+      const routeHooks = hooks[trimmedPath] ?? hooks[path]
+      if (routeHooks?.enter) {
+        const unhook = this.router.addAfterHook(trimmedPath, routeHooks.enter)
+        this.unhookFns.push(unhook)
+      }
+      if (routeHooks?.leave) {
+        const unhook = this.router.addLeaveHook(trimmedPath, routeHooks.leave)
+        this.unhookFns.push(unhook)
+      }
     }
     this.router.resolve()
   }
@@ -43,6 +56,9 @@ export class RouteController {
   hostDisconnected() {
     for (const path of Object.keys(this.routes)) {
       this.router.off(path)
+    }
+    for (const unhook of this.unhookFns) {
+      unhook()
     }
   }
 }
