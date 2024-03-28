@@ -105,7 +105,7 @@ export class ToneWheel extends LitElement {
       }
     }
 
-    .tone-group.active > .inner-wedge {
+    svg:not(.non-interactive) .tone-group.active > .inner-wedge {
       opacity: 0;
     }
 
