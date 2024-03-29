@@ -77,6 +77,9 @@ const styles = css`
   }
 
   ${landscapeMediaQuery} {
+    :host {
+      padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+    }
     .contents {
       display: grid;
       flex: 1;
@@ -86,14 +89,12 @@ const styles = css`
       grid-template-rows: 1fr;
       grid-template-columns: 
         /* .        */
-        ${TOOLBAR_ICON_SIZE}
+        min(${TOOLBAR_ICON_SIZE}, env(safe-area-inset-left))
         /* status   */ ${PANEL_SIZE}
         /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
         /* controls */ ${PANEL_SIZE}
-        /* .        */ max(${TOOLBAR_ICON_SIZE}, 0px);
+        /* .        */ min(${TOOLBAR_ICON_SIZE}, env(safe-area-inset-right));
 
-      /* note: useless max() above is to trick the vscode lit plugin's invalid syntax checker,
-        which breaks if the last element before a ';' char is a template string interpolation */
       grid-template-areas: '. status wheel controls . ';
     }
     .status {
