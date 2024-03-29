@@ -3,7 +3,7 @@ import {
   intervalDisplayName,
   midiNoteInterval,
 } from '../../common/intervals.js'
-import { colorForAngle } from '../../common/color.js'
+import { colorForAngle, getContrastingTextColor } from '../../common/color.js'
 /**
  * @typedef {import('../store.js').RootState} RootState
  * @typedef {import('../store.js').AppDispatch} AppDispatch
@@ -294,6 +294,22 @@ export const selectNoteColor = createSelector(
       return undefined
     }
     return colorForAngle(angle, colorScale)
+  }
+)
+
+export const selectNoteLabelColor = createSelector(
+  [
+    selectTuningState, 
+    selectColorScale, 
+    /** 
+     * @param {RootState} _state
+     * @param {string} noteId
+     */
+    (_state, noteId) => noteId
+  ],
+  (tuning, colorScale, noteId) => {
+    const noteColor = selectNoteColor.resultFunc(tuning, colorScale, noteId)
+    return getContrastingTextColor(noteColor)
   }
 )
 

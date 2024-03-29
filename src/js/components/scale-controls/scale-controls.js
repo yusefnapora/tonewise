@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { selectNoteColor, selectNoteLabel } from '../../state/selectors/selectors.js'
+import { selectNoteColor, selectNoteLabel, selectNoteLabelColor } from '../../state/selectors/selectors.js'
 import { dispatch } from '../../state/store.js'
 import { deriveScaleNotes, setScaleQuality, setTonicNote } from '../../state/slices/tuning-slice.js'
 import { landscapeMediaQuery } from '../../styles.js'
@@ -50,6 +50,7 @@ export class ScaleControlsElement extends LitElement {
     sl-menu-item::part(label) {
       color: var(--color-text);
       font-size: 1.2rem;
+      font-family: var(--note-font-family);
     }
 
     sl-menu-item:active::part(base) {
@@ -112,7 +113,7 @@ export class ScaleControlsElement extends LitElement {
      * @param {string} noteId 
      * @param {1|-1} direction
      */
-    const nextNoteId = (noteId, direction) => {
+    const getNeighboringNoteId = (noteId, direction) => {
       let i = tuning.noteIds.indexOf(noteId)
       if (i < 0) {
         return undefined
@@ -126,10 +127,15 @@ export class ScaleControlsElement extends LitElement {
       return tuning.noteIds[i]
     }
 
+    const nextNote = getNeighboringNoteId(tonicNote, 1)
+    const prevNote = getNeighboringNoteId(tonicNote, -1)
     const tonicNoteLabel = selectNoteLabel(state, tonicNote)
     const tonicColor = selectNoteColor(state, tonicNote)
-    const prevColor = selectNoteColor(state, nextNoteId(tonicNote, -1))
-    const nextColor = selectNoteColor(state, nextNoteId(tonicNote, 1))
+    const prevColor = selectNoteColor(state, prevNote)
+    const nextColor = selectNoteColor(state, nextNote)
+    const tonicLabelColor = selectNoteLabelColor(state, tonicNote)
+    const prevLabelColor = selectNoteLabelColor(state, prevNote)
+    const nextLabelColor = selectNoteLabelColor(state, nextNote)
 
     const noteMenuItems = tuning.noteIds.map(noteId => html`
       <sl-menu-item class=${`note-${noteId}`} value=${noteId}>
@@ -141,6 +147,9 @@ export class ScaleControlsElement extends LitElement {
       sl-menu-item.note-${noteId}::part(base) {
         background-color: ${selectNoteColor(state, noteId)};
       }
+      sl-menu-item.note-${noteId}::part(label) {
+        color: ${selectNoteLabelColor(state, noteId)};
+      }
     `).join('\n')
 
     /** @param {import('@shoelace-style/shoelace').SlSelectEvent} e */
@@ -151,7 +160,7 @@ export class ScaleControlsElement extends LitElement {
 
     /** @param {1|-1} adjust */
     const noteStepBy = (adjust) => {
-      const nextNote = nextNoteId(tonicNote, adjust)
+      const nextNote = getNeighboringNoteId(tonicNote, adjust)
       dispatch(setTonicNote(nextNote))
     }
 
@@ -207,12 +216,23 @@ export class ScaleControlsElement extends LitElement {
           background-color: ${tonicColor};
         }
 
+        .note-dropdown::part(label) {
+          color: ${tonicLabelColor};
+        }
+
         .prev-note::part(base) {
           background-color: ${prevColor};
         }
 
+        .prev-note::part(label) {
+          color: ${prevLabelColor};
+        }
+
         .next-note::part(base) {
           background-color: ${nextColor};
+        }
+        .next-note::part(label) {
+          color: ${nextLabelColor};
         }
 
         ${noteMenuStyles}
