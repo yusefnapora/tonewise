@@ -134,7 +134,7 @@ export const selectStatusMessage = createSelector(
       return 'Loading...'
     }
     if (game.scaleControlsActive) {
-      return 'Choose a scale to change the wheel'
+      return 'Choose a scale'
     }
     if (game.currentMode === 'free-play') {
       return 'Tap the wheel to make music'
@@ -150,9 +150,13 @@ export const selectStatusMessage = createSelector(
   },
 )
 
-export const selectTargetName = createSelector(
-  [selectTuningState, selectCurrentRound],
-  (tuning, currentRound) => {
+export const selectSecondaryStatusMessage = createSelector(
+  [selectTuningState, selectGameState, selectPreferencesState],
+  (tuning, game, preferences) => {
+    if (game.scaleControlsActive) {
+      return selectCurrentScaleLabel.resultFunc(tuning, preferences)
+    }
+    const { currentRound } = game
     if (!currentRound) {
       return undefined
     }
@@ -238,6 +242,15 @@ export const selectNoteLabel = createSelector(
 
     return display.enharmonicLabels[preferences.enharmonicPresentation]
   },
+)
+
+export const selectCurrentScaleLabel = createSelector(
+  [selectTuningState, selectPreferencesState],
+  (tuning, preferences) => {
+    const { tonicNote } = tuning
+    const noteLabel = selectNoteLabel.resultFunc(tuning, preferences, tonicNote)
+    return `${noteLabel} ${tuning.scaleQuality}`
+  }
 )
 
 export const selectEnharmonicPresentation = createSelector(

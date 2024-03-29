@@ -4,7 +4,7 @@ import { StateController } from '../../state/controller.js'
 import {
   isGameCompleted,
   selectStatusMessage,
-  selectTargetName,
+  selectSecondaryStatusMessage,
 } from '../../state/selectors/selectors.js'
 import { landscapeMediaQuery } from '../../styles.js'
 
@@ -45,16 +45,15 @@ export class GameStatusMessageElement extends LitElement {
   #state = new StateController(this)
 
   render() {
-    const isCompleted = this.#state.select(isGameCompleted)
     const message = this.#state.select(selectStatusMessage)
-    const intervalName = this.#state.select(selectTargetName)
+    const secondaryMessage = this.#state.select(selectSecondaryStatusMessage)
 
-    const intervalDisplay = isCompleted
-      ? html`<p>${intervalName}</p>`
+    const secondaryDisplay = secondaryMessage
+      ? html`<p>${secondaryMessage}</p>`
       : undefined
 
     console.log('status message', message)
-    return html` <div class="message">${message} ${intervalDisplay}</div> `
+    return html` <div class="message">${message} ${secondaryDisplay}</div> `
   }
 }
 
