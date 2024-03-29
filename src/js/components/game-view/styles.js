@@ -44,8 +44,8 @@ const styles = css`
     aspect-ratio: 1;
     display: grid;
 
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(7, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
   }
 
   .wheel tone-wheel {
@@ -58,6 +58,12 @@ const styles = css`
     grid-row: -2;
     z-index: 5;
     font-size: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.1));
+
+    & > scale-badge {
+      position: relative;
+      bottom: -20px;
+      right: -20px;
+    }
   }
 
   .controls {
@@ -105,6 +111,11 @@ const styles = css`
 
     .wheel .scale-toggle-icon {
       font-size: min(48px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.1));
+      
+
+      & > scale-badge {
+        bottom: -10px;
+      }
     }
   }
 `
