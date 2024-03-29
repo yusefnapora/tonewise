@@ -396,7 +396,7 @@ export class ToneWheel extends LitElement {
         e.preventDefault()
       }
 
-      const classes = { 'tone-group': true, active: el.active, disabled: el.disabled }
+      const classes = { [className]: true, 'tone-group': true, active: el.active, disabled: el.disabled }
       groups.push(svg`
         <g 
           @touchstart=${touchDown}
