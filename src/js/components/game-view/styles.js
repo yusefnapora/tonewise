@@ -56,14 +56,12 @@ const styles = css`
   .wheel .scale-toggle-icon {
     grid-column: -2;
     grid-row: -2;
-    z-index: 5;
+    z-index: 3;
     font-size: min(48px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.1));
 
-    & > scale-badge {
-      position: relative;
-      bottom: -20px;
-      right: -20px;
-    }
+    position: relative;
+    bottom: calc(-1 * min(24px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.05)));
+    right: calc(-1 * min(24px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.05)));
   }
 
   .controls {
@@ -111,11 +109,8 @@ const styles = css`
 
     .wheel .scale-toggle-icon {
       font-size: min(48px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.1));
-      
-
-      & > scale-badge {
-        bottom: -10px;
-      }
+      bottom: calc(-1 * min(24px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.05)));
+      right: calc(-1 * min(24px, calc((${WHEEL_SIZE_LANDSCAPE}) * 0.05)));
     }
   }
 `
