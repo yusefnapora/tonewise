@@ -36,13 +36,25 @@ export class AppViewElement extends LitElement {
     }
 
     .content {
-      min-width: 100vw;
+      max-width: calc(
+        100vw - env(safe-area-inset-left) - env(safe-area-inset-right)
+      );
+      min-height: calc(
+        min(100vh, 100dvh) - env(safe-area-inset-top) - env(
+            safe-area-inset-bottom
+          )
+      );
       height: 100%;
-      min-height: min(100vh, 100dvh);
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 2;
+
+      margin-top: env(safe-area-inset-top);
+      margin-bottom: env(safe-area-inset-bottom);
+      margin-left: env(safe-area-inset-left);
+      margin-right: env(safe-area-inset-right);
     }
   `
 

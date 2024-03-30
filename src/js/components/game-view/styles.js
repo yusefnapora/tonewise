@@ -12,8 +12,6 @@ const styles = css`
     width: 100%;
     height: 100%;
     touch-action: manipulation;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right)
-      env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
   .contents {
@@ -77,9 +75,6 @@ const styles = css`
   }
 
   ${landscapeMediaQuery} {
-    :host {
-      padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
-    }
     .contents {
       display: grid;
       flex: 1;
@@ -89,11 +84,11 @@ const styles = css`
       grid-template-rows: 1fr;
       grid-template-columns: 
         /* .        */
-        min(${TOOLBAR_ICON_SIZE}, env(safe-area-inset-left))
+        calc(${TOOLBAR_ICON_SIZE} - env(safe-area-inset-left))
         /* status   */ ${PANEL_SIZE}
         /* wheel    */ ${WHEEL_SIZE_LANDSCAPE}
         /* controls */ ${PANEL_SIZE}
-        /* .        */ min(${TOOLBAR_ICON_SIZE}, env(safe-area-inset-right));
+        /* .        */ calc(${TOOLBAR_ICON_SIZE} - env(safe-area-inset-right));
 
       grid-template-areas: '. status wheel controls . ';
     }
