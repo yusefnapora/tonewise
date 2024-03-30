@@ -1,5 +1,8 @@
 import { LitElement, css, html, nothing } from 'lit'
-import { registerElement } from '../../common/dom.js'
+import {
+  keyboardActivationEventListener,
+  registerElement,
+} from '../../common/dom.js'
 import { dispatch } from '../../state/store.js'
 import { StateController } from '../../state/controller.js'
 import {
@@ -71,6 +74,12 @@ export class ProgressViewElement extends LitElement {
       transform: scale(1);
     }
 
+    note-badge:focus-visible {
+      outline: 4px solid var(--color-primary);
+      outline-offset: 10px;
+      border-radius: 5px;
+    }
+
     .buttons {
       display: flex;
       align-items: center;
@@ -101,6 +110,11 @@ export class ProgressViewElement extends LitElement {
 
   #state = new StateController(this)
 
+  constructor() {
+    super()
+    this.ariaLabel = 'progress panel'
+  }
+
   /**
    * @param {string} id
    * @param {number} midiNumber
@@ -121,6 +135,7 @@ export class ProgressViewElement extends LitElement {
     const audioLoadingState = this.#state.select(selectAudioLoadingState)
     if (audioLoadingState === 'loading') {
       return html` <div class="content not-playing">
+        <sl-visually-hidden>Loading...</sl-visually-hidden>
         <sl-spinner></sl-spinner>
       </div>`
     }
@@ -142,18 +157,28 @@ export class ProgressViewElement extends LitElement {
     const noteBadges = noteInfo.map((info) => {
       const { noteId, noteRevealed, highlighted, hidden, midiNote } = info
       const label = this.#state.select(selectNoteLabel, noteId)
-      const pointerDown = () => this.#startPlayback(noteId, midiNote)
-      const pointerUp = () => this.#stopPlayback(noteId, midiNote)
+      const startPlayback = () => this.#startPlayback(noteId, midiNote)
+      const stopPlayback = () => this.#stopPlayback(noteId, midiNote)
       return html`
         <note-badge
+          role="button"
+          tabindex="0"
+          aria-selected=${highlighted}
           class=${hidden ? 'hidden' : ''}
           note-id=${noteId}
           label=${label}
           reveal=${noteRevealed ? 'true' : nothing}
           highlight=${highlighted ? 'true' : nothing}
-          @pointerdown=${pointerDown}
-          @pointerup=${pointerUp}
-          @pointerleave=${pointerUp}></note-badge>
+          @pointerdown=${startPlayback}
+          @pointerup=${stopPlayback}
+          @pointerleave=${stopPlayback}
+          @keydown=${keyboardActivationEventListener((e) => {
+            if (e.repeat) {
+              return
+            }
+            startPlayback()
+          })}
+          @keyup=${keyboardActivationEventListener(stopPlayback)}></note-badge>
       `
     })
 
@@ -161,6 +186,8 @@ export class ProgressViewElement extends LitElement {
 
     const replayButton = html`
       <sl-icon-button
+        role="presentation"
+        label="replay this round"
         name="arrow-counterclockwise"
         @click=${() => restartGame(this.#state.state, dispatch)}>
       </sl-icon-button>
@@ -168,6 +195,8 @@ export class ProgressViewElement extends LitElement {
 
     const nextRoundButton = html`
       <sl-icon-button
+        role="presentation"
+        label="next round"
         name="chevron-double-right"
         @click=${() => startNewGame(this.#state.state, dispatch)}>
       </sl-icon-button>
@@ -184,15 +213,8 @@ export class ProgressViewElement extends LitElement {
       </div>
     `
 
-    /**
-     * iOS safari needs the element to be clickable before it
-     * will apply `touch-action: manipulation`
-     * see: https://stackoverflow.com/a/54753520
-     * @param {Event} e
-     */
-    const dummyClick = (e) => e.preventDefault()
     return html`
-      <div @click=${dummyClick} class="content">${statusView} ${buttons}</div>
+      <wrapper-div class="content">${statusView} ${buttons}</wrapper-div>
     `
   }
 }
