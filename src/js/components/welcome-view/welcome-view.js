@@ -1,10 +1,8 @@
 import { LitElement, css, html } from 'lit'
 import { registerElement } from '../../common/dom.js'
-import { cardStyleBase, landscapeMediaQuery } from '../../styles.js'
+import { landscapeMediaQuery } from '../../styles.js'
 import { resumeAudio } from '../../state/slices/audio-slice.js'
-import { dispatch } from '../../state/store.js'
-import { endGame } from '../../state/sequences/game-sequences.js'
-import { setGameMode } from '../../state/slices/game-slice.js'
+import { navLinkClicked } from '../../route-controller.js'
 
 const appName = `Tonewise`
 const welcomeText = `
@@ -118,11 +116,11 @@ export class WelcomeViewElement extends LitElement {
 
     return html`
       <glass-panel>
-        <div class="content" role="presentation">
-          <div class="logo" role="presentation">
+        <wrapper-div class="content">
+          <wrapper-div class="logo">
             <wheel-icon aria-hidden="true" active-notes="Ab,E"></wheel-icon>
             <h1 class="app-title">${appName}</h1>
-          </div>
+          </wrapper-div>
           <!-- <p class="welcome-text">${welcomeText}</p> -->
           <nav aria-label="Main menu">
             <ul role="presentation">
@@ -130,31 +128,31 @@ export class WelcomeViewElement extends LitElement {
                 <app-link
                   @click=${() => playClicked('free-play')}
                   href="/free-play">
-                  <div class="nav-link" role="presentation">
+                  <wrapper-div class="nav-link">
                     <sl-icon name="hypnotize"></sl-icon>
                     Free play
-                  </div>
+                  </wrapper-div>
                 </app-link>
               </li>
               <li role="presentation">
                 <app-link @click=${() => playClicked('challenge')} href="play">
-                  <div class="nav-link" role="presentation">
+                  <wrapper-div class="nav-link">
                     <sl-icon name="music-note-list"></sl-icon>
                     Quiz mode
-                  </div>
+                  </wrapper-div>
                 </app-link>
               </li>
               <li role="presentation">
-                <app-link href="about">
-                  <div class="nav-link" role="presentation">
-                    <sl-icon name="question-lg" role="presentation"></sl-icon>
+                <a href="/about" @click=${navLinkClicked}>
+                  <wrapper-div class="nav-link">
+                    <sl-icon name="question-lg"></sl-icon>
                     About
-                  </div>
-                </app-link>
+                  </wrapper-div>
+                </a>
               </li>
             </ul>
           </nav>
-        </div>
+        </wrapper-div>
       </glass-panel>
     `
   }

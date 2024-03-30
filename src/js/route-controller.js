@@ -11,6 +11,16 @@ export const sharedRouter = new Navigo(APP_BASE_PATH)
 
 export const { navigate } = sharedRouter
 
+/** @param {Event} e */
+export const navLinkClicked = (e) => {
+  e.preventDefault()
+  console.log('navlink clicked', e, e.target)
+  if (typeof e.target['href'] !== 'string') {
+    return
+  }
+  navigate(e.target['href'])
+}
+
 /**
  * @typedef {(match: Navigo.Match) => import('lit').TemplateResult<1>} RouteHandler
  * @typedef {import('lit').ReactiveControllerHost} ReactiveControllerHost
