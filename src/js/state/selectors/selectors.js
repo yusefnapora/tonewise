@@ -256,6 +256,22 @@ export const selectCurrentScaleLabel = createSelector(
   },
 )
 
+export const selectNoteAriaLabel = createSelector(
+  [
+    selectTuningState,
+    selectPreferencesState,
+    /**
+     * @param {RootState} _state
+     * @param {string} noteId
+     */
+    (_state, noteId) => noteId,
+  ],
+  (tuning, preferences, noteId) => {
+    const label = selectNoteLabel.resultFunc(tuning, preferences, noteId)
+    return label.replace('♯', ' sharp').replace('♭', ' flat')
+  },
+)
+
 export const selectEnharmonicPresentation = createSelector(
   [selectPreferencesState],
   (prefs) => prefs.enharmonicPresentation,

@@ -1,7 +1,8 @@
-import { LitElement, html, css } from 'lit'
+import { LitElement, html, css, nothing } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
+  selectNoteAriaLabel,
   selectNoteColor,
   selectNoteLabel,
   selectNoteLabelColor,
@@ -44,6 +45,17 @@ export class ScaleControlsElement extends LitElement {
       outline-offset: 2px;
       border-radius: 10px;
       filter: drop-shadow(0 0 25px white);
+    }
+
+    scale-badge:focus-visible {
+      outline: 2px dotted var(--color-text-muted);
+      outline-offset: 2px;
+      border-radius: 10px;
+      filter: drop-shadow(0 0 25px white);
+    }
+
+    scale-badge.selected:focus-visible {
+      outline: 2px dotted var(--color-selected-scale-highlight);
     }
 
     sl-button::part(base),
@@ -144,6 +156,7 @@ export class ScaleControlsElement extends LitElement {
     const tonicLabelColor = selectNoteLabelColor(state, tonicNote)
     const prevLabelColor = selectNoteLabelColor(state, prevNote)
     const nextLabelColor = selectNoteLabelColor(state, nextNote)
+    const tonicAriaLabel = selectNoteAriaLabel(state, tonicNote)
 
     const noteMenuItems = tuning.noteIds.map(
       (noteId) => html`
@@ -197,8 +210,13 @@ export class ScaleControlsElement extends LitElement {
       )
       const selected = quality === tuning.scaleQuality
       const classes = { selected }
+      const ariaLabel = `${tonicAriaLabel} ${quality}`
       return html`
         <scale-badge
+          role="radio"
+          tabindex="0"
+          aria-label=${ariaLabel}
+          aria-checked=${selected}
           class=${classMap(classes)}
           @badge:selected=${() => qualitySelected(quality)}
           tonic=${tonicNoteLabel}
@@ -210,16 +228,27 @@ export class ScaleControlsElement extends LitElement {
 
     const tonicControl = html`
       <sl-button-group>
-        <sl-button class="prev-note" pill @click=${() => noteStepBy(-1)}>
+        <sl-button
+          aria-label="previous note"
+          class="prev-note"
+          pill
+          @click=${() => noteStepBy(-1)}>
           <sl-icon name="chevron-compact-left"></sl-icon>
         </sl-button>
         <sl-dropdown hoist>
-          <sl-button class="note-dropdown" slot="trigger">
+          <sl-button
+            aria-label="tonic note: ${tonicAriaLabel}"
+            class="note-dropdown"
+            slot="trigger">
             ${tonicNoteLabel}
           </sl-button>
           <sl-menu @sl-select=${noteSelected}> ${noteMenuItems} </sl-menu>
         </sl-dropdown>
-        <sl-button class="next-note" pill @click=${() => noteStepBy(1)}>
+        <sl-button
+          aria-label="next note"
+          class="next-note"
+          pill
+          @click=${() => noteStepBy(1)}>
           <sl-icon name="chevron-compact-right"></sl-icon>
         </sl-button>
       </sl-button-group>
@@ -256,8 +285,13 @@ export class ScaleControlsElement extends LitElement {
 
         ${noteMenuStyles}
       </style>
-      <div class="badges">${qualityBadges}</div>
-      <div class="controls">${tonicControl}</div>
+      <section class="badges" role="radiogroup">${qualityBadges}</section>
+      <section class="controls">
+        <header>
+          <sl-visually-hidden> Tonic note selection </sl-visually-hidden>
+        </header>
+        ${tonicControl}
+      </section>
     `
   }
 }

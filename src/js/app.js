@@ -19,6 +19,7 @@ import '@shoelace-style/shoelace/dist/components/select/select.js'
 import '@shoelace-style/shoelace/dist/components/spinner/spinner.js'
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js'
 import '@shoelace-style/shoelace/dist/components/option/option.js'
+import '@shoelace-style/shoelace/dist/components/visually-hidden/visually-hidden.js'
 
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js'
 import { setupServiceWorker } from './worker-setup.js'

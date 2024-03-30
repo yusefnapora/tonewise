@@ -135,8 +135,11 @@ export class GameViewElement extends LitElement {
 
     const closeIcon = html`
       <sl-icon-button
+        aria-controls="scale-control-panel"
+        aria-expanded="false"
         @click=${toggleScaleControls}
-        name="x-circle"></sl-icon-button>
+        name="x-circle">
+      </sl-icon-button>
     `
 
     const scaleBadge = scaleControlsActive
@@ -150,12 +153,22 @@ export class GameViewElement extends LitElement {
           </scale-badge>
         `
 
+    const scaleToggle = html`
+      <div class="scale-toggle-icon">${scaleBadge}</div>
+    `
+
     const scaleControls = !scaleControlsActive
       ? undefined
       : html`
-          <div class="scale-controls">
+          <section
+            id="scale-control-panel"
+            class="scale-controls"
+            aria-labelledby="scale-control-header">
+            <sl-visually-hidden>
+              <header id="scale-control-header">Scale control panel</header>
+            </sl-visually-hidden>
             <scale-controls></scale-controls>
-          </div>
+          </section>
         `
 
     const wheelRotation = 360 - tonicAngle
@@ -173,7 +186,7 @@ export class GameViewElement extends LitElement {
             @note:holdEnded=${this.#pitchDeselected}>
             ${pitchClasses}
           </tone-wheel>
-          <div class="scale-toggle-icon">${scaleBadge}</div>
+          ${scaleToggle}
         </div>
         ${scaleControls} ${progressView}
       </div>
