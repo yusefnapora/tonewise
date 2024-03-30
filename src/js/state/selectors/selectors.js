@@ -4,6 +4,7 @@ import {
   midiNoteInterval,
 } from '../../common/intervals.js'
 import { colorForAngle, getContrastingTextColor } from '../../common/color.js'
+import { isCompleted } from '../slices/game-slice.js'
 /**
  * @typedef {import('../store.js').RootState} RootState
  * @typedef {import('../store.js').AppDispatch} AppDispatch
@@ -156,6 +157,10 @@ export const selectSecondaryStatusMessage = createSelector(
     }
     const { currentRound } = game
     if (!currentRound) {
+      return undefined
+    }
+
+    if (!isCompleted(game)) {
       return undefined
     }
 

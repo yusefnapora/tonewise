@@ -37,7 +37,7 @@ export function isStarted(state) {
 /**
  * @param {GameState} state
  */
-function isCompleted(state) {
+export function isCompleted(state) {
   if (state.currentRound == null) {
     return false
   }
