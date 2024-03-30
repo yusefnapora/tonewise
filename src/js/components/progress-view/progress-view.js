@@ -128,6 +128,7 @@ export class ProgressViewElement extends LitElement {
     if (!currentRound) {
       return html` <div class="content not-playing">
         <sl-icon-button
+          role="presentation"
           name="play-fill"
           label="New game"
           @click=${() => startNewGame(this.#state.state, dispatch)}>

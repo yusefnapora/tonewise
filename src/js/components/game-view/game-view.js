@@ -1,5 +1,8 @@
 import { LitElement, html, nothing } from 'lit'
-import { registerElement } from '../../common/dom.js'
+import {
+  keyboardActivationEventListener,
+  registerElement,
+} from '../../common/dom.js'
 import { dispatch } from '../../state/store.js'
 import { StateController } from '../../state/controller.js'
 import { guess, setScaleControlsActive } from '../../state/slices/game-slice.js'
@@ -34,6 +37,7 @@ export class GameViewElement extends LitElement {
   constructor() {
     super()
     this.freePlayMode = false
+    this.ariaLabel = 'Game screen'
   }
 
   /** @type {import('../tone-wheel/tone-wheel.js').ToneWheel} */
@@ -137,6 +141,7 @@ export class GameViewElement extends LitElement {
       <sl-icon-button
         aria-controls="scale-control-panel"
         aria-expanded="false"
+        label="close scale control panel"
         @click=${toggleScaleControls}
         name="x-circle">
       </sl-icon-button>
@@ -146,7 +151,13 @@ export class GameViewElement extends LitElement {
       ? closeIcon
       : html`
           <scale-badge
+            tabindex="0"
+            role="button"
+            aria-controls="scale-control-panel"
+            aria-expanded="true"
+            aria-label="show scale controls"
             @click=${toggleScaleControls}
+            @keyup=${keyboardActivationEventListener(toggleScaleControls)}
             tonic=${tonicLabel}
             label=${scaleLabel}
             note-ids=${JSON.stringify(scaleNotes)}>

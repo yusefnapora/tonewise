@@ -233,7 +233,7 @@ export class ScaleControlsElement extends LitElement {
     })
 
     const tonicControl = html`
-      <sl-button-group>
+      <sl-button-group aria-label="tonic note switcher">
         <sl-button
           aria-label="previous note"
           class="prev-note"

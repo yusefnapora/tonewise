@@ -82,6 +82,7 @@ export class ScaleBadgeElement extends LitElement {
   }
 
   render() {
+    const svgAriaLabel = `${this.tonic} ${this.label}`
     /** @param {PointerEvent} e */
     const pointerDown = (e) => {
       if (this.nonInteractive) {
@@ -116,6 +117,7 @@ export class ScaleBadgeElement extends LitElement {
 
     return html`
       <svg
+        aria-label=${svgAriaLabel}
         viewBox="0 0 1000 1000"
         @pointerdown=${pointerDown}
         @pointerenter=${pointerDown}

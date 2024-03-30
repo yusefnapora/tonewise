@@ -53,7 +53,11 @@ export class GameStatusMessageElement extends LitElement {
       : undefined
 
     console.log('status message', message)
-    return html` <div class="message">${message} ${secondaryDisplay}</div> `
+    return html`
+      <div class="message" role="status" aria-label="status messages">
+        ${message}${secondaryDisplay}
+      </div>
+    `
   }
 }
 
