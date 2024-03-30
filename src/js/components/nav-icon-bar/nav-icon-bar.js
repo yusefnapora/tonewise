@@ -32,6 +32,12 @@ export class NavIconBarElement extends LitElement {
     }
   `
 
+  constructor() {
+    super()
+    this.role = 'navigation'
+    this.ariaLabel = 'app navigation'
+  }
+
   render() {
     const currentRoute = sharedRouter.getCurrentLocation().route.name
 
@@ -59,6 +65,7 @@ export class NavIconBarElement extends LitElement {
       <sl-icon-button
         class=${classMap(backClasses)}
         name="arrow-left-circle"
+        role="presentation"
         label="Go back"
         @click=${goBack}>
       </sl-icon-button>
@@ -69,6 +76,7 @@ export class NavIconBarElement extends LitElement {
       <sl-icon-button
         class=${classMap(settingsClasses)}
         name="gear-wide"
+        role="presentation"
         label="settings"
         @click=${() => navigate('/settings')}></sl-icon-button>
     `

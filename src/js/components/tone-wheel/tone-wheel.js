@@ -149,6 +149,7 @@ export class ToneWheel extends LitElement {
       grid-column: 1;
       aspect-ratio: 1;
       z-index: -2;
+      border-radius: 50%;
     }
 
     .gradient-background {
@@ -160,6 +161,7 @@ export class ToneWheel extends LitElement {
       grid-column: 1;
       aspect-ratio: 1;
       z-index: -1;
+      border-radius: 50%;
     }
 
     .vibrant {
@@ -219,18 +221,37 @@ export class ToneWheel extends LitElement {
   render() {
     const { content, styleContent } = this.renderContent()
     const classes = { 'non-interactive': this.nonInteractive }
+
+    const showVibrantBackground =
+      this.pitchClasses.filter((pc) => pc.active).length >= 2
+
     return html`
       <style>
         ${styleContent}
       </style>
-      <div part="inner-background" class="base-background-layer"></div>
-      <div part="inner-background" class="gradient-background gradient-colors">
+      <div
+        role="presentation"
+        part="inner-background"
+        class="base-background-layer"></div>
+      <div
+        role="presentation"
+        part="inner-background"
+        class="gradient-background gradient-colors">
         <div class="gradient-blur"></div>
       </div>
-      <div class="gradient-background vibrant gradient-colors">
+      <div
+        role="presentation"
+        class="gradient-background vibrant gradient-colors ${showVibrantBackground
+          ? ''
+          : 'hidden'}">
         <div class="gradient-blur"></div>
       </div>
-      <svg class=${classMap(classes)} viewBox="0 0 1000 1000">${content}</svg>
+      <svg
+        aria-label="tone wheel"
+        class=${classMap(classes)}
+        viewBox="0 0 1000 1000">
+        ${content}
+      </svg>
     `
   }
 

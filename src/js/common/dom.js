@@ -50,3 +50,20 @@ export function resolveCSSVariables(str, scope) {
   }
   return res
 }
+
+/**
+ * @param {(key?: 'enter' | 'space') => unknown} callback
+ */
+export function keyboardActivationEventListener(callback) {
+  /** @param {KeyboardEvent} e */
+  return function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      return callback('enter')
+    }
+    if (e.key === ' ') {
+      e.preventDefault()
+      return callback('space')
+    }
+  }
+}

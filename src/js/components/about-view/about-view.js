@@ -49,6 +49,11 @@ export class AboutViewElement extends LitElement {
     }
   `
 
+  constructor() {
+    super()
+    this.ariaLabel = 'About screen'
+  }
+
   render() {
     return html`
       <glass-panel class="panel">

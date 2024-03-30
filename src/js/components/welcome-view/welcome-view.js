@@ -63,6 +63,8 @@ export class WelcomeViewElement extends LitElement {
     .nav-link {
       display: flex;
       align-items: center;
+      font-size: 1.4rem;
+      font-family: var(--heading-font-family);
 
       & > sl-icon {
         margin-right: 20px;
@@ -101,6 +103,11 @@ export class WelcomeViewElement extends LitElement {
     }
   `
 
+  constructor() {
+    super()
+    this.ariaLabel = 'Welcome screen'
+  }
+
   render() {
     /** @param {import('../../state/slices/types.js').GameMode} gameMode */
     const playClicked = (gameMode) => {
@@ -111,36 +118,36 @@ export class WelcomeViewElement extends LitElement {
 
     return html`
       <glass-panel>
-        <div class="content">
-          <div class="logo">
-            <wheel-icon active-notes="Ab,E"></wheel-icon>
+        <div class="content" role="presentation">
+          <div class="logo" role="presentation">
+            <wheel-icon aria-hidden="true" active-notes="Ab,E"></wheel-icon>
             <h1 class="app-title">${appName}</h1>
           </div>
           <!-- <p class="welcome-text">${welcomeText}</p> -->
-          <nav>
-            <ul>
-              <li>
+          <nav aria-label="Main menu">
+            <ul role="presentation">
+              <li role="presentation">
                 <app-link
                   @click=${() => playClicked('free-play')}
                   href="/free-play">
-                  <div class="nav-link">
+                  <div class="nav-link" role="presentation">
                     <sl-icon name="hypnotize"></sl-icon>
                     Free play
                   </div>
                 </app-link>
               </li>
-              <li>
+              <li role="presentation">
                 <app-link @click=${() => playClicked('challenge')} href="play">
-                  <div class="nav-link">
+                  <div class="nav-link" role="presentation">
                     <sl-icon name="music-note-list"></sl-icon>
                     Quiz mode
                   </div>
                 </app-link>
               </li>
-              <li>
+              <li role="presentation">
                 <app-link href="about">
-                  <div class="nav-link">
-                    <sl-icon name="question-lg"></sl-icon>
+                  <div class="nav-link" role="presentation">
+                    <sl-icon name="question-lg" role="presentation"></sl-icon>
                     About
                   </div>
                 </app-link>

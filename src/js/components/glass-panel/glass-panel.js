@@ -20,9 +20,14 @@ export class GlassPanelElement extends LitElement {
     }
   `
 
+  constructor() {
+    super()
+    this.role = 'presentation'
+  }
+
   render() {
     return html`
-      <div class="contents">
+      <div class="contents" role="presentation">
         <slot></slot>
       </div>
     `

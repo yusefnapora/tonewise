@@ -21,6 +21,7 @@ export class WheelIconElement extends LitElement {
   constructor() {
     super()
     this.activeNotes = ''
+    this.ariaLabel = 'Tonewise logo icon'
   }
 
   render() {
