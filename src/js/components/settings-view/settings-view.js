@@ -32,6 +32,10 @@ export class SettingsViewElement extends LitElement {
       width: 100%;
     }
 
+    section {
+      margin-bottom: 2rem;
+    }
+
     .appearance {
       display: grid;
 
@@ -80,6 +84,11 @@ export class SettingsViewElement extends LitElement {
   `
 
   #state = new StateController(this)
+
+  constructor() {
+    super()
+    this.ariaLabel = 'Settings screen'
+  }
 
   render() {
     const enharmonicPresentation = this.#state.select(
@@ -144,16 +153,20 @@ export class SettingsViewElement extends LitElement {
 
     return html`
       <glass-panel>
-        <div class="card-title">settings</div>
+        <h1 class="card-title">settings</h1>
 
-        <div class="appearance">
+        <section
+          class="appearance"
+          role="group"
+          aria-label="appearance settings">
           <tone-wheel non-interactive color-scale=${colorScale}>
             ${pitchClasses}
           </tone-wheel>
 
-          <div class="appearance-controls">
-            <div class="control">
+          <div class="appearance-controls" role="presentation">
+            <wrapper-div class="control">
               <sl-radio-group
+                role="presentation"
                 label="Theme"
                 name="theme"
                 value="${theme}"
@@ -171,18 +184,20 @@ export class SettingsViewElement extends LitElement {
                   Auto
                 </sl-radio-button>
               </sl-radio-group>
-            </div>
-            <div class="control">
+            </wrapper-div>
+            <wrapper-div class="control">
               <sl-select
+                role="presentation"
                 label="Color palette"
                 value=${colorScale}
                 @sl-change=${colorChanged}>
                 ${colorOptions}
               </sl-select>
-            </div>
+            </wrapper-div>
 
-            <div class="control">
+            <wrapper-div class="control">
               <sl-radio-group
+                role="presentation"
                 label="Display sharps or flats?"
                 name="enharmonics"
                 value="${enharmonicPresentation}"
@@ -196,16 +211,19 @@ export class SettingsViewElement extends LitElement {
                   >Flats</sl-radio-button
                 >
               </sl-radio-group>
-            </div>
+            </wrapper-div>
           </div>
-        </div>
+        </section>
 
-        <div class="debug">
-          <sl-button @click=${() => forceRefresh()} label="Refresh cache">
+        <section class="debug" role="group" aria-label="debug settings">
+          <sl-button
+            @click=${() => forceRefresh()}
+            label="Refresh cache"
+            role="presentation">
             <sl-icon slot="prefix" name="arrow-clockwise"></sl-icon>
             Clear offline cache
           </sl-button>
-        </div>
+        </section>
       </glass-panel>
     `
   }
