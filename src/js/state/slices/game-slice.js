@@ -139,21 +139,21 @@ const gameSlice = createSlice({
     },
 
     /**
-     * @param {GameState} state 
-     * @param {import('@reduxjs/toolkit').PayloadAction<import('./types.js').GameMode>} action 
+     * @param {GameState} state
+     * @param {import('@reduxjs/toolkit').PayloadAction<import('./types.js').GameMode>} action
      */
     setGameMode(state, action) {
       state.currentMode = action.payload
     },
 
     /**
-     * 
-     * @param {GameState} state 
-     * @param {import('@reduxjs/toolkit').PayloadAction<boolean>} action 
+     *
+     * @param {GameState} state
+     * @param {import('@reduxjs/toolkit').PayloadAction<boolean>} action
      */
     setScaleControlsActive(state, action) {
       state.scaleControlsActive = action.payload
-    }
+    },
   },
   extraReducers(builder) {
     builder
@@ -203,5 +203,6 @@ const gameSlice = createSlice({
 })
 
 const { actions, reducer } = gameSlice
-export const { start, reset, guess, setGameMode, setScaleControlsActive } = actions
+export const { start, reset, guess, setGameMode, setScaleControlsActive } =
+  actions
 export default reducer

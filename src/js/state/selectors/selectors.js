@@ -90,9 +90,7 @@ export const selectProgressNoteBadgeInfo = createSelector(
         currentRound.progress.guesses.some(
           (g) => g.isCorrect && g.note.id === noteId,
         )
-      const highlighted = audio.soundingNotes.some(
-        (n) => n.id === noteId,
-      )
+      const highlighted = audio.soundingNotes.some((n) => n.id === noteId)
       badges.push({ noteId, noteRevealed, hidden, highlighted, midiNote })
     }
 
@@ -190,7 +188,7 @@ export const selectTuningNoteIds = createSelector(
 
 export const selectScaleNoteIds = createSelector(
   [selectTuningState],
-  (tuning) => tuning.scaleNotes
+  (tuning) => tuning.scaleNotes,
 )
 
 export const selectMidiNote = createSelector(
@@ -250,7 +248,7 @@ export const selectCurrentScaleLabel = createSelector(
     const { tonicNote } = tuning
     const noteLabel = selectNoteLabel.resultFunc(tuning, preferences, tonicNote)
     return `${noteLabel} ${tuning.scaleQuality}`
-  }
+  },
 )
 
 export const selectEnharmonicPresentation = createSelector(
@@ -275,18 +273,18 @@ export const selectTonicNoteAngle = createSelector(
   [selectTuningState],
   (tuning) => {
     return tuning.angles[tuning.tonicNote]
-  }
+  },
 )
 
 export const selectNoteColor = createSelector(
   [
-    selectTuningState, 
-    selectColorScale, 
-    /** 
+    selectTuningState,
+    selectColorScale,
+    /**
      * @param {RootState} _state
      * @param {string} noteId
      */
-    (_state, noteId) => noteId
+    (_state, noteId) => noteId,
   ],
   (tuning, colorScale, noteId) => {
     const angle = tuning.angles[noteId]
@@ -294,23 +292,23 @@ export const selectNoteColor = createSelector(
       return undefined
     }
     return colorForAngle(angle, colorScale)
-  }
+  },
 )
 
 export const selectNoteLabelColor = createSelector(
   [
-    selectTuningState, 
-    selectColorScale, 
-    /** 
+    selectTuningState,
+    selectColorScale,
+    /**
      * @param {RootState} _state
      * @param {string} noteId
      */
-    (_state, noteId) => noteId
+    (_state, noteId) => noteId,
   ],
   (tuning, colorScale, noteId) => {
     const noteColor = selectNoteColor.resultFunc(tuning, colorScale, noteId)
     return getContrastingTextColor(noteColor)
-  }
+  },
 )
 
 export const selectGradientColors = createSelector(
@@ -322,25 +320,29 @@ export const selectGradientColors = createSelector(
       return colorForAngle(angle, colorScale)
     })
     return colors
-  }
+  },
 )
 
 export const selectAppBackgroundCss = createSelector(
-  [selectGradientColors, selectColorScale, selectTonicNoteAngle, selectColorTheme],
+  [
+    selectGradientColors,
+    selectColorScale,
+    selectTonicNoteAngle,
+    selectColorTheme,
+  ],
   (colors, colorScale, tonicAngle, _theme) => {
-    
     let background = 'var(--color-background)'
     let themeColor = background
     if (colorScale.startsWith('oklch')) {
       const rotation = `-${tonicAngle}deg`
       background = `conic-gradient(from ${rotation}, ${colors.join(', ')})`
-      themeColor = colorForAngle(345+tonicAngle, colorScale)
+      themeColor = colorForAngle(345 + tonicAngle, colorScale)
     }
     return { background, themeColor }
-  }
+  },
 )
 
 export const selectScaleControlsActive = createSelector(
   [selectGameState],
-  (game) => game.scaleControlsActive
+  (game) => game.scaleControlsActive,
 )

@@ -13,7 +13,10 @@ import {
   startNewGame,
 } from '../../state/sequences/game-sequences.js'
 import { landscapeMediaQuery } from '../../styles.js'
-import { triggerNoteStart, triggerNoteStop } from '../../state/slices/audio-slice.js'
+import {
+  triggerNoteStart,
+  triggerNoteStop,
+} from '../../state/slices/audio-slice.js'
 
 export class ProgressViewElement extends LitElement {
   static styles = css`
@@ -98,7 +101,7 @@ export class ProgressViewElement extends LitElement {
 
   #state = new StateController(this)
 
-  /** 
+  /**
    * @param {string} id
    * @param {number} midiNumber
    */
@@ -106,7 +109,7 @@ export class ProgressViewElement extends LitElement {
     dispatch(triggerNoteStart({ id, midiNumber }))
   }
 
-  /** 
+  /**
    * @param {string} id
    * @param {number} midiNumber
    */
@@ -115,9 +118,7 @@ export class ProgressViewElement extends LitElement {
   }
 
   render() {
-    const audioLoadingState = this.#state.select(
-      selectAudioLoadingState,
-    )
+    const audioLoadingState = this.#state.select(selectAudioLoadingState)
     if (audioLoadingState === 'loading') {
       return html` <div class="content not-playing">
         <sl-spinner></sl-spinner>
@@ -129,11 +130,7 @@ export class ProgressViewElement extends LitElement {
         <sl-icon-button
           name="play-fill"
           label="New game"
-          @click=${() =>
-            startNewGame(
-              this.#state.state,
-              dispatch,
-            )}>
+          @click=${() => startNewGame(this.#state.state, dispatch)}>
         </sl-icon-button>
       </div>`
     }
@@ -155,8 +152,7 @@ export class ProgressViewElement extends LitElement {
           highlight=${highlighted ? 'true' : nothing}
           @pointerdown=${pointerDown}
           @pointerup=${pointerUp}
-          @pointerleave=${pointerUp}
-          ></note-badge>
+          @pointerleave=${pointerUp}></note-badge>
       `
     })
 
@@ -165,22 +161,14 @@ export class ProgressViewElement extends LitElement {
     const replayButton = html`
       <sl-icon-button
         name="arrow-counterclockwise"
-        @click=${() =>
-          restartGame(
-            this.#state.state,
-            dispatch,
-          )}>
+        @click=${() => restartGame(this.#state.state, dispatch)}>
       </sl-icon-button>
     `
 
     const nextRoundButton = html`
       <sl-icon-button
         name="chevron-double-right"
-        @click=${() =>
-          startNewGame(
-            this.#state.state,
-            dispatch,
-          )}>
+        @click=${() => startNewGame(this.#state.state, dispatch)}>
       </sl-icon-button>
     `
 
@@ -195,7 +183,7 @@ export class ProgressViewElement extends LitElement {
       </div>
     `
 
-    /** 
+    /**
      * iOS safari needs the element to be clickable before it
      * will apply `touch-action: manipulation`
      * see: https://stackoverflow.com/a/54753520

@@ -1,7 +1,6 @@
 // @ts-expect-error process is defined in rollup & not visible to typescript
 const isProd = process.env.NODE_ENV === 'production'
 
-
 /** @type {ServiceWorkerRegistration | null} */
 let swRegistration = null
 
@@ -13,16 +12,23 @@ export async function setupServiceWorker() {
   const wb = new Workbox('/sw.js')
 
   /** @type {Array<keyof import('workbox-window').WorkboxEventMap>} */
-  const eventNames = ['activated', 'activating', 'controlling', 'installed', 'installing', 'redundant', 'waiting']
+  const eventNames = [
+    'activated',
+    'activating',
+    'controlling',
+    'installed',
+    'installing',
+    'redundant',
+    'waiting',
+  ]
   for (const n of eventNames) {
     wb.addEventListener(n, (e) => {
       console.log(`service worker event ${n}`, e)
     })
   }
-  wb.register()
-    .then(registration => {
-      swRegistration = registration
-    })
+  wb.register().then((registration) => {
+    swRegistration = registration
+  })
   wb.update()
 }
 

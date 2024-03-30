@@ -39,10 +39,10 @@ export default {
     generateSW({
       swDest: 'dist/sw.js',
       globDirectory: 'dist/',
-      globPatterns:  [
-        "**\/*.{js,css,html,svg}",
-        "assets\/audio\/*",
-        "assets\/fonts\/*",
+      globPatterns: [
+        '**/*.{js,css,html,svg}',
+        'assets/audio/*',
+        'assets/fonts/*',
       ],
       dontCacheBustURLsMatching: /inline-module-.*\.js/,
       navigateFallback: '/index.html',
@@ -51,6 +51,6 @@ export default {
     terser({
       ecma: '2016',
       // keep_fnames: true,
-    })
+    }),
   ],
 }

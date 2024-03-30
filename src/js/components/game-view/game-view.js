@@ -104,8 +104,7 @@ export class GameViewElement extends LitElement {
           id=${noteId}
           midi-note=${midiNote}
           active=${active || nothing}
-          disabled=${scaleNotes.includes(noteId) ? nothing : true}
-          >
+          disabled=${scaleNotes.includes(noteId) ? nothing : true}>
           ${label}
         </pitch-class>
       `,
@@ -113,17 +112,21 @@ export class GameViewElement extends LitElement {
 
     const showProgress = !this.freePlayMode && !scaleControlsActive
 
-    const progressView = !showProgress ? undefined : html`
-      <glass-panel class="controls">
-        <progress-view></progress-view>
-      </glass-panel>
-    `
+    const progressView = !showProgress
+      ? undefined
+      : html`
+          <glass-panel class="controls">
+            <progress-view></progress-view>
+          </glass-panel>
+        `
 
     // TODO: make tone-wheel update itself when active pitch classes change
     this.#wheel?.requestUpdate()
 
     const tonicAngle = selectTonicNoteAngle(this.#state.state)
-    const { tuning: { tonicNote, scaleQuality } } = this.#state.state
+    const {
+      tuning: { tonicNote, scaleQuality },
+    } = this.#state.state
     const scaleLabel = scaleQuality
     const tonicLabel = selectNoteLabel(this.#state.state, tonicNote)
     const toggleScaleControls = () => {
@@ -131,25 +134,31 @@ export class GameViewElement extends LitElement {
     }
 
     const closeIcon = html`
-      <sl-icon-button @click=${toggleScaleControls} name="x-circle"></sl-icon-button>
-    `
-
-    const scaleBadge = scaleControlsActive ? closeIcon : html`
-      <scale-badge 
+      <sl-icon-button
         @click=${toggleScaleControls}
-        tonic=${tonicLabel} 
-        label=${scaleLabel} 
-        note-ids=${JSON.stringify(scaleNotes)}>
-      </scale-badge>
+        name="x-circle"></sl-icon-button>
     `
 
-    const scaleControls = !scaleControlsActive ? undefined : html`
-      <div class="scale-controls">
-        <scale-controls></scale-controls>
-      </div>
-    `
+    const scaleBadge = scaleControlsActive
+      ? closeIcon
+      : html`
+          <scale-badge
+            @click=${toggleScaleControls}
+            tonic=${tonicLabel}
+            label=${scaleLabel}
+            note-ids=${JSON.stringify(scaleNotes)}>
+          </scale-badge>
+        `
 
-    const wheelRotation = 360-tonicAngle
+    const scaleControls = !scaleControlsActive
+      ? undefined
+      : html`
+          <div class="scale-controls">
+            <scale-controls></scale-controls>
+          </div>
+        `
+
+    const wheelRotation = 360 - tonicAngle
 
     return html`
       <div class="contents">
@@ -164,12 +173,9 @@ export class GameViewElement extends LitElement {
             @note:holdEnded=${this.#pitchDeselected}>
             ${pitchClasses}
           </tone-wheel>
-          <div class="scale-toggle-icon">
-            ${scaleBadge}
-          </div>
+          <div class="scale-toggle-icon">${scaleBadge}</div>
         </div>
-        ${scaleControls}
-        ${progressView}
+        ${scaleControls} ${progressView}
       </div>
     `
   }

@@ -89,10 +89,12 @@ export class SettingsViewElement extends LitElement {
     const wheelNotes = this.#state.select(selectWheelNotes)
     const theme = this.#state.select(selectColorTheme)
 
-    const activeNotes = ['Ab','E']
+    const activeNotes = ['Ab', 'E']
     const pitchClasses = wheelNotes.map(
       ({ noteId, label }) => html`
-        <pitch-class id=${noteId} active=${activeNotes.includes(noteId) ? true : nothing}> 
+        <pitch-class
+          id=${noteId}
+          active=${activeNotes.includes(noteId) ? true : nothing}>
           ${label}
         </pitch-class>
       `,
@@ -145,7 +147,9 @@ export class SettingsViewElement extends LitElement {
         <div class="card-title">settings</div>
 
         <div class="appearance">
-          <tone-wheel non-interactive color-scale=${colorScale}> ${pitchClasses} </tone-wheel>
+          <tone-wheel non-interactive color-scale=${colorScale}>
+            ${pitchClasses}
+          </tone-wheel>
 
           <div class="appearance-controls">
             <div class="control">
@@ -197,9 +201,7 @@ export class SettingsViewElement extends LitElement {
         </div>
 
         <div class="debug">
-          <sl-button 
-            @click=${() => forceRefresh()}
-            label="Refresh cache">
+          <sl-button @click=${() => forceRefresh()} label="Refresh cache">
             <sl-icon slot="prefix" name="arrow-clockwise"></sl-icon>
             Clear offline cache
           </sl-button>

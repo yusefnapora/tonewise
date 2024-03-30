@@ -20,15 +20,7 @@ export const DefaultNoteIds = [
   'B',
 ]
 
-export const DefaultScale = [
-  'C',
-  'D',
-  'E',
-  'F',
-  'G',
-  'A',
-  'B',
-]
+export const DefaultScale = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 
 const startMidiNote = 60
 const NoteIdMidiMap = Object.fromEntries(
@@ -36,11 +28,11 @@ const NoteIdMidiMap = Object.fromEntries(
 )
 
 /** @param {string} tonicNoteId  */
-function midiNoteMapForTonic(tonicNoteId, noteIds=DefaultNoteIds) {
+function midiNoteMapForTonic(tonicNoteId, noteIds = DefaultNoteIds) {
   const index = DefaultNoteIds.indexOf(tonicNoteId)
 
   if (index < 0) {
-    return {...NoteIdMidiMap}
+    return { ...NoteIdMidiMap }
   }
 
   const octave = 4 // index === 0 ? 4 : 3
@@ -48,15 +40,13 @@ function midiNoteMapForTonic(tonicNoteId, noteIds=DefaultNoteIds) {
   const tonic = Note.get(noteName)
   const startMidi = tonic.midi
   const sorted = [...noteIds.slice(index), ...noteIds.slice(0, index)]
-  return Object.fromEntries(
-    sorted.map((n, i) => [n, startMidi + i]),
-  )
+  return Object.fromEntries(sorted.map((n, i) => [n, startMidi + i]))
 }
 
 /** @type {Record<string, import("./types.js").NoteDisplay>} */
 const DefaultDisplay = {
   C: { label: 'C' },
-  'Db': {
+  Db: {
     label: 'C♯',
     enharmonicLabels: {
       sharp: 'C♯',
@@ -64,7 +54,7 @@ const DefaultDisplay = {
     },
   },
   D: { label: 'D' },
-  'Eb': {
+  Eb: {
     label: 'D♯',
     enharmonicLabels: {
       sharp: 'D♯',
@@ -73,7 +63,7 @@ const DefaultDisplay = {
   },
   E: { label: 'E' },
   F: { label: 'F' },
-  'Gb': {
+  Gb: {
     label: 'F♯',
     enharmonicLabels: {
       sharp: 'F♯',
@@ -81,7 +71,7 @@ const DefaultDisplay = {
     },
   },
   G: { label: 'G' },
-  'Ab': {
+  Ab: {
     label: 'G♯',
     enharmonicLabels: {
       sharp: 'G♯',
@@ -89,7 +79,7 @@ const DefaultDisplay = {
     },
   },
   A: { label: 'A' },
-  'Bb': {
+  Bb: {
     label: 'A♯',
     enharmonicLabels: {
       sharp: 'A♯',
@@ -105,12 +95,11 @@ const DefaultDisplay = {
 const EDOAngles = (noteIds) =>
   Object.fromEntries(noteIds.map((n, i) => [n, (360 / noteIds.length) * i]))
 
-
 /**
- * 
+ *
  * @param {string[]} noteIds all notes in tuning
  * @param {string} tonicNote
- * @param {string} scaleQuality 
+ * @param {string} scaleQuality
  */
 export function deriveScaleNotes(noteIds, tonicNote, scaleQuality) {
   const scaleName = [tonicNote, scaleQuality].join(' ')
@@ -144,17 +133,19 @@ const tuningSlice = createSlice({
   initialState,
   reducers: {
     /**
-     * @param {TuningState} state 
-     * @param {import('@reduxjs/toolkit').PayloadAction<string[]>} action 
+     * @param {TuningState} state
+     * @param {import('@reduxjs/toolkit').PayloadAction<string[]>} action
      */
     setScaleNotes(state, action) {
-      state.scaleNotes = action.payload.filter(noteId => state.noteIds.includes(noteId))
+      state.scaleNotes = action.payload.filter((noteId) =>
+        state.noteIds.includes(noteId),
+      )
       // todo: derive quality
     },
 
     /**
-     * @param {TuningState} state 
-     * @param {import('@reduxjs/toolkit').PayloadAction<string>} action 
+     * @param {TuningState} state
+     * @param {import('@reduxjs/toolkit').PayloadAction<string>} action
      */
     setTonicNote(state, action) {
       if (!state.noteIds.includes(action.payload)) {
@@ -163,7 +154,11 @@ const tuningSlice = createSlice({
       const tonicNote = action.payload
       state.tonicNote = tonicNote
       state.midiNotes = midiNoteMapForTonic(tonicNote)
-      const scaleNotes = deriveScaleNotes(state.noteIds, tonicNote, state.scaleQuality)
+      const scaleNotes = deriveScaleNotes(
+        state.noteIds,
+        tonicNote,
+        state.scaleQuality,
+      )
       if (!scaleNotes) {
         return
       }
@@ -171,17 +166,21 @@ const tuningSlice = createSlice({
     },
 
     /**
-     * @param {TuningState} state 
-     * @param {import('@reduxjs/toolkit').PayloadAction<string>} action 
-     */ 
+     * @param {TuningState} state
+     * @param {import('@reduxjs/toolkit').PayloadAction<string>} action
+     */
     setScaleQuality(state, action) {
       const quality = action.payload
-      const scaleNotes = deriveScaleNotes(state.noteIds, state.tonicNote, quality)
+      const scaleNotes = deriveScaleNotes(
+        state.noteIds,
+        state.tonicNote,
+        quality,
+      )
       if (scaleNotes) {
         state.scaleNotes = scaleNotes
         state.scaleQuality = quality
       }
-    }
+    },
   },
 })
 

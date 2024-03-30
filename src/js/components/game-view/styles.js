@@ -12,7 +12,8 @@ const styles = css`
     width: 100%;
     height: 100%;
     touch-action: manipulation;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+      env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
   .contents {
@@ -32,7 +33,6 @@ const styles = css`
       '. . .';
     place-items: center;
   }
-
 
   .status {
     grid-area: status;

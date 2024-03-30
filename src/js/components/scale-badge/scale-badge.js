@@ -115,7 +115,8 @@ export class ScaleBadgeElement extends LitElement {
     }
 
     return html`
-      <svg viewBox="0 0 1000 1000"
+      <svg
+        viewBox="0 0 1000 1000"
         @pointerdown=${pointerDown}
         @pointerenter=${pointerDown}
         @pointerup=${pointerUp}
@@ -133,10 +134,9 @@ export class ScaleBadgeElement extends LitElement {
   #svgContent() {
     const tonicAngle = this.#state.select(selectTonicNoteAngle)
     this.rotationOffset = DEFAULT_ROTATION_OFFSET - tonicAngle
-    
+
     const noteIds = this.#state.select(selectTuningNoteIds)
     const colorScale = this.#state.select(selectColorScale)
-    
 
     /** @type {Array<{id: string, angle: number}>} */
     const notes = []
@@ -144,7 +144,6 @@ export class ScaleBadgeElement extends LitElement {
       const angle = this.#state.select(selectNoteAngle, id)
       notes.push({ id, angle })
     }
-
 
     const gapDegrees = 10
     const cx = 500
@@ -200,14 +199,14 @@ export class ScaleBadgeElement extends LitElement {
 
     let r = 460
     const bottomTextArc = `
-      M ${cx-r},${cy}
-      a ${r},${r} 0 1,0 ${r*2},0
+      M ${cx - r},${cy}
+      a ${r},${r} 0 1,0 ${r * 2},0
       `
 
     r = radius + 60
     const topTextArc = `
-      M ${cx-r},${cy}
-      a ${r},${r} 0 1,1 ${r*2},0
+      M ${cx - r},${cy}
+      a ${r},${r} 0 1,1 ${r * 2},0
     `
 
     const arcDef = svg`
@@ -304,7 +303,7 @@ export class ScaleBadgeElement extends LitElement {
   #createRimSegment(args) {
     const center = { x: 500, y: 500 }
     const radius = args.radius ?? 480
-    const thickness = args.thickness ?? (radius / 2)
+    const thickness = args.thickness ?? radius / 2
 
     const startAngle = args.startAngle + this.rotationOffset
     const endAngle = args.endAngle + this.rotationOffset

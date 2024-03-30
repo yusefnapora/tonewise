@@ -1,9 +1,17 @@
 import { LitElement, html, css } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import { selectNoteColor, selectNoteLabel, selectNoteLabelColor } from '../../state/selectors/selectors.js'
+import {
+  selectNoteColor,
+  selectNoteLabel,
+  selectNoteLabelColor,
+} from '../../state/selectors/selectors.js'
 import { dispatch } from '../../state/store.js'
-import { deriveScaleNotes, setScaleQuality, setTonicNote } from '../../state/slices/tuning-slice.js'
+import {
+  deriveScaleNotes,
+  setScaleQuality,
+  setTonicNote,
+} from '../../state/slices/tuning-slice.js'
 import { landscapeMediaQuery } from '../../styles.js'
 import { classMap } from 'lit/directives/class-map.js'
 
@@ -19,7 +27,7 @@ export class ScaleControlsElement extends LitElement {
       justify-content: space-between;
       user-select: none;
       -webkit-user-select: none;
-    
+
       --color-selected-scale-highlight: var(--color-text);
     }
 
@@ -38,7 +46,8 @@ export class ScaleControlsElement extends LitElement {
       filter: drop-shadow(0 0 25px white);
     }
 
-    sl-button::part(base), sl-menu-item::part(base) {
+    sl-button::part(base),
+    sl-menu-item::part(base) {
       touch-action: manipulation;
     }
 
@@ -108,9 +117,8 @@ export class ScaleControlsElement extends LitElement {
     const { tuning } = state
     const { tonicNote } = tuning
 
-
     /**
-     * @param {string} noteId 
+     * @param {string} noteId
      * @param {1|-1} direction
      */
     const getNeighboringNoteId = (noteId, direction) => {
@@ -137,20 +145,26 @@ export class ScaleControlsElement extends LitElement {
     const prevLabelColor = selectNoteLabelColor(state, prevNote)
     const nextLabelColor = selectNoteLabelColor(state, nextNote)
 
-    const noteMenuItems = tuning.noteIds.map(noteId => html`
-      <sl-menu-item class=${`note-${noteId}`} value=${noteId}>
-        ${selectNoteLabel(state, noteId)}
-      </sl-menu-item>
-    `)
+    const noteMenuItems = tuning.noteIds.map(
+      (noteId) => html`
+        <sl-menu-item class=${`note-${noteId}`} value=${noteId}>
+          ${selectNoteLabel(state, noteId)}
+        </sl-menu-item>
+      `,
+    )
 
-    const noteMenuStyles = tuning.noteIds.map(noteId => `
+    const noteMenuStyles = tuning.noteIds
+      .map(
+        (noteId) => `
       sl-menu-item.note-${noteId}::part(base) {
         background-color: ${selectNoteColor(state, noteId)};
       }
       sl-menu-item.note-${noteId}::part(label) {
         color: ${selectNoteLabelColor(state, noteId)};
       }
-    `).join('\n')
+    `,
+      )
+      .join('\n')
 
     /** @param {import('@shoelace-style/shoelace').SlSelectEvent} e */
     const noteSelected = (e) => {
@@ -164,16 +178,23 @@ export class ScaleControlsElement extends LitElement {
       dispatch(setTonicNote(nextNote))
     }
 
-
     // todo: don't hardcode, derive from state
-    const scaleQualities = ['major', 'minor', 'harmonic minor', 'blues', 'chromatic']
+    const scaleQualities = [
+      'major',
+      'minor',
+      'harmonic minor',
+      'blues',
+      'chromatic',
+    ]
     /** @param {string} q */
     const qualitySelected = (q) => {
       dispatch(setScaleQuality(q))
     }
 
-    const qualityBadges = scaleQualities.map(quality => {
-      const noteIds = JSON.stringify(deriveScaleNotes(tuning.noteIds, tonicNote, quality))
+    const qualityBadges = scaleQualities.map((quality) => {
+      const noteIds = JSON.stringify(
+        deriveScaleNotes(tuning.noteIds, tonicNote, quality),
+      )
       const selected = quality === tuning.scaleQuality
       const classes = { selected }
       return html`
@@ -196,9 +217,7 @@ export class ScaleControlsElement extends LitElement {
           <sl-button class="note-dropdown" slot="trigger">
             ${tonicNoteLabel}
           </sl-button>
-          <sl-menu @sl-select=${noteSelected}>
-            ${noteMenuItems}
-          </sl-menu>
+          <sl-menu @sl-select=${noteSelected}> ${noteMenuItems} </sl-menu>
         </sl-dropdown>
         <sl-button class="next-note" pill @click=${() => noteStepBy(1)}>
           <sl-icon name="chevron-compact-right"></sl-icon>
@@ -237,13 +256,8 @@ export class ScaleControlsElement extends LitElement {
 
         ${noteMenuStyles}
       </style>
-      <div class="badges">
-
-        ${qualityBadges}
-      </div>
-      <div class="controls">
-        ${tonicControl}
-      </div>
+      <div class="badges">${qualityBadges}</div>
+      <div class="controls">${tonicControl}</div>
     `
   }
 }

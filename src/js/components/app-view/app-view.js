@@ -35,7 +35,6 @@ export class AppViewElement extends LitElement {
       /* min-height: calc(48px + var(--toolbar-padding)); */
     }
 
-
     .content {
       min-width: 100vw;
       height: 100%;
@@ -57,7 +56,7 @@ export class AppViewElement extends LitElement {
   render() {
     // @ts-expect-error todo: make the icon bar update itself on route changes
     this.renderRoot.querySelector('nav-icon-bar')?.requestUpdate()
-    
+
     return html`
       <app-background></app-background>
       <div class="toolbar">

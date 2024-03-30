@@ -40,7 +40,7 @@ export const hooks = {
       endGame(dispatch)
       dispatch(setGameMode('free-play'))
     },
-  }
+  },
 }
 
 /** @type {Record<string, RouteHandler>} */
@@ -51,5 +51,5 @@ export default {
   '/settings': settingsRoute,
   '/play': playGameRoute,
   '/free-play': freePlayRoute,
-  '/icon-sandbox': () => html`<icon-sandbox></icon-sandbox>`
+  '/icon-sandbox': () => html`<icon-sandbox></icon-sandbox>`,
 }

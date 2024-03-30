@@ -5,9 +5,7 @@ import {
   setMetaThemeColors,
 } from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
-import {
-  selectAppBackgroundCss,
-} from '../../state/selectors/selectors.js'
+import { selectAppBackgroundCss } from '../../state/selectors/selectors.js'
 import Color from 'colorjs.io'
 
 export class AppBackgroundElement extends LitElement {
@@ -48,7 +46,6 @@ export class AppBackgroundElement extends LitElement {
     themeColor = resolveCSSVariables(themeColor, this)
     const c = new Color(themeColor).to('srgb').toString({ format: 'hex' })
     setMetaThemeColors(c)
-
 
     return html`
       <style>

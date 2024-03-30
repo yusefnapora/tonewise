@@ -39,7 +39,6 @@ const DEFAULT_PITCH_LINE_WIDTH = 200
 export class ToneWheel extends LitElement {
   static styles = css`
     :host {
-
       /** 
        * Layout children in a 1x1 grid, so that they overlap back-to-front
        * Used to position the gradient background so that it is positioned
@@ -111,7 +110,6 @@ export class ToneWheel extends LitElement {
     }
 
     .tone-group.disabled {
-      
       & > .rim-segment-overlay {
         fill: var(--color-background);
         opacity: 0.3;
@@ -127,7 +125,6 @@ export class ToneWheel extends LitElement {
         opacity: 0;
       }
     }
-
 
     .pitch-line {
       opacity: 0;
@@ -320,7 +317,6 @@ export class ToneWheel extends LitElement {
         )
       }
 
-
       const color = colorForAngle(intervalAngle, this.colorScale)
       const textColor = getContrastingTextColor(color)
       colors.push(color)
@@ -396,7 +392,12 @@ export class ToneWheel extends LitElement {
         e.preventDefault()
       }
 
-      const classes = { [className]: true, 'tone-group': true, active: el.active, disabled: el.disabled }
+      const classes = {
+        [className]: true,
+        'tone-group': true,
+        active: el.active,
+        disabled: el.disabled,
+      }
       groups.push(svg`
         <g 
           @touchstart=${touchDown}
@@ -414,7 +415,7 @@ export class ToneWheel extends LitElement {
     // repeat the first color at the end, so the
     // to act as the end point for the last gradient stop
     const backgroundColors = [...colors, colors[0]]
-    const backgroundRotation = `from ${90+this.rotationOffset}deg`
+    const backgroundRotation = `from ${90 + this.rotationOffset}deg`
     styleContent += `
       .gradient-colors {
         background: conic-gradient(

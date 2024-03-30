@@ -5,7 +5,6 @@ import { setupColorScheme } from './color-scheme.js'
 unmuteIosAudio()
 setupColorScheme()
 
-
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import '@shoelace-style/shoelace/dist/components/button-group/button-group.js'
 import '@shoelace-style/shoelace/dist/components/card/card.js'

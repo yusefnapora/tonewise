@@ -23,8 +23,7 @@ export class WelcomeViewElement extends LitElement {
 
       grid-template-areas:
         'logo'
-        'nav'
-        ;
+        'nav';
       grid-template-columns: min(300px, calc(100vw - 32px));
     }
 
@@ -64,7 +63,7 @@ export class WelcomeViewElement extends LitElement {
     .nav-link {
       display: flex;
       align-items: center;
-      
+
       & > sl-icon {
         margin-right: 20px;
       }
@@ -89,9 +88,7 @@ export class WelcomeViewElement extends LitElement {
 
       .content {
         grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-         'logo nav'
-         ;
+        grid-template-areas: 'logo nav';
       }
 
       .app-title {
@@ -123,7 +120,9 @@ export class WelcomeViewElement extends LitElement {
           <nav>
             <ul>
               <li>
-                <app-link @click=${() => playClicked('free-play')} href="/free-play">
+                <app-link
+                  @click=${() => playClicked('free-play')}
+                  href="/free-play">
                   <div class="nav-link">
                     <sl-icon name="hypnotize"></sl-icon>
                     Free play

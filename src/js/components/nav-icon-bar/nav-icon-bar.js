@@ -33,7 +33,7 @@ export class NavIconBarElement extends LitElement {
   `
 
   render() {
-    const currentRoute = sharedRouter.getCurrentLocation().route.name 
+    const currentRoute = sharedRouter.getCurrentLocation().route.name
 
     // todo: pull into helper fn
     const isHomeRoute = ['', '/', '/index.html', 'src'].includes(currentRoute)
@@ -73,9 +73,7 @@ export class NavIconBarElement extends LitElement {
         @click=${() => navigate('/settings')}></sl-icon-button>
     `
 
-    return html`
-        ${backButton} ${settingsButton}
-    `
+    return html` ${backButton} ${settingsButton} `
   }
 }
 

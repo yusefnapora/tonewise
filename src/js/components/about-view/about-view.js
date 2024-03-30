@@ -59,31 +59,31 @@ export class AboutViewElement extends LitElement {
             <span class="app-title">Tonewise</span>
           </h2>
         </div>
-         <p>
-          Tonewise was made to play around with relationships
-          between sound, color, and proportion.
+        <p>
+          Tonewise was made to play around with relationships between sound,
+          color, and proportion.
         </p>
         <p>
-          In the <app-link href="/free-play">free play</app-link> mode,
-          you can play music on the <em>tone wheel</em>, a circle that
-          covers one musical octave. Try pressing the scale icon next
-          to the tone wheel to switch between different musical keys.
+          In the <app-link href="/free-play">free play</app-link> mode, you can
+          play music on the <em>tone wheel</em>, a circle that covers one
+          musical octave. Try pressing the scale icon next to the tone wheel to
+          switch between different musical keys.
         </p>
         <p>
-          The <app-link href="/play">quiz mode</app-link> helps you
-          learn to identify the <em>intervals</em> between two notes.
+          The <app-link href="/play">quiz mode</app-link> helps you learn to
+          identify the <em>intervals</em> between two notes.
         </p>
         <p>
-          First, the app will play a reference note and highlight it on
-          the wheel. Next, you'll hear a "hidden note" that is not
-          highlighted. When you tap the hidden note on the wheel, you'll
-          see the name of the interval between the two notes.
+          First, the app will play a reference note and highlight it on the
+          wheel. Next, you'll hear a "hidden note" that is not highlighted. When
+          you tap the hidden note on the wheel, you'll see the name of the
+          interval between the two notes.
         </p>
         <p>
-          This app is a passion project that I work on when I have
-          the time and motivation. You can help with the motivation bit by
-          <a href="mailto:contact@tonewise.app">sending me an email</a>,
-          or check out <a href="https://yusef.napora.org">my website</a>
+          This app is a passion project that I work on when I have the time and
+          motivation. You can help with the motivation bit by
+          <a href="mailto:contact@tonewise.app">sending me an email</a>, or
+          check out <a href="https://yusef.napora.org">my website</a>
           for other ways to get in touch.
         </p>
       </glass-panel>

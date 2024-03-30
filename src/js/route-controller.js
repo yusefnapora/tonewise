@@ -38,7 +38,7 @@ export class RouteController {
         this.content = render(match)
         this.host.requestUpdate()
       })
-      
+
       const trimmedPath = path.replace(/^\//, '')
       const routeHooks = hooks[trimmedPath] ?? hooks[path]
       if (routeHooks?.enter) {

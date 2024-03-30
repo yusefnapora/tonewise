@@ -70,7 +70,7 @@ export class NoteBadgeElement extends LitElement {
   render() {
     const tonicAngle = this.#state.select(selectTonicNoteAngle)
     this.rotationOffset = DEFAULT_ROTATION_OFFSET - tonicAngle
-    
+
     return html` <svg viewBox="0 0 1000 1000">${this.#svgContent()}</svg> `
   }
 

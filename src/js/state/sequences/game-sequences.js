@@ -32,10 +32,10 @@ export function startNewGame(state, dispatch) {
   }
   const rules = { tonic, targets: [target] }
   const round = newRound(rules)
-  
+
   // prevent having the same round twice in a row
   const { currentRound } = state.game
-  if (currentRound){
+  if (currentRound) {
     const current = [currentRound.rules.tonic, ...currentRound.rules.targets]
     const next = [tonic, ...rules.targets]
     if (current.every((note, i) => next[i]?.id === note.id)) {
