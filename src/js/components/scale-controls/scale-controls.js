@@ -1,5 +1,8 @@
 import { LitElement, html, css, nothing } from 'lit'
-import { registerElement } from '../../common/dom.js'
+import {
+  keyboardActivationEventListener,
+  registerElement,
+} from '../../common/dom.js'
 import { StateController } from '../../state/controller.js'
 import {
   selectNoteAriaLabel,
@@ -218,6 +221,9 @@ export class ScaleControlsElement extends LitElement {
           aria-label=${ariaLabel}
           aria-checked=${selected}
           class=${classMap(classes)}
+          @keyup=${keyboardActivationEventListener(() =>
+            qualitySelected(quality),
+          )}
           @badge:selected=${() => qualitySelected(quality)}
           tonic=${tonicNoteLabel}
           label=${quality}
