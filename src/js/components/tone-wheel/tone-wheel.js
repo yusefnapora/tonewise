@@ -141,7 +141,7 @@ export class ToneWheel extends LitElement {
     }
 
     .base-background-layer {
-      clip-path: url(#gradient-clip);
+      clip-path: circle(48%);
       background-color: var(--color-wheel-bottom-layer-background);
       /* width: 100%; */
       height: 100%;
@@ -152,7 +152,7 @@ export class ToneWheel extends LitElement {
     }
 
     .gradient-background {
-      clip-path: url(#gradient-clip);
+      clip-path: circle(48%);
       /* width: 100%; */
       height: 100%;
       opacity: var(--wheel-gradient-background-opacity, 0.5);
@@ -163,7 +163,8 @@ export class ToneWheel extends LitElement {
     }
 
     .vibrant {
-      clip-path: url(#vibrant-gradient-reveal);
+      clip-path: var(--vibrant-reveal-path, circle(0px));
+      transform: rotate(${DEFAULT_ROTATION_OFFSET});
       opacity: var(--wheel-gradient-background-vibrant-opacity, 1);
       aspect-ratio: 1;
       height: 100%;
@@ -178,7 +179,7 @@ export class ToneWheel extends LitElement {
     }
 
     .gradient-blur {
-      clip-path: url(#gradient-clip);
+      clip-path: circle(48%);
       width: 100%;
       height: 100%;
       backdrop-filter: blur(var(--wheel-gradient-background-blur, 30px));
@@ -202,6 +203,7 @@ export class ToneWheel extends LitElement {
     this.colorScale = DEFAULT_COLOR_SCALE
     this.hideLabels = false
     this.nonInteractive = false
+    this.maskIdSlug = Math.random().toString().replace('.', '_')
   }
 
   get rotationOffset() {
@@ -425,69 +427,70 @@ export class ToneWheel extends LitElement {
       }
     `
 
-    // clip the inner conic gradient background to extend just
-    // past the inner edge of the rim. Putting it right at the
-    // edge leads to a "glow" effect around the rim which is
-    // nice, but not quite what I want.
-    // also note that we're dividing by 1000 (viewbox width / height),
-    // so that we end up covering a 1x1 unit area, which will be
-    // scaled to cover the area of the clipped object thanks to
-    // clipPathUnits="objectBoundingBox"
-    const clipRadius = (this.radius - rimThickness / 2) / 1000
+    const { defs, clipMaskCss } = this.#vibrantBackgroundClipPath()
 
+    styleContent += `
+      .vibrant {
+        --vibrant-reveal-path: ${clipMaskCss};
+      }
+    `
+
+    const content = svg`
+    ${defs}
+    <g>
+      ${groups}
+    </g>
+    `
+    return { content, styleContent }
+  }
+
+  #vibrantBackgroundClipPath() {
     // reveal the "vibrant" form of the inner gradient background
     // in between each of the currently "active" pitch classes
     //
     // TODO: pass in a list of pitch-class ids to be highlighted
     // instead of assuming we always want the active ones in the
     // default order.
+    const pitchesWithAngles = getIntervalAngles(this.pitchClasses)
     const activeIntervalAngles = pitchesWithAngles
       .filter(({ pitchClass }) => pitchClass.active)
       .map(({ angle }) => angle)
 
-    const revealClipPath = this.renderRoot.querySelector(
-      '#vibrant-gradient-reveal > path',
-    )
-    let revealMaskPath = revealClipPath?.getAttribute('d') ?? ''
-    let showVibrantBackground = false
-    const revealMaskTransform = `rotate(${DEFAULT_ROTATION_OFFSET} 0.5 0.5)`
-    if (activeIntervalAngles.length >= 2) {
-      showVibrantBackground = true
-      let startAngle = activeIntervalAngles[0] + this.rotation
-      let endAngle =
-        activeIntervalAngles[activeIntervalAngles.length - 1] + this.rotation
-      if (startAngle >= 360) {
-        startAngle = startAngle - 360
-      }
-      if (endAngle >= 360) {
-        endAngle = endAngle - 360
-      }
-      // console.log('reveal angles', { startAngle, endAngle, rot: this.rotation })
-      revealMaskPath = rimSegmentSVGPath({
-        center: { x: 0.5, y: 0.5 },
-        radius: this.radius / 1000,
-        thickness: this.radius / 1000,
-        startAngle,
-        endAngle,
-      })
+    if (activeIntervalAngles.length < 2) {
+      return { defs: null, clipMaskCss: 'circle(0px)' }
     }
-    const vibrantBackgroundElement = this.renderRoot.querySelector('.vibrant')
-    vibrantBackgroundElement?.classList.toggle('hidden', !showVibrantBackground)
 
-    const content = svg`
+    let startAngle = activeIntervalAngles[0] + this.rotation
+    let endAngle =
+      activeIntervalAngles[activeIntervalAngles.length - 1] + this.rotation
+    if (startAngle >= 360) {
+      startAngle = startAngle - 360
+    }
+    if (endAngle >= 360) {
+      endAngle = endAngle - 360
+    }
+    // console.log('reveal angles', { startAngle, endAngle, rot: this.rotation })
+    const revealMaskPath = rimSegmentSVGPath({
+      center: { x: 0.5, y: 0.5 },
+      radius: this.radius / 1000,
+      thickness: this.radius / 1000,
+      startAngle,
+      endAngle,
+    })
+
+    const transform = `rotate(${DEFAULT_ROTATION_OFFSET} 0.5 0.5)`
+    const maskId = `vibrant-mask-${this.maskIdSlug}`
+    const defs = svg`
     <defs>
-      <clipPath id="gradient-clip" clipPathUnits="objectBoundingBox">
-        <circle cx="0.5" cy="0.5" r=${clipRadius} />
-      </clipPath>      
-      <clipPath id="vibrant-gradient-reveal" clipPathUnits="objectBoundingBox">
-        <path d=${revealMaskPath} transform=${revealMaskTransform} />
+      <clipPath id=${maskId} clipPathUnits="objectBoundingBox">
+        <path d=${revealMaskPath} transform=${transform} />
       </clipPath>
     </defs>
-    <g>
-      ${groups}
-    </g>
     `
-    return { content, styleContent }
+
+    const clipMaskCss = `url('#${maskId}')`
+
+    return { defs, clipMaskCss }
   }
 
   /**
