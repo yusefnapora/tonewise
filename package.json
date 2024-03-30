@@ -13,7 +13,8 @@
     "typecheck": "tsc -p ./jsconfig.json",
     "splash-screen-light": "pwa-asset-generator http://localhost:8000/src/splash-screen.html assets/splash",
     "splash-screen-dark": "pwa-asset-generator http://localhost:8000/src/splash-screen.html assets/splash --dark-mode",
-    "splash-screen": "run-s splash-screen-light splash-screen-dark"
+    "splash-screen": "run-s splash-screen-light splash-screen-dark",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,8 @@
     "@web/rollup-plugin-html": "^2.1.2",
     "@web/test-runner": "^0.18.0",
     "chai": "npm:@esm-bundle/chai@^4.3.4-fix.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "npm-run-all": "^4.1.5",
     "prettier": "3.2.5",
     "pwa-asset-generator": "^6.3.1",
@@ -47,5 +50,8 @@
     "smplr": "^0.12.2",
     "tonal": "^6.0.0",
     "workbox-window": "^7.0.0"
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }
