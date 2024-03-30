@@ -1,13 +1,9 @@
 import { LitElement, css, html } from 'lit'
 import { registerElement } from '../../common/dom.js'
 import { landscapeMediaQuery } from '../../styles.js'
-import { resumeAudio } from '../../state/slices/audio-slice.js'
-import { navLinkClicked } from '../../route-controller.js'
+import { navigate } from '../../route-controller.js'
 
 const appName = `Tonewise`
-const welcomeText = `
-A game for learning musical intervals
-`
 
 export class WelcomeViewElement extends LitElement {
   static styles = css`
@@ -58,15 +54,10 @@ export class WelcomeViewElement extends LitElement {
       grid-area: welcome;
     }
 
-    .nav-link {
-      display: flex;
-      align-items: center;
+    nav sl-button::part(label),
+    sl-button::part(prefix) {
       font-size: 1.4rem;
       font-family: var(--heading-font-family);
-
-      & > sl-icon {
-        margin-right: 20px;
-      }
     }
 
     nav > ul {
@@ -107,13 +98,6 @@ export class WelcomeViewElement extends LitElement {
   }
 
   render() {
-    /** @param {import('../../state/slices/types.js').GameMode} gameMode */
-    const playClicked = (gameMode) => {
-      resumeAudio()
-      // endGame(dispatch)
-      // dispatch(setGameMode(gameMode))
-    }
-
     return html`
       <glass-panel>
         <wrapper-div class="content">
@@ -121,33 +105,35 @@ export class WelcomeViewElement extends LitElement {
             <wheel-icon aria-hidden="true" active-notes="Ab,E"></wheel-icon>
             <h1 class="app-title">${appName}</h1>
           </wrapper-div>
-          <!-- <p class="welcome-text">${welcomeText}</p> -->
           <nav aria-label="Main menu">
             <ul role="presentation">
               <li role="presentation">
-                <app-link
-                  @click=${() => playClicked('free-play')}
-                  href="/free-play">
-                  <wrapper-div class="nav-link">
-                    <sl-icon name="hypnotize"></sl-icon>
+                <sl-button
+                  role="presentation"
+                  variant="text"
+                  @click=${() => navigate('/free-play')}
+                  >
+                    <sl-icon slot="prefix" name="hypnotize"></sl-icon>
                     Free play
-                  </wrapper-div>
-                </app-link>
+                </sl-button>
               </li>
               <li role="presentation">
-                <app-link @click=${() => playClicked('challenge')} href="play">
-                  <wrapper-div class="nav-link">
-                    <sl-icon name="music-note-list"></sl-icon>
-                    Quiz mode
-                  </wrapper-div>
-                </app-link>
+                <sl-button
+                  role="presentation"
+                  variant="text"
+                  @click=${() => navigate('/play')}>
+                  <sl-icon slot="prefix" name="music-note-list"></sl-icon>
+                  Quiz mode
+                </sl-button>
               </li>
               <li role="presentation">
-                <a href="/about" @click=${navLinkClicked}>
-                  <wrapper-div class="nav-link">
-                    <sl-icon name="question-lg"></sl-icon>
+                <sl-button
+                  role="presentation"
+                  variant="text"
+                  @click=${() => navigate('/about')}>
+                    <sl-icon slot="prefix" name="question-lg"></sl-icon>
                     About
-                  </wrapper-div>
+                </sl-button>
                 </a>
               </li>
             </ul>

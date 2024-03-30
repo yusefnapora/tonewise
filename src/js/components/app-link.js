@@ -1,9 +1,6 @@
 import { LitElement, html, css } from 'lit'
 import { sharedRouter } from '../route-controller.js'
-import {
-  keyboardActivationEventListener,
-  registerElement,
-} from '../common/dom.js'
+import { registerElement } from '../common/dom.js'
 
 export class AppLinkElement extends LitElement {
   static styles = css`
@@ -31,20 +28,6 @@ export class AppLinkElement extends LitElement {
     super()
     this.href = '#'
     this.role = 'presentation'
-    this.tabIndex = 0
-    this.onfocus = (e) => {
-      this.renderRoot.querySelector('sl-button')?.focus(e)
-      this.tabIndex = -1
-    }
-    this.onblur = () => {
-      this.tabIndex = 0
-    }
-    this.onkeyup = keyboardActivationEventListener(() => {
-      if (typeof this.onclick === 'function') {
-        this.onclick(null)
-      }
-      sharedRouter.navigate(this.href)
-    })
   }
 
   /**
