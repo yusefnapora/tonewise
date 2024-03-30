@@ -35,6 +35,11 @@ export class GameStatusMessageElement extends LitElement {
       /* padding-left: 12px;
       margin-right: 48px; */
     }
+
+    .secondary {
+      font-size: 0.8em;
+    }
+
     ${landscapeMediaQuery} {
       :host {
         justify-content: flex-start;
@@ -49,7 +54,7 @@ export class GameStatusMessageElement extends LitElement {
     const secondaryMessage = this.#state.select(selectSecondaryStatusMessage)
 
     const secondaryDisplay = secondaryMessage
-      ? html`<p>${secondaryMessage}</p>`
+      ? html`<p class="secondary">${secondaryMessage}</p>`
       : undefined
 
     console.log('status message', message)
