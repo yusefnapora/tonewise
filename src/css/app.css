@@ -26,3 +26,17 @@ body {
 * {
   touch-action: manipulation;
 }
+
+.touch-indicator {
+  background-color: lightgray;
+  opacity: 0.8;
+  clip-path: circle(50%);
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  z-index: 100;
+  top: -16px;
+  left: -16px;
+  transform: var(--indicator-transform);
+  pointer-events: none;
+}
