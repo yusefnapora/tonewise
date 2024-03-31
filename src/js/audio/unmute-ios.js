@@ -2,6 +2,8 @@
 
 /*! unmute-ios-audio. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
+import { isIOS } from '../common/platform.js'
+
 const USER_ACTIVATION_EVENTS = [
   'auxclick',
   'click',
@@ -17,20 +19,7 @@ const USER_ACTIVATION_EVENTS = [
 export function unmuteIosAudio() {
   const AudioContext = window.AudioContext
 
-  const platform = navigator.userAgentData?.platform ?? navigator.platform
-  const isIOS =
-    [
-      'iPad Simulator',
-      'iPhone Simulator',
-      'iPod Simulator',
-      'iPad',
-      'iPhone',
-      'iPod',
-    ].includes(platform) ||
-    // iPad on iOS 13 detection
-    (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
-
-  if (!isIOS) {
+  if (!isIOS()) {
     console.log('not ios', { AudioContext })
     return
   }

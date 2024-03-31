@@ -70,9 +70,10 @@ export class SplashScreenCanvasElement extends LitElement {
  * @param {number} opts.height
  * @param {'dark'|'light'} opts.colorTheme
  * @param {number} [opts.pixelRatio]
+ * @param {boolean} [opts.backgroundOnly]
  */
 export function createSplashScreenImage(opts) {
-  const { width, height, colorTheme } = opts
+  const { width, height, colorTheme, backgroundOnly } = opts
 
   const rotation = -90
   const baseColors = getNoteColors().map((c) =>
@@ -110,6 +111,7 @@ export function createSplashScreenImage(opts) {
     bottomLayerColor,
     activeStartAngle,
     activeEndAngle,
+    backgroundOnly,
   })
 
   return canvas.toDataURL('image/png')
@@ -128,6 +130,7 @@ export function createSplashScreenImage(opts) {
  * @param {DOMRect} [opts.canvasRect]
  * @param {number} [opts.pixelRatio]
  * @param {number} [opts.innerGradientOpacity]
+ * @param {boolean} [opts.backgroundOnly]
  */
 function drawSplashScreen(opts) {
   const {
@@ -165,6 +168,9 @@ function drawSplashScreen(opts) {
   const center = { x: rect.width / 2, y: rect.height / 2 }
   drawBackground({ canvas, center, rotation, backgroundColors })
 
+  if (opts.backgroundOnly) {
+    return
+  }
   // console.log({ viewportSize, radius, thickness, center, rotation })
 
   const innerLayerOpacity = opts.innerGradientOpacity ?? 0.5
