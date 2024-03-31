@@ -4,10 +4,6 @@ import { registerElement, resolveCSSVariables } from '../../common/dom.js'
 import { createRef, ref } from 'lit/directives/ref.js'
 import { rimSegmentSVGPath, toRadians } from '../../common/geometry.js'
 
-/**
- * @typedef {import("../../common/types.js").Point} Point
- */
-
 export class SplashScreenCanvasElement extends LitElement {
   static styles = css`
     :host {
@@ -22,15 +18,6 @@ export class SplashScreenCanvasElement extends LitElement {
       height: 100%;
     }
   `
-
-  constructor() {
-    super()
-    this.rotation = -90
-    this.noteColors = noteColors().map((c) => resolveCSSVariables(c, this))
-    this.backgroundColors = backgroundGradientColors().map((c) =>
-      resolveCSSVariables(c, this),
-    )
-  }
 
   /**
    * @type {import('lit/directives/ref.js').Ref<HTMLCanvasElement>}
@@ -52,11 +39,16 @@ export class SplashScreenCanvasElement extends LitElement {
       return
     }
 
-    const { rotation, noteColors, backgroundColors } = this
+    const rotation = -90
+    const noteColors = getNoteColors().map((c) => resolveCSSVariables(c, this))
+    const backgroundColors = backgroundGradientColors().map((c) =>
+      resolveCSSVariables(c, this),
+    )
     const bottomLayerColor = resolveCSSVariables(
       'var(--color-background, black)',
       this,
     )
+
     const activeStartAngle = 120
     const activeEndAngle = 240
     drawSplashScreen({
@@ -74,6 +66,58 @@ export class SplashScreenCanvasElement extends LitElement {
 /**
  *
  * @param {object} opts
+ * @param {number} opts.width
+ * @param {number} opts.height
+ * @param {'dark'|'light'} opts.colorTheme
+ * @param {number} [opts.pixelRatio]
+ */
+export function createSplashScreenImage(opts) {
+  const { width, height, colorTheme } = opts
+
+  const rotation = -90
+  const baseColors = getNoteColors().map((c) =>
+    c.replaceAll('--color-', `--theme-${colorTheme}-color-`),
+  )
+
+  const backgroundColorsBase = baseColors.map((c) =>
+    c
+      .replaceAll('-primary-lightness', '-background-lightness')
+      .replaceAll('-primary-chroma', '-background-chroma'),
+  )
+
+  const cssScope = document.documentElement
+  const noteColors = baseColors.map((c) => resolveCSSVariables(c, cssScope))
+  const backgroundColors = backgroundColorsBase.map((c) =>
+    resolveCSSVariables(c, cssScope),
+  )
+  const bottomLayerColor = resolveCSSVariables(
+    `var(--theme-${colorTheme}-color-background)`,
+    document.documentElement,
+  )
+
+  const activeStartAngle = 120
+  const activeEndAngle = 240
+
+  const canvas = document.createElement('canvas')
+  const canvasRect = new DOMRect(0, 0, width, height)
+
+  drawSplashScreen({
+    canvas,
+    canvasRect,
+    rotation,
+    noteColors,
+    backgroundColors,
+    bottomLayerColor,
+    activeStartAngle,
+    activeEndAngle,
+  })
+
+  return canvas.toDataURL('image/png')
+}
+
+/**
+ *
+ * @param {object} opts
  * @param {HTMLCanvasElement} opts.canvas
  * @param {number} opts.rotation
  * @param {string[]} opts.noteColors
@@ -81,6 +125,8 @@ export class SplashScreenCanvasElement extends LitElement {
  * @param {string} opts.bottomLayerColor
  * @param {number} opts.activeStartAngle
  * @param {number} opts.activeEndAngle
+ * @param {DOMRect} [opts.canvasRect]
+ * @param {number} [opts.pixelRatio]
  * @param {number} [opts.innerGradientOpacity]
  */
 function drawSplashScreen(opts) {
@@ -93,10 +139,11 @@ function drawSplashScreen(opts) {
     activeStartAngle,
     activeEndAngle,
   } = opts
+  const startTime = Date.now()
   const ctx = canvas.getContext('2d')
   // Get the DPR and size of the canvas
-  const dpr = window.devicePixelRatio
-  const rect = canvas.getBoundingClientRect()
+  const dpr = opts.pixelRatio ?? window.devicePixelRatio
+  const rect = opts.canvasRect ?? canvas.getBoundingClientRect()
 
   // Set the "actual" size of the canvas
   const width = rect.width * dpr
@@ -118,7 +165,7 @@ function drawSplashScreen(opts) {
   const center = { x: rect.width / 2, y: rect.height / 2 }
   drawBackground({ canvas, center, rotation, backgroundColors })
 
-  console.log({ viewportSize, radius, thickness, center, rotation })
+  // console.log({ viewportSize, radius, thickness, center, rotation })
 
   const innerLayerOpacity = opts.innerGradientOpacity ?? 0.5
   drawInnerBackground({
@@ -139,8 +186,8 @@ function drawSplashScreen(opts) {
     filter: 'blur(30px)',
   })
 
-  const startAngle = opts.activeStartAngle
-  const endAngle = opts.activeEndAngle
+  const startAngle = activeStartAngle
+  const endAngle = activeEndAngle
   ctx.save()
   setInnerWedgeClipPath({
     canvas,
@@ -162,12 +209,13 @@ function drawSplashScreen(opts) {
   ctx.restore()
 
   drawWheelRim({ canvas, center, rotation, radius, thickness, noteColors })
+  console.log(`drew splash screen to canvas in ${Date.now() - startTime}ms`)
 }
 
 /**
  * @param {object} opts
  * @param {HTMLCanvasElement} opts.canvas
- * @param {Point} opts.center
+ * @param {import("../../common/types.js").Point} opts.center
  * @param {number} opts.rotation
  * @param {string[]} opts.colors
  */
@@ -175,7 +223,7 @@ function setGradientFill(opts) {
   const { canvas, center, rotation, colors } = opts
   const ctx = canvas.getContext('2d')
   const stops = [...colors, colors[0]]
-  console.log('color stops', stops)
+  // console.log('color stops', stops)
   const startAngle = toRadians(rotation)
   const gradient = ctx.createConicGradient(startAngle, center.x, center.y)
   for (let i = 0; i < stops.length; i++) {
@@ -187,7 +235,7 @@ function setGradientFill(opts) {
 /**
  * @param {object} opts
  * @param {HTMLCanvasElement} opts.canvas
- * @param {Point} opts.center
+ * @param {import("../../common/types.js").Point} opts.center
  * @param {number} opts.rotation
  * @param {string[]} opts.backgroundColors
  */
@@ -203,7 +251,7 @@ function drawBackground(opts) {
 /**
  * @param {object} opts
  * @param {HTMLCanvasElement} opts.canvas
- * @param {Point} opts.center
+ * @param {import("../../common/types.js").Point} opts.center
  * @param {number} opts.rotation
  * @param {number} opts.opacity
  * @param {number} opts.radius radius of inner section, not whole wheel
@@ -232,7 +280,7 @@ function drawInnerBackground(opts) {
  *
  * @param {object} opts
  * @param {HTMLCanvasElement} opts.canvas
- * @param {Point} opts.center
+ * @param {import("../../common/types.js").Point} opts.center
  * @param {number} opts.rotation
  * @param {number} opts.radius radius of inner section, not whole wheel
  * @param {number} opts.startAngle
@@ -258,7 +306,7 @@ function setInnerWedgeClipPath(opts) {
 /**
  * @param {object} opts
  * @param {HTMLCanvasElement} opts.canvas
- * @param {Point} opts.center
+ * @param {import("../../common/types.js").Point} opts.center
  * @param {number} opts.rotation
  * @param {number} opts.radius
  * @param {number} opts.thickness
@@ -287,7 +335,7 @@ function drawWheelRim(opts) {
   }
 }
 
-function noteColors(colorScale = 'oklch') {
+function getNoteColors(colorScale = 'oklch') {
   const colors = []
   const n = 12
   const step = 360 / n
@@ -295,12 +343,12 @@ function noteColors(colorScale = 'oklch') {
     const angle = step * i
     colors.push(colorForAngle(angle, colorScale))
   }
-  console.log('colors', colors)
+  // console.log('colors', colors)
   return colors
 }
 
 function backgroundGradientColors(colorScale = 'oklch') {
-  return noteColors(colorScale).map((c) =>
+  return getNoteColors(colorScale).map((c) =>
     c
       .replace('--color-primary-lightness', '--bgcolor-lightness')
       .replace('--color-primary-chroma', '--bgcolor-chroma'),

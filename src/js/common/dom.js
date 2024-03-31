@@ -46,7 +46,30 @@ export function resolveCSSVariables(str, scope) {
   for (const m of matches) {
     const [key, defaultVal] = m[1].split(',')
     const val = style.getPropertyValue(key) || defaultVal
-    res = res.replace(m[0], val)
+    if (val) {
+      res = res.replace(m[0], val)
+    }
+  }
+  return res
+}
+
+/**
+ *
+ * @param {string} str
+ * @param {{ [key: string]: string }} replacements
+ */
+export function replaceCSSVariables(str, replacements) {
+  const matches = [...str.matchAll(/var\((--.*?)\)/g)]
+  if (matches.length === 0) {
+    return str
+  }
+  let res = str
+  for (const m of matches) {
+    const [key, defaultVal] = m[1].split(',')
+    const val = replacements[key] ?? defaultVal
+    if (val) {
+      res = res.replace(m[0], val)
+    }
   }
   return res
 }

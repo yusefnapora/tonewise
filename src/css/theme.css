@@ -6,6 +6,11 @@
   --theme-dark-color-text-muted: #aaa;
   --theme-dark-color-wheel-bottom-layer-background: black;
 
+  --theme-dark-color-primary-lightness: 60%;
+  --theme-dark-color-primary-chroma: 0.26;
+  --theme-dark-color-background-lightness: 40%;
+  --theme-dark-color-background-chroma: 0.075;
+
   --theme-light-color-background: hsl(30, 67%, 98%);
   /* --theme-light-color-muted: hsl(208, 31.9%, 81.6%); */
   /* --theme-light-color-muted: hsl(207.1, 31.3%, 80.6%); */
@@ -15,6 +20,10 @@
   --theme-light-color-text: black;
   --theme-light-color-text-muted: #666;
   --theme-light-color-wheel-bottom-layer-background: white;
+  --theme-light-color-primary-lightness: 70%;
+  --theme-light-color-primary-chroma: 0.26;
+  --theme-light-color-background-lightness: 80%;
+  --theme-light-color-background-chroma: 0.15;
 
   --wheel-gradient-background-opacity: 0.5;
   --wheel-gradient-background-vibrant-opacity: 1;
@@ -33,11 +42,11 @@ html {
     --theme-dark-color-wheel-bottom-layer-background
   );
 
-  --color-primary-lightness: 60%;
-  --color-primary-chroma: 0.26;
+  --color-primary-lightness: var(--theme-dark-color-primary-lightness, 60%);
+  --color-primary-chroma: var(--theme-dark-color-primary-chroma, 0.26);
 
-  --bgcolor-lightness: 40%;
-  --bgcolor-chroma: 0.075;
+  --bgcolor-lightness: var(--theme-dark-color-background-lightness, 40%);
+  --bgcolor-chroma: var(--theme-dark-color-background-chroma, 0.075);
 
   background: var(--color-background);
   color: var(--color-text);
@@ -56,9 +65,9 @@ html.light-theme {
     --theme-light-color-wheel-bottom-layer-background
   );
 
-  --color-primary-lightness: 70%;
-  --color-primary-chroma: 0.26;
+  --color-primary-lightness: var(--theme-light-color-primary-lightness, 70%);
+  --color-primary-chroma: var(--theme-light-color-primary-chroma, 0.26);
 
-  --bgcolor-lightness: 80%;
-  --bgcolor-chroma: 0.15;
+  --bgcolor-lightness: var(--theme-light-color-background-lightness, 80%);
+  --bgcolor-chroma: var(--theme-light-color-background-chroma, 0.15);
 }
