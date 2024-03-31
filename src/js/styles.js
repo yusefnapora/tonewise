@@ -1,4 +1,4 @@
-import { css } from 'lit'
+import { css, unsafeCSS } from 'lit'
 
 export const cardStyleBase = css`
   sl-card::part(base) {
@@ -10,7 +10,31 @@ export const cardStyleBase = css`
   }
 `
 
+/* prettier-ignore */
+const landscapeCriteria = `(orientation: landscape) and (max-height: 540px)`
+
+export function isLandscape(maxHeight = '540px') {
+  const criteria = `(orientation: landscape) and (max-height: ${maxHeight})`
+  return window.matchMedia(criteria).matches
+}
+
+/**
+ *
+ * @param {(orientation: 'landscape' | 'portrait') => unknown} callback
+ */
+export function onOrientationChange(callback, maxHeight = '540px') {
+  const criteria = `(orientation: landscape) and (max-height: ${maxHeight})`
+
+  window.matchMedia(criteria).addEventListener('change', (ev) => {
+    if (ev.matches) {
+      callback('landscape')
+    } else {
+      callback('portrait')
+    }
+  })
+}
+
 export const landscapeMediaQuery = css`
   /* prettier-ignore */
-  @media (orientation: landscape) and (max-height: 540px)
+  @media ${unsafeCSS(landscapeCriteria)}
 `

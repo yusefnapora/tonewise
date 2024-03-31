@@ -44,16 +44,13 @@ function applyPreferredColorScheme(scheme) {
 }
 
 function applyCurrentPreferredColorScheme() {
-  if (
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  ) {
+  if (!window.matchMedia) {
+    return
+  }
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
     applyPreferredColorScheme('dark')
   }
-  if (
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: light)').matches
-  ) {
+  if (window.matchMedia('(prefers-color-scheme: light)').matches) {
     applyPreferredColorScheme('light')
   }
 }

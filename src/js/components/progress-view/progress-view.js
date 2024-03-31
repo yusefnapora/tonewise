@@ -214,7 +214,7 @@ export class ProgressViewElement extends LitElement {
     `
 
     return html`
-      <wrapper-div class="content">${statusView} ${buttons}</wrapper-div>
+      <div role="presentation" class="content">${statusView} ${buttons}</div>
     `
   }
 }

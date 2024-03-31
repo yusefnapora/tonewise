@@ -100,11 +100,11 @@ export class WelcomeViewElement extends LitElement {
   render() {
     return html`
       <glass-panel>
-        <wrapper-div class="content">
-          <wrapper-div class="logo">
+        <div role="presentation" class="content">
+          <div role="presentation" class="logo">
             <wheel-icon aria-hidden="true" active-notes="Ab,E"></wheel-icon>
             <h1 class="app-title">${appName}</h1>
-          </wrapper-div>
+          </div>
           <nav aria-label="Main menu">
             <ul role="presentation">
               <li role="presentation">
@@ -138,7 +138,7 @@ export class WelcomeViewElement extends LitElement {
               </li>
             </ul>
           </nav>
-        </wrapper-div>
+        </div>
       </glass-panel>
     `
   }
