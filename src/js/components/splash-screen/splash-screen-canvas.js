@@ -73,7 +73,7 @@ export class SplashScreenCanvasElement extends LitElement {
  * @param {boolean} [opts.backgroundOnly]
  */
 export function createSplashScreenImage(opts) {
-  const { width, height, colorTheme, backgroundOnly } = opts
+  const { width, height, colorTheme, backgroundOnly, pixelRatio } = opts
 
   const rotation = -90
   const baseColors = getNoteColors().map((c) =>
@@ -112,6 +112,7 @@ export function createSplashScreenImage(opts) {
     activeStartAngle,
     activeEndAngle,
     backgroundOnly,
+    pixelRatio,
   })
 
   return canvas.toDataURL('image/png')

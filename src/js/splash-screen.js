@@ -38,7 +38,7 @@ export function setupSplashScreenImages() {
       const dataUri = createSplashScreenImage({
         width,
         height,
-        pixelRatio,
+        pixelRatio: 1,
         // @ts-expect-error
         colorTheme,
         backgroundOnly,
