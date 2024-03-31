@@ -14,7 +14,7 @@
         env: { NODE_ENV: 'development' },
       }
     </script>
-    <script type="module" src="./js/app.js"></script>
+    <script type="module" src="./js/components/splash-screen/splash-screen-canvas.js"></script>
 
     <style>
       *:not(:defined) {
@@ -52,20 +52,6 @@
     </style>
   </head>
   <body oncontextmenu="return false;">
-    <app-background></app-background>
-    <tone-wheel hide-labels>
-      <pitch-class class="C" midi-note="60">C</pitch-class>
-      <pitch-class class="C♯" midi-note="61">C♯</pitch-class>
-      <pitch-class class="D" midi-note="62">D</pitch-class>
-      <pitch-class class="D♯" midi-note="63">D♯</pitch-class>
-      <pitch-class class="E" active midi-note="64">E</pitch-class>
-      <pitch-class class="F" midi-note="65">F</pitch-class>
-      <pitch-class class="F♯" midi-note="66">F♯</pitch-class>
-      <pitch-class class="G" midi-note="67">G</pitch-class>
-      <pitch-class class="G♯" active midi-note="68">G♯</pitch-class>
-      <pitch-class class="A" midi-note="69">A</pitch-class>
-      <pitch-class class="A♯" midi-note="70">A♯</pitch-class>
-      <pitch-class class="B" midi-note="71">B</pitch-class>
-    </tone-wheel>
+    <splash-screen-canvas width="100%" height="100%"></splash-screen-canvas>
   </body>
 </html>
