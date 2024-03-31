@@ -7,11 +7,7 @@ const currentPlatform = () =>
   navigator.userAgentData?.platform ?? navigator.platform
 
 export const isIPad = () => {
-  return (
-    iPadPlatforms.includes(currentPlatform()) ||
-    // iPad on iOS 13 detection
-    (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
-  )
+  return iPadPlatforms.includes(currentPlatform())
 }
 
 export const isIPhone = () => {

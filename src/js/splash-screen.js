@@ -4,6 +4,7 @@ import { isIOS, isIPad, isProd } from './common/platform.js'
 export function setupSplashScreenImages() {
   const skipGeneration = isProd && !isIOS()
   if (skipGeneration) {
+    console.log('skipping splash screen generation')
     return
   }
 
