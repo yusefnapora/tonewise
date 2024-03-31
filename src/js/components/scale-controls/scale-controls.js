@@ -51,15 +51,21 @@ export class ScaleControlsElement extends LitElement {
     }
 
     scale-badge:focus-visible {
-      outline: 2px dotted var(--color-text-muted);
+      outline: 4px solid var(--color-selected-scale-highlight);
       outline-offset: 2px;
       border-radius: 10px;
-      filter: drop-shadow(0 0 25px white);
+      /* filter: drop-shadow(0 0 25px white); */
     }
 
-    scale-badge.selected:focus-visible {
-      outline: 2px dotted var(--color-selected-scale-highlight);
+    .badges:has(scale-badge:focus-visible) {
+      & > scale-badge.selected:not(:focus-visible) {
+        outline: 2px dotted var(--color-selected-scale-highlight);
+      }
     }
+
+    /* scale-badge.selected:not(:focus-visible) {
+      outline: 2px dotted var(--color-selected-scale-highlight);
+    } */
 
     sl-button::part(base),
     sl-menu-item::part(base) {
