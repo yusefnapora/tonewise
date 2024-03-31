@@ -2,6 +2,7 @@ import { LitElement, css, html } from 'lit'
 import { RouteController } from '../../route-controller.js'
 import { loadSampler } from '../../state/slices/audio-slice.js'
 import { dispatch } from '../../state/store.js'
+import { setupSplashScreenImages } from '../../splash-screen.js'
 
 export class AppViewElement extends LitElement {
   static styles = css`
@@ -63,6 +64,7 @@ export class AppViewElement extends LitElement {
   connectedCallback() {
     super.connectedCallback()
     dispatch(loadSampler())
+    setupSplashScreenImages()
   }
 
   render() {

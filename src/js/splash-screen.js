@@ -1,8 +1,5 @@
 import { createSplashScreenImage } from './components/splash-screen/splash-screen-canvas.js'
-import { isIOS, isIPad } from './common/platform.js'
-
-// @ts-expect-error process is defined in rollup & not visible to typescript
-const isProd = process.env.NODE_ENV === 'production'
+import { isIOS, isIPad, isProd } from './common/platform.js'
 
 export function setupSplashScreenImages() {
   const skipGeneration = isProd && !isIOS()

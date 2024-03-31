@@ -1,5 +1,4 @@
-// @ts-expect-error process is defined in rollup & not visible to typescript
-const isProd = process.env.NODE_ENV === 'production'
+import { isProd } from './common/platform.js'
 
 /** @type {ServiceWorkerRegistration | null} */
 let swRegistration = null
