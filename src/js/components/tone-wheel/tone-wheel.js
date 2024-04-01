@@ -135,9 +135,13 @@ export class ToneWheel extends LitElement {
       stroke: var(--color-text);
     }
 
-    .tone-group.active > .pitch-line {
+    .tone-group.active > .pitch-line:not(.hidden) {
       transition: opacity 0s;
       opacity: 1;
+    }
+
+    .pitch-line.hidden {
+      opacity: 0;
     }
 
     .base-background-layer {
@@ -194,6 +198,7 @@ export class ToneWheel extends LitElement {
     fontSize: { type: Number },
     colorScale: { type: String, attribute: 'color-scale' },
     hideLabels: { type: Boolean, attribute: 'hide-labels' },
+    hidePitchLines: { type: Boolean, attribute: 'hide-pitch-lines' },
     nonInteractive: { type: Boolean, attribute: 'non-interactive' },
   }
 
@@ -204,6 +209,7 @@ export class ToneWheel extends LitElement {
     this.fontSize = DEFAULT_FONT_SIZE
     this.colorScale = DEFAULT_COLOR_SCALE
     this.hideLabels = false
+    this.hidePitchLines = false
     this.nonInteractive = false
     this.maskIdSlug = Math.random().toString().replace('.', '_')
   }
@@ -323,6 +329,7 @@ export class ToneWheel extends LitElement {
           className,
           endpoint: intervalPoint,
           width,
+          hidden: this.hidePitchLines,
         }),
       )
 
@@ -602,17 +609,19 @@ export class ToneWheel extends LitElement {
    * @param {Point} args.endpoint (x,y) coords of line's endpoint
    * @param {string} args.className CSS class name, to set stroke color
    * @param {number} args.width width of line in viewbox units
+   * @param {boolean} [args.hidden]
    * @param {number} [args.cx] center x coord of wheel in viewbox units. defaults to 500
    * @param {number} [args.cy] center y coord of wheel in viewbox units. defaults to 500
    *
    */
   #createPitchLine(args) {
-    const { className, endpoint, width } = args
+    const { className, endpoint, width, hidden } = args
     const cx = args.cx ?? 500
     const cy = args.cy ?? 500
 
+    const groupClasses = { 'pitch-line': true, hidden }
     return svg`
-    <g class="pitch-line">
+    <g class=${classMap(groupClasses)}>
       <line
         class="outline" 
         x1=${cx} y1=${cy}
