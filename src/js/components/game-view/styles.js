@@ -63,6 +63,12 @@ const styles = css`
     right: calc(-1 * min(24px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.05)));
   }
 
+  .scale-toggle-icon scale-badge:focus-visible {
+    outline: var(--sl-focus-ring);
+    outline-offset: var(--sl-focus-ring-offset);
+    border-radius: 10px;
+  }
+
   .controls {
     grid-area: controls;
     width: 100%;
