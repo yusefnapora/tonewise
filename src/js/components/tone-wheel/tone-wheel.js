@@ -88,11 +88,6 @@ export class ToneWheel extends LitElement {
       opacity: 0.3;
     }
 
-    .rim-segment-overlay {
-      fill: none;
-      stroke: none;
-    }
-
     @media (pointer: fine) {
       svg:not(.non-interactive) .tone-group {
         cursor: pointer;
@@ -110,11 +105,6 @@ export class ToneWheel extends LitElement {
     }
 
     .tone-group.disabled {
-      /* & > .rim-segment-overlay {
-        fill: var(--color-background);
-        opacity: 0.3;
-      } */
-
       & > .tone-label {
         opacity: 0;
       }
@@ -123,6 +113,18 @@ export class ToneWheel extends LitElement {
       cursor: auto;
       &:hover > .inner-wedge {
         opacity: 0;
+      }
+    }
+
+    @supports (color: rgb(from white r g b)) {
+      .tone-group:has(.held) .rim-segment {
+        fill: lch(from var(--tone-color) calc(l * 0.9) c h);
+      }
+    }
+
+    @supports not (color: rgb(from white r g b)) {
+      .tone-group:has(.held) .rim-segment {
+        filter: brightness(0.9);
       }
     }
 
@@ -309,14 +311,6 @@ export class ToneWheel extends LitElement {
         className,
       })
 
-      const { path: segmentOverlayPath } = this.#createRimSegment({
-        startAngle: segmentStartAngle,
-        endAngle: segmentEndAngle,
-        intervalAngle: intervalAngle,
-        thickness: rimThickness,
-        className: 'rim-segment-overlay',
-      })
-
       // scale the pitch line width proportional to the wheel radius,
       // and also shrink the width for pitches whose rim segment length
       // is less than 1 EDO-step
@@ -335,7 +329,6 @@ export class ToneWheel extends LitElement {
 
       // push rim segment after pitch line, so it renders on top
       groupContent.push(segmentPath)
-      groupContent.push(segmentOverlayPath)
 
       if (el.label) {
         groupContent.push(
@@ -349,9 +342,11 @@ export class ToneWheel extends LitElement {
 
       const color = colorForAngle(intervalAngle, this.colorScale)
       const textColor = getContrastingTextColor(color)
+
       colors.push(color)
       styleContent += `
-        .${className} { 
+        .${className} {
+          --tone-color: ${color}; 
           stroke: ${color};
           fill: ${color};
         }
@@ -435,6 +430,7 @@ export class ToneWheel extends LitElement {
           @pointerenter=${pointerEnter} 
           @pointerleave=${pointerLeave}
           @pointerup=${pointerUp}
+          @pointercancel=${pointerUp}
           class=${classMap(classes)}
         >
           ${groupContent}
