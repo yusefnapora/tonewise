@@ -81,5 +81,3 @@ To preview the production build, I usually just use python to pop up a server on
 ```shell
 python3 -m http.server 3000
 ```
-
-At some point I'll probably need to debug the service worker and have to setup a local https thing, but that's tomorrow's problem.
