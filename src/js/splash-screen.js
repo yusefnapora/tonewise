@@ -1,5 +1,8 @@
 import { createSplashScreenImage } from './components/splash-screen/splash-screen-canvas.js'
 import { isIOS, isIPad, isProd } from './common/platform.js'
+import { store } from './state/store.js'
+
+let currentThemePref = undefined
 
 export function setupSplashScreenImages() {
   const skipGeneration = isProd && !isIOS()
@@ -8,9 +11,24 @@ export function setupSplashScreenImages() {
     return
   }
 
+  generateAndSetSplahImages()
+  store.subscribe(() => generateAndSetSplahImages())
+}
+
+function generateAndSetSplahImages() {
+  const colorThemePref = store.getState().preferences.theme
+  if (colorThemePref === currentThemePref) {
+    return
+  }
+  if (currentThemePref !== undefined) {
+    console.log(`regenerating splash images. theme preference changed from ${currentThemePref} to ${colorThemePref}`)
+  }
+  currentThemePref = colorThemePref
+
   const { width, height } = screen
   const pixelRatio = window.devicePixelRatio ?? 1
-  const colorThemes = ['light', 'dark']
+  /** @type {Array<'dark'|'light'>} */
+  const colorThemes = colorThemePref === 'auto' ? ['light', 'dark'] : [colorThemePref]
   const orientations = {
     portrait: {
       width: Math.min(width, height),
@@ -21,26 +39,27 @@ export function setupSplashScreenImages() {
       height: Math.min(width, height),
     },
   }
+  // iPadOS has a longstanding bug that causes it to use the portrait
+  // splash image and stretch it to fit the landscape view.
+  // This looks terrible, so we skip drawing the icon on iPad,
+  // since the gradient background stretches well & is better
+  // than nothing.
+  //
+  // feel free to remove this hack if / when the underlying bug is fixed.
+  // see: https://intercom.help/progressier/en/articles/6755369-why-do-ipad-landscape-splash-screens-look-stretched
+  const backgroundOnly = isIPad()
   const uris = []
   for (const [orientation, { width, height }] of Object.entries(orientations)) {
     for (const colorTheme of colorThemes) {
-      const mediaQuery = `screen and (orientation: ${orientation}) and (prefers-color-scheme: ${colorTheme})`
-
-      // iPadOS has a longstanding bug that causes it to use the portrait
-      // splash image and stretch it to fit the landscape view.
-      // This looks terrible, so we skip drawing the icon on iPad,
-      // since the gradient background stretches well & is better
-      // than nothing.
-      //
-      // feel free to remove this hack if / when the underlying bug is fixed.
-      // see: https://intercom.help/progressier/en/articles/6755369-why-do-ipad-landscape-splash-screens-look-stretched
-      const backgroundOnly = isIPad()
+      let mediaQuery = `screen and (orientation: ${orientation})`
+      if (colorThemes.length > 1) {
+        mediaQuery += ' and (prefers-color-scheme: ${colorTheme})'
+      }
 
       const dataUri = createSplashScreenImage({
         width,
         height,
         pixelRatio,
-        // @ts-expect-error
         colorTheme,
         backgroundOnly,
       })
