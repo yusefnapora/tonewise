@@ -1,8 +1,9 @@
 import { LitElement, css, html } from 'lit'
 import { colorForAngle } from '../../common/color.js'
-import { registerElement, resolveCSSVariables } from '../../common/dom.js'
+import { registerElement, replaceCSSVariables, resolveCSSVariables } from '../../common/dom.js'
 import { createRef, ref } from 'lit/directives/ref.js'
 import { rimSegmentSVGPath, toRadians } from '../../common/geometry.js'
+import { DARK_COLOR_VARS, LIGHT_COLOR_VARS } from './colors.js'
 
 export class SplashScreenCanvasElement extends LitElement {
   static styles = css`
@@ -76,25 +77,14 @@ export function createSplashScreenImage(opts) {
   const { width, height, colorTheme, backgroundOnly, pixelRatio } = opts
 
   const rotation = -90
-  const baseColors = getNoteColors().map((c) =>
-    c.replaceAll('--color-', `--theme-${colorTheme}-color-`),
-  )
 
-  const backgroundColorsBase = baseColors.map((c) =>
-    c
-      .replaceAll('-primary-lightness', '-background-lightness')
-      .replaceAll('-primary-chroma', '-background-chroma'),
-  )
+  const colorVars = colorTheme === 'dark' ? DARK_COLOR_VARS : LIGHT_COLOR_VARS
 
-  const cssScope = document.documentElement
-  const noteColors = baseColors.map((c) => resolveCSSVariables(c, cssScope))
-  const backgroundColors = backgroundColorsBase.map((c) =>
-    resolveCSSVariables(c, cssScope),
+  const noteColors = getNoteColors().map((c) => replaceCSSVariables(c, colorVars.foreground))
+  const backgroundColors = getNoteColors().map((c) =>
+    replaceCSSVariables(c, colorVars.background),
   )
-  const bottomLayerColor = resolveCSSVariables(
-    `var(--theme-${colorTheme}-color-background)`,
-    document.documentElement,
-  )
+  const bottomLayerColor = colorVars.bottomLayer
 
   const activeStartAngle = 120
   const activeEndAngle = 240
