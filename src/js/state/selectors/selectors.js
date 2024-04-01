@@ -66,6 +66,13 @@ export const isGameCompleted = createSelector(
   },
 )
 
+export const selectIsChallengePlaying = createSelector(
+  [selectCurrentRound],
+  (currentRound) => {
+    return currentRound?.challengePlaying ?? false
+  },
+)
+
 export const selectProgressNoteBadgeInfo = createSelector(
   [selectCurrentRound, selectTuningState, selectAudioState],
   (currentRound, tuning, audio) => {
@@ -144,6 +151,9 @@ export const selectStatusMessage = createSelector(
     }
     if (isGameCompleted.resultFunc(currentRound)) {
       return 'Great job!'
+    }
+    if (currentRound.challengePlaying) {
+      return 'Listen to the notes…'
     }
     return 'Tap the hidden note'
   },

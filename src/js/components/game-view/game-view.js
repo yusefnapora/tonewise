@@ -17,6 +17,7 @@ import {
 } from '../../state/slices/audio-slice.js'
 import {
   selectColorScale,
+  selectIsChallengePlaying,
   selectMidiNote,
   selectNoteLabel,
   selectScaleControlsActive,
@@ -101,6 +102,7 @@ export class GameViewElement extends LitElement {
     const wheelNotes = this.#state.select(selectWheelNotes)
     const scaleNotes = this.#state.select(selectScaleNoteIds)
     const scaleControlsActive = this.#state.select(selectScaleControlsActive)
+    const isChallengePlaying = this.#state.select(selectIsChallengePlaying)
 
     const pitchClasses = wheelNotes.map(
       ({ noteId, midiNote, label, active }) => html`
@@ -125,7 +127,7 @@ export class GameViewElement extends LitElement {
         `
 
     // TODO: make tone-wheel update itself when active pitch classes change
-    this.#wheel?.requestUpdate()
+    setTimeout(() => this.#wheel?.requestUpdate())
 
     const tonicAngle = selectTonicNoteAngle(this.#state.state)
     const {
@@ -182,6 +184,7 @@ export class GameViewElement extends LitElement {
           </section>
         `
 
+    const nonInteractive = isChallengePlaying && !this.freePlayMode
     const wheelRotation = 360 - tonicAngle
 
     return html`
@@ -191,6 +194,7 @@ export class GameViewElement extends LitElement {
         </div>
         <div class="wheel">
           <tone-wheel
+            non-interactive=${nonInteractive || nothing}
             rotation=${wheelRotation}
             color-scale=${colorScale}
             @note:holdBegan=${this.#pitchSelected}
