@@ -88,8 +88,20 @@ export class AboutViewElement extends LitElement {
           This app is a passion project that I work on when I have the time and
           motivation. You can help with the motivation bit by
           <a href="mailto:contact@tonewise.app">sending me an email</a>, or
-          check out <a href="https://yusef.napora.org">my website</a>
+          check out
+          <a target="_blank" href="https://yusef.napora.org">my website</a>
           for other ways to get in touch.
+        </p>
+        <p>
+          The source code for Tonewise is available on
+          <a target="_blank" href="https://github.com/yusefnapora/tonewise">
+            <sl-icon name="github"></sl-icon>
+            GitHub
+          </a>
+          under the
+          <a target="_blank" href="https://www.gnu.org/licenses/gpl-3.0.en.html"
+            >GNU General Public License (v3)</a
+          >.
         </p>
       </glass-panel>
     `
