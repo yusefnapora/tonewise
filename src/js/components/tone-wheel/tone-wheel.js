@@ -110,10 +110,10 @@ export class ToneWheel extends LitElement {
     }
 
     .tone-group.disabled {
-      & > .rim-segment-overlay {
+      /* & > .rim-segment-overlay {
         fill: var(--color-background);
         opacity: 0.3;
-      }
+      } */
 
       & > .tone-label {
         opacity: 0;
