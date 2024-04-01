@@ -8,19 +8,19 @@ import {
   selectColorScale,
   selectColorTheme,
   selectEnharmonicPresentation,
+  selectShowTouchHighlights,
   selectWheelNotes,
 } from '../../state/selectors/selectors.js'
 import {
   setColorScale,
   setEnharmonicPresentation,
   setSystemColorTheme,
+  setShowTouchHighlights,
 } from '../../state/slices/preferences-slice.js'
-import {
-  isLandscape,
-  landscapeMediaQuery,
-  onOrientationChange,
-} from '../../styles.js'
+import { isLandscape, onOrientationChange } from '../../styles.js'
 import { unregisterServiceWorker } from '../../worker-setup.js'
+
+let awaitingForceRefresh = false
 
 export class SettingsViewElement extends LitElement {
   static styles = css`
@@ -86,6 +86,15 @@ export class SettingsViewElement extends LitElement {
       grid-area: controls;
     }
 
+    .debug-controls {
+      display: flex;
+      flex-direction: column;
+
+      & > * {
+        margin: 1rem 2ch;
+      }
+    }
+
     @media (orientation: landscape) and (max-height: 650px) {
       :host {
         margin-top: 0;
@@ -122,6 +131,7 @@ export class SettingsViewElement extends LitElement {
     const colorScale = this.#state.select(selectColorScale)
     const wheelNotes = this.#state.select(selectWheelNotes)
     const theme = this.#state.select(selectColorTheme)
+    const showTouchHighlights = this.#state.select(selectShowTouchHighlights)
 
     const activeNotes = ['Ab', 'E']
     const pitchClasses = wheelNotes.map(
@@ -168,10 +178,17 @@ export class SettingsViewElement extends LitElement {
 
     const forceRefresh = async () => {
       console.log('forcing service worker reload')
+      awaitingForceRefresh = true
+      this.requestUpdate()
       await unregisterServiceWorker()
       console.log('reloading page')
+      awaitingForceRefresh = false
       window.location.reload()
     }
+
+    const forceRefreshIcon = awaitingForceRefresh
+      ? html`<sl-spinner slot="prefix"></sl-spinner>`
+      : html`<sl-icon slot="prefix" name="arrow-clockwise"></sl-icon>`
 
     //@ts-expect-error
     this.renderRoot.querySelector('tone-wheel')?.requestUpdate()
@@ -253,13 +270,22 @@ export class SettingsViewElement extends LitElement {
             class="debug"
             role="group"
             aria-label="debug settings">
-            <sl-button
-              @click=${() => forceRefresh()}
-              label="Refresh cache"
-              role="presentation">
-              <sl-icon slot="prefix" name="arrow-clockwise"></sl-icon>
-              Clear offline cache
-            </sl-button>
+            <div role="presentation" class="debug-controls">
+              <sl-button
+                @click=${() => forceRefresh()}
+                label="Refresh cache"
+                role="presentation">
+                ${forceRefreshIcon} Clear offline cache
+              </sl-button>
+
+              <sl-switch
+                @sl-change=${(e) =>
+                  dispatch(setShowTouchHighlights(e.target.checked))}
+                value=${showTouchHighlights}
+                label="Show pointer highlights?">
+                Show pointer highlights?
+              </sl-switch>
+            </div>
           </sl-tab-panel>
         </sl-tab-group>
       </glass-panel>

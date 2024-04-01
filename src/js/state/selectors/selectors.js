@@ -186,6 +186,11 @@ export const selectColorTheme = createSelector(
   (prefs) => prefs.theme,
 )
 
+export const selectShowTouchHighlights = createSelector(
+  [selectPreferencesState],
+  (prefs) => prefs.showTouchHighlights ?? false,
+)
+
 export const selectTuningNoteIds = createSelector(
   [selectTuningState],
   (tuning) => tuning.noteIds,

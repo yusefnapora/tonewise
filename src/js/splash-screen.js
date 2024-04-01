@@ -44,7 +44,7 @@ export function setupSplashScreenImages() {
         colorTheme,
         backgroundOnly,
       })
-      console.log('setting splash screen image for', mediaQuery)
+      // console.log('setting splash screen image for', mediaQuery)
       const link = document.createElement('link')
       link.setAttribute('rel', 'apple-touch-startup-image')
       link.setAttribute('media', mediaQuery)

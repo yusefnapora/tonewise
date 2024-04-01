@@ -29,7 +29,7 @@ body {
 
 .touch-indicator {
   background-color: lightgray;
-  opacity: 0.8;
+  opacity: 0.6;
   clip-path: circle(50%);
   width: 32px;
   height: 32px;

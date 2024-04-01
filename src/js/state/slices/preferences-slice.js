@@ -14,6 +14,7 @@ const initialState = {
   theme: 'auto',
   colorScale: DEFAULT_COLOR_SCALE,
   enharmonicPresentation: 'flat',
+  showTouchHighlights: false,
 }
 
 const preferencesSlice = createSlice({
@@ -44,10 +45,22 @@ const preferencesSlice = createSlice({
     setEnharmonicPresentation(state, action) {
       state.enharmonicPresentation = action.payload
     },
+
+    /**
+     * @param {PreferencesState} state
+     * @param {import('@reduxjs/toolkit').PayloadAction<boolean>} action
+     */
+    setShowTouchHighlights(state, action) {
+      state.showTouchHighlights = action.payload
+    },
   },
 })
 
 const { actions, reducer } = preferencesSlice
-export const { setColorScale, setSystemColorTheme, setEnharmonicPresentation } =
-  actions
+export const {
+  setColorScale,
+  setSystemColorTheme,
+  setEnharmonicPresentation,
+  setShowTouchHighlights,
+} = actions
 export default reducer

@@ -87,5 +87,6 @@ export type SystemColorTheme = 'dark' | 'light' | 'auto'
 export type PreferencesState = {
   theme: SystemColorTheme
   colorScale: ColorScaleName
-  enharmonicPresentation: EnharmonicPresentation
+  enharmonicPresentation: EnharmonicPresentation,
+  showTouchHighlights?: boolean,
 }

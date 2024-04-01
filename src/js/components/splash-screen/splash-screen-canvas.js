@@ -143,7 +143,6 @@ function drawSplashScreen(opts) {
     activeStartAngle,
     activeEndAngle,
   } = opts
-  const startTime = Date.now()
   const ctx = canvas.getContext('2d')
   // Get the DPR and size of the canvas
   const dpr = opts.pixelRatio ?? window.devicePixelRatio
@@ -216,7 +215,6 @@ function drawSplashScreen(opts) {
   ctx.restore()
 
   drawWheelRim({ canvas, center, rotation, radius, thickness, noteColors })
-  console.log(`drew splash screen to canvas in ${Date.now() - startTime}ms`)
 }
 
 /**
