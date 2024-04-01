@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from 'lit'
+import { LitElement, css, html, nothing, unsafeCSS } from 'lit'
 import { registerElement } from '../../common/dom.js'
 
 import { COLOR_SCALE_NAMES, asColorScaleName } from '../../common/color.js'
@@ -22,6 +22,8 @@ import { unregisterServiceWorker } from '../../worker-setup.js'
 
 let awaitingForceRefresh = false
 
+const LANDSCAPE_BREAKPOINT = `680px`
+
 export class SettingsViewElement extends LitElement {
   static styles = css`
     :host {
@@ -30,6 +32,10 @@ export class SettingsViewElement extends LitElement {
 
       width: 100%;
       max-width: min(90vw, 450px);
+    }
+
+    sl-tab-group::part(base) {
+      min-height: min(70vh, 500px);
     }
 
     h1 {
@@ -59,13 +65,6 @@ export class SettingsViewElement extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      /* margin-bottom: 2rem; */
-    }
-
-    .control {
-      margin-top: 16px;
-      margin-bottom: 16px;
-      max-width: 450px;
     }
 
     .enharmonic {
@@ -84,6 +83,12 @@ export class SettingsViewElement extends LitElement {
 
     .appearance-controls {
       grid-area: controls;
+
+      display: flex;
+      flex-direction: column;
+      & > * {
+        margin: 1rem 2ch;
+      }
     }
 
     .debug-controls {
@@ -95,7 +100,9 @@ export class SettingsViewElement extends LitElement {
       }
     }
 
-    @media (orientation: landscape) and (max-height: 650px) {
+    @media (orientation: landscape) and (max-height: ${unsafeCSS(
+        LANDSCAPE_BREAKPOINT,
+      )}) {
       :host {
         margin-top: 0;
         max-width: min(90vw, calc(800px - 96px - var(--toolbar-padding)));
@@ -103,6 +110,10 @@ export class SettingsViewElement extends LitElement {
 
       glass-panel {
         min-height: min(calc(100vh - 16px), 352px);
+      }
+
+      sl-tab-group::part(base) {
+        min-height: min(calc(90vh - 16px), 300px);
       }
 
       .appearance {
@@ -121,7 +132,7 @@ export class SettingsViewElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback()
-    onOrientationChange(() => this.requestUpdate(), '580px')
+    onOrientationChange(() => this.requestUpdate(), LANDSCAPE_BREAKPOINT)
   }
 
   render() {
@@ -193,7 +204,7 @@ export class SettingsViewElement extends LitElement {
     //@ts-expect-error
     this.renderRoot.querySelector('tone-wheel')?.requestUpdate()
 
-    const tabPlacement = isLandscape('580px') ? 'start' : 'top'
+    const tabPlacement = isLandscape(LANDSCAPE_BREAKPOINT) ? 'start' : 'top'
 
     return html`
       <glass-panel>
