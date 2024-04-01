@@ -292,7 +292,7 @@ export class SettingsViewElement extends LitElement {
               <sl-switch
                 @sl-change=${(e) =>
                   dispatch(setShowTouchHighlights(e.target.checked))}
-                value=${showTouchHighlights}
+                ?checked=${showTouchHighlights}
                 label="Show pointer highlights?">
                 Show pointer highlights?
               </sl-switch>
