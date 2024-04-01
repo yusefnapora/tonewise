@@ -31,12 +31,12 @@ body {
   background-color: lightgray;
   opacity: 0.6;
   clip-path: circle(50%);
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   position: absolute;
   z-index: 100;
-  top: -16px;
-  left: -16px;
+  top: -24px;
+  left: -24px;
   transform: var(--indicator-transform);
   pointer-events: none;
 }
