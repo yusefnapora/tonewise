@@ -23,6 +23,12 @@ TODO: link to intro video / screenshots, etc
 
 -->
 
+### Demos
+
+Click the image below for a quick video of me playing around with the app and installing it to my home screen:
+
+[![Screenshot of a YouTube video that shows about a minute of interacting with the app](https://img.youtube.com/vi/oJYA1k86ckM/maxresdefault.jpg)](https://www.youtube.com/watch?v=oJYA1k86ckM)
+
 ## License
 
 This project is licensed under the [GNU General Public License, version 3](./LICENSE.txt), except where indicated otherwise.
