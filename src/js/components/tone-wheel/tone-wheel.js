@@ -14,7 +14,7 @@ import {
   colorForAngle,
   getContrastingTextColor,
 } from '../../common/color.js'
-import { registerElement } from '../../common/dom.js'
+import { keyboardActivationEventListener, registerElement } from '../../common/dom.js'
 /**
  * @typedef {import('../../common/types.d.ts').Point} Point
  * @typedef {import('../../common/types.d.ts').Rect} Rect
@@ -109,6 +109,14 @@ export class ToneWheel extends LitElement {
       opacity: 0;
     }
 
+		svg:not(.non-interactive) .tone-group:focus-visible {
+			outline: none;
+		}
+
+		svg:not(.non-interactive) .tone-group:focus-visible > .inner-wedge {
+			opacity: 0.3;
+		}
+
     .tone-group.disabled {
       /* & > .rim-segment-overlay {
         fill: var(--color-background);
@@ -143,6 +151,7 @@ export class ToneWheel extends LitElement {
     .pitch-line.hidden {
       opacity: 0;
     }
+
 
     .base-background-layer {
       clip-path: circle(48%);
@@ -372,10 +381,7 @@ export class ToneWheel extends LitElement {
         this.dispatchEvent(event)
       }
 
-      /**
-       *
-       * @param {PointerEvent} e
-       */
+      /** @param {PointerEvent} e */
       const pointerDown = (e) => {
         if (this.nonInteractive) {
           return
@@ -387,9 +393,7 @@ export class ToneWheel extends LitElement {
         activated()
       }
 
-      /**
-       * @param {PointerEvent} e
-       */
+      /**  @param {PointerEvent} e */
       const pointerEnter = (e) => {
         if (this.nonInteractive) {
           return
@@ -400,6 +404,7 @@ export class ToneWheel extends LitElement {
         activated()
       }
 
+			/** @param {PointerEvent} e */
       const pointerLeave = (e) => {
         if (this.nonInteractive) {
           return
@@ -409,18 +414,35 @@ export class ToneWheel extends LitElement {
         }
         deactivated()
       }
-      const pointerUp = (e) => {
+
+      const pointerUp = () => {
         if (this.nonInteractive) {
           return
         }
         deactivated()
       }
+
+			/** @param {PointerEvent} e */
       const touchDown = (e) => {
         if (this.nonInteractive) {
           return
         }
         e.preventDefault()
       }
+
+			const keyDown = keyboardActivationEventListener((e) => {
+				if (this.nonInteractive || e.repeat) {
+					return
+				}
+				activated()
+			})
+
+			const keyUp = keyboardActivationEventListener(() => {
+				if (this.nonInteractive) {
+					return
+				}
+				deactivated()
+			})
 
       const classes = {
         [className]: true,
@@ -435,7 +457,11 @@ export class ToneWheel extends LitElement {
           @pointerenter=${pointerEnter} 
           @pointerleave=${pointerLeave}
           @pointerup=${pointerUp}
+					@keydown=${keyDown}
+					@keyup=${keyUp}
           class=${classMap(classes)}
+					tabindex=${el.disabled ? undefined : '0'}
+					role="button"
         >
           ${groupContent}
         </g>
