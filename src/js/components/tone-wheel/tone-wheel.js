@@ -449,6 +449,8 @@ export class ToneWheel extends LitElement {
 				deactivated()
 			})
 
+			const tabIndex = el.disabled ? undefined :'0'
+
       const classes = {
         [className]: true,
         'tone-group': true,
@@ -465,8 +467,10 @@ export class ToneWheel extends LitElement {
 					@keydown=${keyDown}
 					@keyup=${keyUp}
           class=${classMap(classes)}
-					tabindex=${el.disabled ? undefined : '0'}
+					tabindex=${tabIndex}
 					role="button"
+					aria-disabled=${el.disabled}
+					aria-label=${el.label}
         >
           ${groupContent}
         </g>
