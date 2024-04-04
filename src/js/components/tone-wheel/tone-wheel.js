@@ -14,7 +14,10 @@ import {
   colorForAngle,
   getContrastingTextColor,
 } from '../../common/color.js'
-import { keyboardActivationEventListener, registerElement } from '../../common/dom.js'
+import {
+  keyboardActivationEventListener,
+  registerElement,
+} from '../../common/dom.js'
 /**
  * @typedef {import('../../common/types.d.ts').Point} Point
  * @typedef {import('../../common/types.d.ts').Rect} Rect
@@ -109,18 +112,18 @@ export class ToneWheel extends LitElement {
       opacity: 0;
     }
 
-		svg:not(.non-interactive) .tone-group:focus-visible {
-			outline: none;
+    svg:not(.non-interactive) .tone-group:focus-visible {
+      outline: none;
 
       & > .rim-segment {
-				stroke: var(--color-text);
-				stroke-width: 4;
-			}
+        stroke: var(--color-text);
+        stroke-width: 4;
+      }
 
-			& > .inner-wedge {
-				opacity: 0.3;
-		  }
-		}
+      &:not(.active) > .inner-wedge {
+        opacity: 0.3;
+      }
+    }
 
     .tone-group.disabled {
       /* & > .rim-segment-overlay {
@@ -156,7 +159,6 @@ export class ToneWheel extends LitElement {
     .pitch-line.hidden {
       opacity: 0;
     }
-
 
     .base-background-layer {
       clip-path: circle(48%);
@@ -238,12 +240,97 @@ export class ToneWheel extends LitElement {
     ])
   }
 
+  get #toneGroupElements() {
+    return /** @type {SVGGElement[]} */ ([
+      ...this.renderRoot.querySelectorAll('g.tone-group'),
+    ])
+  }
+
   render() {
     const { content, styleContent } = this.renderContent()
     const classes = { 'non-interactive': this.nonInteractive }
 
     const showVibrantBackground =
       this.pitchClasses.filter((pc) => pc.active).length >= 2
+
+    /** @param {Element} item */
+    const activate = (item) => {
+      if (!(item instanceof SVGElement)) {
+        return
+      }
+
+      for (const g of this.#toneGroupElements) {
+        g.tabIndex = -1
+      }
+      item.tabIndex = 0
+      item.focus()
+    }
+
+    const focusPrev = () => {
+      const current = this.shadowRoot.activeElement
+      if (!current) {
+        return
+      }
+      let prev = current.previousElementSibling
+      while (prev && prev.classList.contains('disabled')) {
+        prev = prev.previousElementSibling
+      }
+      if (prev) {
+        activate(prev)
+        return
+      }
+      const groups = this.#toneGroupElements
+      const last = groups[groups.length - 1]
+      activate(last)
+    }
+    const focusNext = () => {
+      const current = this.shadowRoot.activeElement
+      if (!current) {
+        return
+      }
+      let next = current.nextElementSibling
+      while (next && next.classList.contains('disabled')) {
+        next = next.nextElementSibling
+      }
+      if (next) {
+        activate(next)
+        return
+      }
+      const groups = this.#toneGroupElements
+      if (groups.length === 0) {
+        return
+      }
+      const first = groups[0]
+      activate(first)
+    }
+
+    /** @param {KeyboardEvent} e */
+    const arrowListener = (e) => {
+      if (e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
+        return focusPrev()
+      }
+      if (e.code === 'ArrowRight' || e.code === 'ArrowDown') {
+        return focusNext()
+      }
+    }
+
+    /** @param {FocusEvent} e */
+    const focusOut = (e) => {
+      const { relatedTarget } = e
+      if (!(relatedTarget instanceof Element)) {
+        return
+      }
+      if (relatedTarget.classList.contains('tone-group')) {
+        return
+      }
+      console.log('focus leaving tone wheel, restoring tab indexes')
+      for (const g of this.#toneGroupElements) {
+        if (g.classList.contains('disabled')) {
+          continue
+        }
+        g.tabIndex = 0
+      }
+    }
 
     return html`
       <style>
@@ -268,6 +355,8 @@ export class ToneWheel extends LitElement {
       </div>
       <svg
         aria-label="tone wheel"
+        @keydown=${arrowListener}
+        @focusout=${focusOut}
         class=${classMap(classes)}
         viewBox="0 0 1000 1000">
         ${content}
@@ -409,7 +498,7 @@ export class ToneWheel extends LitElement {
         activated()
       }
 
-			/** @param {PointerEvent} e */
+      /** @param {PointerEvent} e */
       const pointerLeave = (e) => {
         if (this.nonInteractive) {
           return
@@ -427,7 +516,7 @@ export class ToneWheel extends LitElement {
         deactivated()
       }
 
-			/** @param {PointerEvent} e */
+      /** @param {PointerEvent} e */
       const touchDown = (e) => {
         if (this.nonInteractive) {
           return
@@ -435,21 +524,21 @@ export class ToneWheel extends LitElement {
         e.preventDefault()
       }
 
-			const keyDown = keyboardActivationEventListener((e) => {
-				if (this.nonInteractive || e.repeat) {
-					return
-				}
-				activated()
-			})
+      const keyDown = keyboardActivationEventListener((e) => {
+        if (this.nonInteractive || e.repeat) {
+          return
+        }
+        activated()
+      })
 
-			const keyUp = keyboardActivationEventListener(() => {
-				if (this.nonInteractive) {
-					return
-				}
-				deactivated()
-			})
+      const keyUp = keyboardActivationEventListener(() => {
+        if (this.nonInteractive) {
+          return
+        }
+        deactivated()
+      })
 
-			const tabIndex = el.disabled ? undefined :'0'
+      const tabIndex = el.disabled ? undefined : '0'
 
       const classes = {
         [className]: true,
