@@ -13,15 +13,7 @@ made for playing with musical relationships.
 
 I have a lot of things I'd like to do with it, but no timelines or anything like that. If there's something that you think would be cool to see in the app, [let me know](https://yusef.napora.org) or [open an issue](https://github.com/yusefnapora/tonewise/issues/new).
 
-I'm afraid that if you rely on keyboard or other focus-driven input methods, you will not be able to use the main tone wheel component. Fixing this is high on my list of things to do, but please reach out if it would help you out and I haven't got to it yet.
-
 I'm especially interested in your feedback if you perceive color differently than I do. I've tried to make the app accessible to people with color perceptual issues by adding alternative color palettes in the app settings, but there's no substitute for direct experience.
-
-<!--
-
-TODO: link to intro video / screenshots, etc
-
--->
 
 ### Demos
 
