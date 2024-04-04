@@ -111,10 +111,15 @@ export class ToneWheel extends LitElement {
 
 		svg:not(.non-interactive) .tone-group:focus-visible {
 			outline: none;
-		}
 
-		svg:not(.non-interactive) .tone-group:focus-visible > .inner-wedge {
-			opacity: 0.3;
+      & > .rim-segment {
+				stroke: var(--color-text);
+				stroke-width: 4;
+			}
+
+			& > .inner-wedge {
+				opacity: 0.3;
+		  }
 		}
 
     .tone-group.disabled {
