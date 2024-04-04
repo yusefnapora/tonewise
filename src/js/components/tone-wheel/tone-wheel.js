@@ -306,6 +306,9 @@ export class ToneWheel extends LitElement {
 
     /** @param {KeyboardEvent} e */
     const arrowListener = (e) => {
+      if (this.nonInteractive) {
+        return
+      }
       if (e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
         return focusPrev()
       }
@@ -316,6 +319,9 @@ export class ToneWheel extends LitElement {
 
     /** @param {FocusEvent} e */
     const focusOut = (e) => {
+      if (this.nonInteractive) {
+        return
+      }
       const { relatedTarget } = e
       if (!(relatedTarget instanceof Element)) {
         return
@@ -538,7 +544,7 @@ export class ToneWheel extends LitElement {
         deactivated()
       })
 
-      const tabIndex = el.disabled ? undefined : '0'
+      const tabIndex = this.nonInteractive || el.disabled ? undefined : '0'
 
       const classes = {
         [className]: true,
