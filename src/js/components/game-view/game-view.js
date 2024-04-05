@@ -19,6 +19,7 @@ import {
   selectColorScale,
   selectIsChallengePlaying,
   selectMidiNote,
+  selectNoteAriaLabel,
   selectNoteLabel,
   selectScaleControlsActive,
   selectScaleNoteIds,
@@ -108,6 +109,7 @@ export class GameViewElement extends LitElement {
       ({ noteId, midiNote, label, active }) => html`
         <pitch-class
           id=${noteId}
+          aria-label=${selectNoteAriaLabel(this.#state.state, noteId)}
           midi-note=${midiNote}
           active=${active || nothing}
           disabled=${scaleNotes.includes(noteId) ? nothing : true}>

@@ -450,6 +450,7 @@ export class ToneWheel extends LitElement {
         groupContent.push(
           this.#createSegmentLabel({
             label: el.label,
+            ariaLabel: el.ariaLabel,
             position: intervalPoint,
             hidden: this.hideLabels || el.disabled,
           }),
@@ -545,7 +546,7 @@ export class ToneWheel extends LitElement {
       })
 
       const tabIndex = this.nonInteractive || el.disabled ? undefined : '0'
-
+      const role = this.nonInteractive || el.disabled ? undefined : 'button'
       const classes = {
         [className]: true,
         'tone-group': true,
@@ -563,9 +564,9 @@ export class ToneWheel extends LitElement {
 					@keyup=${keyUp}
           class=${classMap(classes)}
 					tabindex=${tabIndex}
-					role="button"
+					role=${role}
 					aria-disabled=${el.disabled}
-					aria-label=${el.label}
+					aria-label=${el.ariaLabel ?? el.label}
         >
           ${groupContent}
         </g>
@@ -655,6 +656,7 @@ export class ToneWheel extends LitElement {
    *
    * @param {object} args
    * @param {string} args.label
+   * @param {string} [args.ariaLabel]
    * @param {Point} args.position
    * @param {boolean} [args.hidden]
    * @param {Function} [args.clickHandler]
@@ -662,7 +664,7 @@ export class ToneWheel extends LitElement {
    * @returns {SVGTemplateResult}
    */
   #createSegmentLabel(args) {
-    const { label, position, hidden } = args
+    const { label, ariaLabel, position, hidden } = args
     const x = position.x
     const y = position.y + this.fontSize * 0.25
     const classes = { 'tone-label': true, hidden }
@@ -673,11 +675,13 @@ export class ToneWheel extends LitElement {
         fill="white"
         text-anchor="middle"
         font-size=${this.fontSize}
+        aria-hidden="true"
         x=${x}
         y=${y}
       >
         ${label}
       </text>
+      <text class="visually-hidden" font-size="0">${ariaLabel}</text>
     `
   }
 
