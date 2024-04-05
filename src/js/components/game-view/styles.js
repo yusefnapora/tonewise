@@ -63,27 +63,19 @@ const styles = css`
     right: calc(-1 * min(24px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.05)));
   }
 
-  .wheel bass-clef {
+  .wheel staff-view {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: -2;
     z-index: 3;
 
-    /* FIXME: use responsive sizes */
-    padding: 10px 0;
-    min-width: 64px;
-    min-height: 32px;
-    max-height: 60px;
-  }
-
-  .wheel treble-clef {
-    grid-column: -2;
-    grid-row: 1;
-    z-index: 3;
+    position: relative;
+    bottom: calc(-1 * min(24px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.05)));
+    left: calc(-1 * min(24px, calc((${WHEEL_SIZE_PORTRAIT}) * 0.05)));
 
     /* FIXME: use responsive sizes */
     min-width: 16px;
     min-height: 16px;
-    max-height: 80px;
+    max-height: 70px;
   }
 
   .scale-toggle-icon scale-badge:focus-visible {
