@@ -142,7 +142,7 @@ export class GameViewElement extends LitElement {
     const closeIcon = html`
       <sl-icon-button
         aria-controls="scale-control-panel"
-        aria-expanded="false"
+        aria-expanded="true"
         label="close scale control panel"
         @click=${toggleScaleControls}
         name="x-circle">
@@ -156,7 +156,7 @@ export class GameViewElement extends LitElement {
             tabindex="0"
             role="button"
             aria-controls="scale-control-panel"
-            aria-expanded="true"
+            aria-expanded="false"
             aria-label="show scale controls"
             @click=${toggleScaleControls}
             @keyup=${keyboardActivationEventListener(toggleScaleControls)}

@@ -166,11 +166,15 @@ export class ScaleControlsElement extends LitElement {
     const prevLabelColor = selectNoteLabelColor(state, prevNote)
     const nextLabelColor = selectNoteLabelColor(state, nextNote)
     const tonicAriaLabel = selectNoteAriaLabel(state, tonicNote)
+    const prevAriaLabel = selectNoteAriaLabel(state, prevNote)
+    const nextAriaLabel = selectNoteAriaLabel(state, nextNote)
 
     const noteMenuItems = tuning.noteIds.map(
       (noteId) => html`
         <sl-menu-item class=${`note-${noteId}`} value=${noteId}>
-          ${selectNoteLabel(state, noteId)}
+          <span aria-label=${selectNoteAriaLabel(state, noteId)}>
+            ${selectNoteLabel(state, noteId)}
+          </span>
         </sl-menu-item>
       `,
     )
@@ -240,28 +244,21 @@ export class ScaleControlsElement extends LitElement {
 
     const tonicControl = html`
       <sl-button-group aria-label="tonic note switcher">
-        <sl-button
-          aria-label="previous note"
-          class="prev-note"
-          pill
-          @click=${() => noteStepBy(-1)}>
-          <sl-icon name="chevron-compact-left"></sl-icon>
+        <sl-button class="prev-note" pill @click=${() => noteStepBy(-1)}>
+          <sl-icon
+            label="previous note: ${prevAriaLabel}"
+            name="chevron-compact-left"></sl-icon>
         </sl-button>
         <sl-dropdown hoist>
-          <sl-button
-            aria-label="tonic note: ${tonicAriaLabel}"
-            class="note-dropdown"
-            slot="trigger">
-            ${tonicNoteLabel}
+          <sl-button label="tonic note" class="note-dropdown" slot="trigger">
+            <span aria-label=${tonicAriaLabel}>${tonicNoteLabel}</span>
           </sl-button>
           <sl-menu @sl-select=${noteSelected}> ${noteMenuItems} </sl-menu>
         </sl-dropdown>
-        <sl-button
-          aria-label="next note"
-          class="next-note"
-          pill
-          @click=${() => noteStepBy(1)}>
-          <sl-icon name="chevron-compact-right"></sl-icon>
+        <sl-button class="next-note" pill @click=${() => noteStepBy(1)}>
+          <sl-icon
+            label="next note: ${nextAriaLabel}"
+            name="chevron-compact-right"></sl-icon>
         </sl-button>
       </sl-button-group>
     `
