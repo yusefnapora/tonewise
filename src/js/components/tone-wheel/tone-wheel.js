@@ -266,42 +266,55 @@ export class ToneWheel extends LitElement {
       item.focus()
     }
 
+    /**
+     * @param {SVGGElement} currentFocusedGroup
+     * @param {'prev' | 'next'} direction
+     */
+    const findNeighboringGroup = (currentFocusedGroup, direction) => {
+      const groups = this.#toneGroupElements
+      const selfIndex = groups.indexOf(currentFocusedGroup)
+      if (selfIndex < 0) {
+        return
+      }
+      const offset = direction === 'next' ? 1 : -1
+      for (
+        let index = selfIndex + offset;
+        index !== selfIndex;
+        index += offset
+      ) {
+        if (index < 0) {
+          index = groups.length - 1
+        } else if (index >= groups.length) {
+          index = 0
+        }
+
+        const g = groups[index]
+        if (!g.classList.contains('disabled')) {
+          return g
+        }
+      }
+      return undefined
+    }
+
     const focusPrev = () => {
       const current = this.shadowRoot.activeElement
-      if (!current) {
+      if (!current || !(current instanceof SVGGElement)) {
         return
       }
-      let prev = current.previousElementSibling
-      while (prev && prev.classList.contains('disabled')) {
-        prev = prev.previousElementSibling
-      }
+      const prev = findNeighboringGroup(current, 'prev')
       if (prev) {
         activate(prev)
-        return
       }
-      const groups = this.#toneGroupElements
-      const last = groups[groups.length - 1]
-      activate(last)
     }
     const focusNext = () => {
       const current = this.shadowRoot.activeElement
-      if (!current) {
+      if (!current || !(current instanceof SVGGElement)) {
         return
       }
-      let next = current.nextElementSibling
-      while (next && next.classList.contains('disabled')) {
-        next = next.nextElementSibling
-      }
+      const next = findNeighboringGroup(current, 'next')
       if (next) {
         activate(next)
-        return
       }
-      const groups = this.#toneGroupElements
-      if (groups.length === 0) {
-        return
-      }
-      const first = groups[0]
-      activate(first)
     }
 
     /** @param {KeyboardEvent} e */
