@@ -195,6 +195,8 @@ export class GameViewElement extends LitElement {
           <game-status-message></game-status-message>
         </div>
         <div class="wheel">
+          <bass-clef></bass-clef>
+          <treble-clef></treble-clef>
           <tone-wheel
             non-interactive=${nonInteractive || nothing}
             rotation=${wheelRotation}
