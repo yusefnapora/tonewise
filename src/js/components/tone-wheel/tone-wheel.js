@@ -484,82 +484,17 @@ export class ToneWheel extends LitElement {
         }
 			`
 
-      const activated = () => {
-        const event = new NoteHoldBeganEvent({ id: el.id })
-        this.dispatchEvent(event)
-      }
-
-      const deactivated = () => {
-        // console.log('note hold end', el.id)
-        const event = new NoteHoldEndedEvent({ id: el.id })
-        this.dispatchEvent(event)
-      }
-
-      /** @param {PointerEvent} e */
-      const pointerDown = (e) => {
-        if (this.nonInteractive) {
-          return
-        }
-        if (e.target instanceof Element) {
-          e.target.releasePointerCapture(e.pointerId)
-        }
-        e.preventDefault()
-        activated()
-      }
-
-      /**  @param {PointerEvent} e */
-      const pointerEnter = (e) => {
-        if (this.nonInteractive) {
-          return
-        }
-        if (e.pointerType !== 'touch' && e.buttons === 0) {
-          return
-        }
-        activated()
-      }
-
-      /** @param {PointerEvent} e */
-      const pointerLeave = (e) => {
-        if (this.nonInteractive) {
-          return
-        }
-        if (e.pointerType !== 'touch' && e.buttons === 0) {
-          return
-        }
-        deactivated()
-      }
-
-      const pointerUp = () => {
-        if (this.nonInteractive) {
-          return
-        }
-        deactivated()
-      }
-
-      /** @param {PointerEvent} e */
-      const touchDown = (e) => {
-        if (this.nonInteractive) {
-          return
-        }
-        e.preventDefault()
-      }
-
-      const keyDown = keyboardActivationEventListener((e) => {
-        if (this.nonInteractive || e.repeat) {
-          return
-        }
-        activated()
-      })
-
-      const keyUp = keyboardActivationEventListener(() => {
-        if (this.nonInteractive) {
-          return
-        }
-        deactivated()
-      })
-
+      const {
+        touchDown,
+        pointerDown,
+        pointerEnter,
+        pointerLeave,
+        pointerUp,
+        keyDown,
+        keyUp,
+      } = evenHandlersForPitchClass(el)
       const tabIndex = this.nonInteractive || el.disabled ? undefined : '0'
-      const role = this.nonInteractive || el.disabled ? undefined : 'button'
+      const role = this.nonInteractive ? undefined : 'button'
       const classes = {
         [className]: true,
         'tone-group': true,
@@ -846,6 +781,88 @@ function getIntervalAngles(pitchClasses) {
     }
     return { angle: edoStep * i, pitchClass: el }
   })
+}
+
+// internal event handlers
+/**
+ * @param {PitchClassElement} el
+ */
+function evenHandlersForPitchClass(el) {
+  const activated = () => {
+    const event = new NoteHoldBeganEvent({ id: el.id })
+    this.dispatchEvent(event)
+  }
+
+  const deactivated = () => {
+    // console.log('note hold end', el.id)
+    const event = new NoteHoldEndedEvent({ id: el.id })
+    this.dispatchEvent(event)
+  }
+
+  return {
+    /** @param {PointerEvent} e */
+    pointerDown(e) {
+      if (this.nonInteractive) {
+        return
+      }
+      if (e.target instanceof Element) {
+        e.target.releasePointerCapture(e.pointerId)
+      }
+      e.preventDefault()
+      activated()
+    },
+
+    /** @param {PointerEvent} e */
+    pointerEnter(e) {
+      if (this.nonInteractive) {
+        return
+      }
+      if (e.pointerType !== 'touch' && e.buttons === 0) {
+        return
+      }
+      activated()
+    },
+
+    /** @param {PointerEvent} e */
+    pointerLeave(e) {
+      if (this.nonInteractive) {
+        return
+      }
+      if (e.pointerType !== 'touch' && e.buttons === 0) {
+        return
+      }
+      deactivated()
+    },
+
+    pointerUp() {
+      if (this.nonInteractive) {
+        return
+      }
+      deactivated()
+    },
+
+    /** @param {PointerEvent} e */
+    touchDown(e) {
+      if (this.nonInteractive) {
+        return
+      }
+      e.preventDefault()
+    },
+
+    keyDown: keyboardActivationEventListener((e) => {
+      if (this.nonInteractive || e.repeat) {
+        return
+      }
+      activated()
+    }),
+
+    keyUp: keyboardActivationEventListener(() => {
+      if (this.nonInteractive) {
+        return
+      }
+      deactivated()
+    }),
+  }
 }
 
 registerElement('tone-wheel', ToneWheel)
