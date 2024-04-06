@@ -126,11 +126,6 @@ export class ToneWheel extends LitElement {
     }
 
     .tone-group.disabled {
-      /* & > .rim-segment-overlay {
-        fill: var(--color-background);
-        opacity: 0.3;
-      } */
-
       & > .tone-label {
         opacity: 0;
       }
@@ -318,7 +313,7 @@ export class ToneWheel extends LitElement {
     }
 
     /** @param {KeyboardEvent} e */
-    const arrowListener = (e) => {
+    const keyDown = (e) => {
       if (this.nonInteractive) {
         return
       }
@@ -374,7 +369,7 @@ export class ToneWheel extends LitElement {
       </div>
       <svg
         aria-label="tone wheel"
-        @keydown=${arrowListener}
+        @keydown=${keyDown}
         @focusout=${focusOut}
         class=${classMap(classes)}
         viewBox="0 0 1000 1000">
@@ -431,14 +426,6 @@ export class ToneWheel extends LitElement {
         className,
       })
 
-      const { path: segmentOverlayPath } = this.#createRimSegment({
-        startAngle: segmentStartAngle,
-        endAngle: segmentEndAngle,
-        intervalAngle: intervalAngle,
-        thickness: rimThickness,
-        className: 'rim-segment-overlay',
-      })
-
       // scale the pitch line width proportional to the wheel radius,
       // and also shrink the width for pitches whose rim segment length
       // is less than 1 EDO-step
@@ -457,7 +444,6 @@ export class ToneWheel extends LitElement {
 
       // push rim segment after pitch line, so it renders on top
       groupContent.push(segmentPath)
-      groupContent.push(segmentOverlayPath)
 
       if (el.label) {
         groupContent.push(
@@ -492,7 +478,7 @@ export class ToneWheel extends LitElement {
         pointerUp,
         keyDown,
         keyUp,
-      } = evenHandlersForPitchClass(el)
+      } = this.#evenHandlersForPitchClass(el)
       const tabIndex = this.nonInteractive || el.disabled ? undefined : '0'
       const role = this.nonInteractive ? undefined : 'button'
       const classes = {
@@ -748,6 +734,87 @@ export class ToneWheel extends LitElement {
       <path class=${fullClass} d=${pathString} />
     `
   }
+
+  /**
+   * @param {PitchClassElement} el
+   */
+  #evenHandlersForPitchClass(el) {
+    const activated = () => {
+      const event = new NoteHoldBeganEvent({ id: el.id })
+      this.dispatchEvent(event)
+    }
+
+    const deactivated = () => {
+      // console.log('note hold end', el.id)
+      const event = new NoteHoldEndedEvent({ id: el.id })
+      this.dispatchEvent(event)
+    }
+
+    return {
+      /** @param {PointerEvent} e */
+      pointerDown(e) {
+        if (this.nonInteractive) {
+          return
+        }
+        if (e.target instanceof Element) {
+          e.target.releasePointerCapture(e.pointerId)
+        }
+        e.preventDefault()
+        activated()
+      },
+
+      /** @param {PointerEvent} e */
+      pointerEnter(e) {
+        if (this.nonInteractive) {
+          return
+        }
+        if (e.pointerType !== 'touch' && e.buttons === 0) {
+          return
+        }
+        activated()
+      },
+
+      /** @param {PointerEvent} e */
+      pointerLeave(e) {
+        if (this.nonInteractive) {
+          return
+        }
+        if (e.pointerType !== 'touch' && e.buttons === 0) {
+          return
+        }
+        deactivated()
+      },
+
+      pointerUp() {
+        if (this.nonInteractive) {
+          return
+        }
+        deactivated()
+      },
+
+      /** @param {PointerEvent} e */
+      touchDown(e) {
+        if (this.nonInteractive) {
+          return
+        }
+        e.preventDefault()
+      },
+
+      keyDown: keyboardActivationEventListener((e) => {
+        if (this.nonInteractive || e.repeat) {
+          return
+        }
+        activated()
+      }),
+
+      keyUp: keyboardActivationEventListener(() => {
+        if (this.nonInteractive) {
+          return
+        }
+        deactivated()
+      }),
+    }
+  }
 }
 
 /**
@@ -781,88 +848,6 @@ function getIntervalAngles(pitchClasses) {
     }
     return { angle: edoStep * i, pitchClass: el }
   })
-}
-
-// internal event handlers
-/**
- * @param {PitchClassElement} el
- */
-function evenHandlersForPitchClass(el) {
-  const activated = () => {
-    const event = new NoteHoldBeganEvent({ id: el.id })
-    this.dispatchEvent(event)
-  }
-
-  const deactivated = () => {
-    // console.log('note hold end', el.id)
-    const event = new NoteHoldEndedEvent({ id: el.id })
-    this.dispatchEvent(event)
-  }
-
-  return {
-    /** @param {PointerEvent} e */
-    pointerDown(e) {
-      if (this.nonInteractive) {
-        return
-      }
-      if (e.target instanceof Element) {
-        e.target.releasePointerCapture(e.pointerId)
-      }
-      e.preventDefault()
-      activated()
-    },
-
-    /** @param {PointerEvent} e */
-    pointerEnter(e) {
-      if (this.nonInteractive) {
-        return
-      }
-      if (e.pointerType !== 'touch' && e.buttons === 0) {
-        return
-      }
-      activated()
-    },
-
-    /** @param {PointerEvent} e */
-    pointerLeave(e) {
-      if (this.nonInteractive) {
-        return
-      }
-      if (e.pointerType !== 'touch' && e.buttons === 0) {
-        return
-      }
-      deactivated()
-    },
-
-    pointerUp() {
-      if (this.nonInteractive) {
-        return
-      }
-      deactivated()
-    },
-
-    /** @param {PointerEvent} e */
-    touchDown(e) {
-      if (this.nonInteractive) {
-        return
-      }
-      e.preventDefault()
-    },
-
-    keyDown: keyboardActivationEventListener((e) => {
-      if (this.nonInteractive || e.repeat) {
-        return
-      }
-      activated()
-    }),
-
-    keyUp: keyboardActivationEventListener(() => {
-      if (this.nonInteractive) {
-        return
-      }
-      deactivated()
-    }),
-  }
 }
 
 registerElement('tone-wheel', ToneWheel)
