@@ -283,7 +283,7 @@ export const selectNoteAriaLabel = createSelector(
   ],
   (tuning, preferences, noteId) => {
     const label = selectNoteLabel.resultFunc(tuning, preferences, noteId)
-    return label.replace('♯', ' sharp').replace('♭', ' flat')
+    return label.replace('♯', ' sharp').replace('♭', ' flat').toLowerCase()
   },
 )
 
