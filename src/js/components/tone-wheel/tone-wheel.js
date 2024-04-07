@@ -68,6 +68,10 @@ export class ToneWheel extends LitElement {
     svg:not(.non-interactive) {
       /* prevent browser from eating touch events for scrolling, etc */
       touch-action: none;
+
+      & * {
+        outline: none;
+      }
     }
 
     .tone-label {
@@ -112,10 +116,12 @@ export class ToneWheel extends LitElement {
       opacity: 0;
     }
 
-    svg:not(.non-interactive) .tone-group:focus-visible {
+    svg:not(.non-interactive) .tone-group:focus-within {
       outline: none;
 
       & > .rim-segment {
+        outline: none;
+
         stroke: var(--color-text);
         stroke-width: 4;
       }
@@ -235,9 +241,9 @@ export class ToneWheel extends LitElement {
     ])
   }
 
-  get #toneGroupElements() {
-    return /** @type {SVGGElement[]} */ ([
-      ...this.renderRoot.querySelectorAll('g.tone-group'),
+  get #noteFocusTargets() {
+    return /** @type {SVGElement[]} */ ([
+      ...this.renderRoot.querySelectorAll('g.tone-group > .rim-segment'),
     ])
   }
 
@@ -254,20 +260,25 @@ export class ToneWheel extends LitElement {
         return
       }
 
-      for (const g of this.#toneGroupElements) {
-        g.tabIndex = -1
+      for (const el of this.#noteFocusTargets) {
+        el.tabIndex = -1
       }
       item.tabIndex = 0
       item.focus()
     }
 
+    /** @param {SVGElement} el */
+    const isDisabled = (el) =>
+      el.classList.contains('disabled') ||
+      el.getAttribute('aria-disabled') === 'true'
+
     /**
-     * @param {SVGGElement} currentFocusedGroup
+     * @param {SVGElement} currentFocusTarget
      * @param {'prev' | 'next'} direction
      */
-    const findNeighboringGroup = (currentFocusedGroup, direction) => {
-      const groups = this.#toneGroupElements
-      const selfIndex = groups.indexOf(currentFocusedGroup)
+    const findNeighboringTarget = (currentFocusTarget, direction) => {
+      const targets = this.#noteFocusTargets
+      const selfIndex = targets.indexOf(currentFocusTarget)
       if (selfIndex < 0) {
         return
       }
@@ -278,14 +289,14 @@ export class ToneWheel extends LitElement {
         index += offset
       ) {
         if (index < 0) {
-          index = groups.length - 1
-        } else if (index >= groups.length) {
+          index = targets.length - 1
+        } else if (index >= targets.length) {
           index = 0
         }
 
-        const g = groups[index]
-        if (!g.classList.contains('disabled')) {
-          return g
+        const t = targets[index]
+        if (!isDisabled(t)) {
+          return t
         }
       }
       return undefined
@@ -293,20 +304,20 @@ export class ToneWheel extends LitElement {
 
     const focusPrev = () => {
       const current = this.shadowRoot.activeElement
-      if (!current || !(current instanceof SVGGElement)) {
+      if (!current || !(current instanceof SVGElement)) {
         return
       }
-      const prev = findNeighboringGroup(current, 'prev')
+      const prev = findNeighboringTarget(current, 'prev')
       if (prev) {
         activate(prev)
       }
     }
     const focusNext = () => {
       const current = this.shadowRoot.activeElement
-      if (!current || !(current instanceof SVGGElement)) {
+      if (!current || !(current instanceof SVGElement)) {
         return
       }
-      const next = findNeighboringGroup(current, 'next')
+      const next = findNeighboringTarget(current, 'next')
       if (next) {
         activate(next)
       }
@@ -334,15 +345,14 @@ export class ToneWheel extends LitElement {
       if (!(relatedTarget instanceof Element)) {
         return
       }
-      if (relatedTarget.classList.contains('tone-group')) {
+      if (relatedTarget.classList.contains('rim-segment')) {
         return
       }
-      console.log('focus leaving tone wheel, restoring tab indexes')
-      for (const g of this.#toneGroupElements) {
-        if (g.classList.contains('disabled')) {
+      for (const t of this.#noteFocusTargets) {
+        if (isDisabled(t)) {
           continue
         }
-        g.tabIndex = 0
+        t.tabIndex = 0
       }
     }
 
@@ -409,6 +419,17 @@ export class ToneWheel extends LitElement {
       const segmentLength = degreesBetween(segmentStartAngle, segmentEndAngle)
 
       const className = `tone-${i}`
+      const {
+        touchDown,
+        pointerDown,
+        pointerEnter,
+        pointerLeave,
+        pointerUp,
+        keyDown,
+        keyUp,
+      } = this.#evenHandlersForPitchClass(el)
+      const tabIndex = this.nonInteractive || el.disabled ? undefined : 0
+      const role = this.nonInteractive ? undefined : 'button'
 
       groupContent.push(
         this.#createInnerWedge({
@@ -423,7 +444,11 @@ export class ToneWheel extends LitElement {
         endAngle: segmentEndAngle,
         intervalAngle: intervalAngle,
         thickness: rimThickness,
+        tabIndex,
+        role,
         className,
+        ariaDisabled: el.disabled,
+        ariaLabel: el.ariaLabel ?? el.label,
       })
 
       // scale the pitch line width proportional to the wheel radius,
@@ -470,17 +495,6 @@ export class ToneWheel extends LitElement {
         }
 			`
 
-      const {
-        touchDown,
-        pointerDown,
-        pointerEnter,
-        pointerLeave,
-        pointerUp,
-        keyDown,
-        keyUp,
-      } = this.#evenHandlersForPitchClass(el)
-      const tabIndex = this.nonInteractive || el.disabled ? undefined : '0'
-      const role = this.nonInteractive ? undefined : 'button'
       const classes = {
         [className]: true,
         'tone-group': true,
@@ -497,10 +511,6 @@ export class ToneWheel extends LitElement {
 					@keydown=${keyDown}
 					@keyup=${keyUp}
           class=${classMap(classes)}
-					tabindex=${tabIndex}
-					role=${role}
-					aria-disabled=${el.disabled}
-					aria-label=${el.ariaLabel ?? el.label}
         >
           ${groupContent}
         </g>
@@ -629,6 +639,10 @@ export class ToneWheel extends LitElement {
    * @param {number} args.endAngle angle in degrees of the end of the rim segment arc
    * @param {number} [args.thickness] distance between inner and outer radii of the arc segment. defaults to 100
    * @param {string} [args.className] CSS class name, used for stroke color
+   * @param {number} [args.tabIndex]
+   * @param {string} [args.role]
+   * @param {string} [args.ariaLabel]
+   * @param {boolean} [args.ariaDisabled]
    *
    * @typedef {object} RimSegment
    * @property {SVGTemplateResult} RimSegment.path an svg fragment containing shapes for the segment
@@ -639,7 +653,7 @@ export class ToneWheel extends LitElement {
    * @returns {RimSegment}
    */
   #createRimSegment(args) {
-    const { className } = args
+    const { className, role, tabIndex, ariaDisabled, ariaLabel } = args
     const center = { x: 500, y: 500 }
     const radius = this.radius
     const thickness = args.thickness ?? 140
@@ -656,7 +670,13 @@ export class ToneWheel extends LitElement {
       thickness,
     })
     const path = svg`
-      <path class=${className + ' rim-segment'} d=${pathString} />
+      <path 
+        class=${className + ' rim-segment'}
+        role=${role}
+        tabindex=${tabIndex}
+        aria-label=${ariaLabel}
+        aria-disabled=${ariaDisabled}
+        d=${pathString} />
     `
 
     // return the cartesian point that corresponds to the intervalAngle,
