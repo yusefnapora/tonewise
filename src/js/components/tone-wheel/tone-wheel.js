@@ -57,6 +57,9 @@ export class ToneWheel extends LitElement {
     }
 
     svg {
+      /* prevent browser from eating touch events for scrolling, etc */
+      touch-action: none;
+
       /* width: 100%; */
       height: 100%;
       aspect-ratio: 1;
@@ -66,9 +69,6 @@ export class ToneWheel extends LitElement {
     }
 
     svg:not(.non-interactive) {
-      /* prevent browser from eating touch events for scrolling, etc */
-      touch-action: none;
-
       & * {
         outline: none;
       }
