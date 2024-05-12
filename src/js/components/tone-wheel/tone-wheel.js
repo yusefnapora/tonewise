@@ -427,7 +427,7 @@ export class ToneWheel extends LitElement {
         pointerUp,
         keyDown,
         keyUp,
-      } = this.#evenHandlersForPitchClass(el)
+      } = this.#eventHandlersForPitchClass(el)
       const tabIndex = this.nonInteractive || el.disabled ? undefined : 0
       const role = this.nonInteractive ? undefined : 'button'
 
@@ -758,7 +758,7 @@ export class ToneWheel extends LitElement {
   /**
    * @param {PitchClassElement} el
    */
-  #evenHandlersForPitchClass(el) {
+  #eventHandlersForPitchClass(el) {
     const activated = () => {
       const event = new NoteHoldBeganEvent({ id: el.id })
       this.dispatchEvent(event)
